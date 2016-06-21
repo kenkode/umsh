@@ -1,1 +1,0 @@
-C:\xampp\htdocs\xaracbs\app/views/loancharges/show.blade.php

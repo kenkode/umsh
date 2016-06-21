@@ -1,0 +1,11 @@
+[11-Mar-2016 09:56:31 UTC] PHP Fatal error:  Can't use function return value in write context in /home/umashcok/public_html/cloud/umash/app/controllers/ReportsController.php on line 78
+[11-Mar-2016 09:57:54 UTC] PHP Fatal error:  Can't use function return value in write context in /home/umashcok/public_html/cloud/umash/app/controllers/ReportsController.php on line 78
+[11-Mar-2016 09:59:01 UTC] PHP Fatal error:  Can't use function return value in write context in /home/umashcok/public_html/cloud/umash/app/controllers/ReportsController.php on line 78
+[11-Mar-2016 10:03:44 UTC] PHP Fatal error:  Can't use function return value in write context in /home/umashcok/public_html/cloud/umash/app/controllers/ReportsController.php on line 130
+[15-Mar-2016 08:04:04 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 64 bytes) in /home/umashcok/public_html/cloud/umash/vendor/dompdf/dompdf/include/style.cls.php on line 574
+[15-Mar-2016 08:05:24 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 85 bytes) in /home/umashcok/public_html/cloud/umash/vendor/dompdf/dompdf/include/style.cls.php on line 684
+[19-May-2016 07:56:26 UTC] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 32 bytes) in /home/umashcok/public_html/cloud/umash/vendor/dompdf/dompdf/include/style.cls.php on line 1427
+[24-May-2016 06:30:49 UTC] PHP Fatal error:  Call to a member function clearAll() on a non-object in /home/umashcok/public_html/cloud/umash/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMimeEntity.php on line 830
+[24-May-2016 06:30:59 UTC] PHP Fatal error:  Call to a member function clearAll() on a non-object in /home/umashcok/public_html/cloud/umash/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Mime/SimpleMimeEntity.php on line 830
+[02-Jun-2016 06:52:53 UTC] PHP Fatal error:  Call to undefined method stdClass::number_format() in /home/umashcok/public_html/cloud/umash/app/controllers/ReportsController.php on line 5298
+[02-Jun-2016 07:17:10 UTC] PHP Fatal error:  Call to undefined method Maatwebsite\Excel\Writers\CellWriter::setAllignment() in /home/umashcok/public_html/cloud/umash/app/controllers/ReportsController.php on line 5209

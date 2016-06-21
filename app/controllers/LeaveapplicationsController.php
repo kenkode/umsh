@@ -14,6 +14,26 @@ class LeaveapplicationsController extends \BaseController {
 		return Redirect::to('leavemgmt');
 	}
 
+	public function createleave()
+	{
+      $postleave = Input::all();
+      $data = array('name' => $postleave['type'], 
+      	            'days' => $postleave['days'],
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('leavetypes')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Leavetypes', 'create', 'created: '.$postleave['type']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	}
+
 	/**
 	 * Show the form for creating a new leaveapplication
 	 *

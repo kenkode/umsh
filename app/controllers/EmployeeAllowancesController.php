@@ -13,7 +13,7 @@ class EmployeeAllowancesController extends \BaseController {
 		          ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
 		          ->join('allowances', 'employee_allowances.allowance_id', '=', 'allowances.id')
 		          ->where('in_employment','=','Y')
-		          ->select('employee_allowances.id','first_name','last_name','allowance_amount','allowance_name')
+		          ->select('employee_allowances.id','first_name','middle_name','last_name','allowance_amount','allowance_name')
 		          ->get();
 
 		Audit::logaudit('Employee Allowances', 'view', 'viewed employee allowances');
@@ -26,14 +26,46 @@ class EmployeeAllowancesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
+
+    public function createallowance()
+	{
+      $postallowance = Input::all();
+      $data = array('allowance_name' => $postallowance['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('allowances')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Allowances', 'create', 'created: '.$postallowance['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	}    
+
 	public function create()
 	{
+		
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
 		          ->get();
 		$allowances = Allowance::all();
-		return View::make('employee_allowances.create',compact('employees','allowances'));
+		$currency = Currency::find(1);
+		return View::make('employee_allowances.create',compact('employees','allowances','currency'));
 	}
+
+
+	public function display(){
+        
+      $allw = Allowance::orderBy('id','DESC')->first();
+          
+      return json_encode(array("id"=>$allw->id,"name"=>$allw->allowance_name));
+      exit();
+
+    }
 
 	/**
 	 * Store a newly created branch in storage.
@@ -55,9 +87,49 @@ class EmployeeAllowancesController extends \BaseController {
 
 		$allowance->allowance_id = Input::get('allowance');
 
+        $allowance->formular = Input::get('formular');
+
+		if(Input::get('formular') == 'Instalments'){
+		$allowance->instalments = Input::get('instalments');
+        $insts = Input::get('instalments');
+
+		$a = str_replace( ',', '', Input::get('amount') );
+
+        $allowance->allowance_amount = $a;
+
+        $d=strtotime(Input::get('adate'));
+
+        $allowance->allowance_date = date("Y-m-d", $d);
+
+        $effectiveDate = date('Y-m-d', strtotime("+".($insts-1)." months", strtotime(Input::get('adate'))));
+
+        $First  = date('Y-m-01', strtotime(Input::get('adate')));
+        $Last   = date('Y-m-t', strtotime($effectiveDate));
+
+        $allowance->first_day_month = $First;
+
+        $allowance->last_day_month = $Last;
+
+	    }else{
+	    $allowance->instalments = '1';
         $a = str_replace( ',', '', Input::get('amount') );
 
         $allowance->allowance_amount = $a;
+
+        $d=strtotime(Input::get('adate'));
+
+        $allowance->allowance_date = date("Y-m-d", $d);
+
+        $First  = date('Y-m-01', strtotime(Input::get('adate')));
+        $Last   = date('Y-m-t', strtotime(Input::get('adate')));
+        
+
+        $allowance->first_day_month = $First;
+
+        $allowance->last_day_month = $Last;
+
+	    }
+        
 
 		$allowance->save();
 
@@ -92,8 +164,8 @@ class EmployeeAllowancesController extends \BaseController {
 		$eallw = EAllowances::find($id);
 		$employees = Employee::all();
 		$allowances = Allowance::all();
-
-		return View::make('employee_allowances.edit', compact('eallw','allowances','employees'));
+        $currency = Currency::find(1);
+		return View::make('employee_allowances.edit', compact('eallw','allowances','employees','currency'));
 	}
 
 	/**
@@ -116,9 +188,49 @@ class EmployeeAllowancesController extends \BaseController {
 
 		$allowance->allowance_id = Input::get('allowance');
 
+        $allowance->formular = Input::get('formular');
+
+		if(Input::get('formular') == 'Instalments'){
+		$allowance->instalments = Input::get('instalments');
+        $insts = Input::get('instalments');
+
+		$a = str_replace( ',', '', Input::get('amount') );
+
+        $allowance->allowance_amount = $a;
+
+        $d=strtotime(Input::get('adate'));
+
+        $allowance->allowance_date = date("Y-m-d", $d);
+
+        $effectiveDate = date('Y-m-d', strtotime("+".($insts-1)." months", strtotime(Input::get('adate'))));
+
+        $First  = date('Y-m-01', strtotime(Input::get('adate')));
+        $Last   = date('Y-m-t', strtotime($effectiveDate));
+
+        $allowance->first_day_month = $First;
+
+        $allowance->last_day_month = $Last;
+
+	    }else{
+	    $allowance->instalments = '1';
         $a = str_replace( ',', '', Input::get('amount') );
 
         $allowance->allowance_amount = $a;
+
+        $d=strtotime(Input::get('adate'));
+
+        $allowance->allowance_date = date("Y-m-d", $d);
+
+        $First  = date('Y-m-01', strtotime(Input::get('adate')));
+        $Last   = date('Y-m-t', strtotime(Input::get('adate')));
+        
+
+        $allowance->first_day_month = $First;
+
+        $allowance->last_day_month = $Last;
+
+	    }
+
 
 		$allowance->update();
 
@@ -152,7 +264,8 @@ class EmployeeAllowancesController extends \BaseController {
 		          ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
 		          ->join('allowances', 'employee_allowances.allowance_id', '=', 'allowances.id')
 		          ->where('employee_allowances.id','=',$id)
-		          ->select('employee_allowances.id','first_name','last_name','middle_name','allowance_amount','allowance_name','photo','signature')
+		          ->select('employee_allowances.id','first_name','last_name','middle_name','allowance_amount',
+		          	'allowance_name','photo','signature','formular','instalments','allowance_date','first_day_month','last_day_month')
 		          ->first();
 
 		$organization = Organization::find(1);

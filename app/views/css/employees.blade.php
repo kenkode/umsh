@@ -40,6 +40,15 @@
         
 
       </thead>
+
+      <tfoot>
+
+        <th>#</th>
+        <th>Employee Number</th>
+        <th>Employee Name</th>
+        
+      </tfoot>
+
       <tbody>
 
         <?php $i = 1; ?>

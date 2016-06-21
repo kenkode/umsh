@@ -1,4 +1,14 @@
- <nav class="navbar-default navbar-static-side" role="navigation">
+<style type="text/css">
+#wrap{
+    margin-top: 90px !important;
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    border-radius: 0 0 0.5em 0.5em;
+}
+</style>
+
+ <nav class="navbar-default navbar-static-side" id="wrap" role="navigation">
     
            
 

@@ -111,10 +111,17 @@ class EmployeeTypeController extends \BaseController {
 	public function destroy($id)
 	{
 		$etype = EType::findOrFail($id);
+		$type  = DB::table('employee')->where('type_id',$id)->count();
+		if($type>0){
+			return Redirect::route('employee_type.index')->withDeleteMessage('Cannot delete this employee type because its assigned to an employee(s)!');
+		}else{
+		
 		EType::destroy($id);
 
 		Audit::logaudit('Employee Types', 'delete', 'deleted: '.$etype->employee_type_name);
 		return Redirect::route('employee_type.index')->withDeleteMessage('Employee Type successfully deleted!');
 	}
+
+}
 
 }

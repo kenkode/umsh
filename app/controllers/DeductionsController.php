@@ -113,6 +113,10 @@ class DeductionsController extends \BaseController {
 	public function destroy($id)
 	{
 		$deduction = Deduction::findOrFail($id);
+		$ded  = DB::table('employee_deductions')->where('deduction_id',$id)->count();
+		if($ded>0){
+			return Redirect::route('deductions.index')->withDeleteMessage('Cannot delete this deduction because its assigned to an employee(s)!');
+		}else{
 		
 		Deduction::destroy($id);
 
@@ -120,5 +124,7 @@ class DeductionsController extends \BaseController {
 
 		return Redirect::route('deductions.index')->withDeleteMessage('Deduction successfully deleted!');
 	}
+
+ }
 
 }

@@ -17,6 +17,160 @@ class EmployeesController extends \BaseController {
 		return View::make('employees.index', compact('employees'));
 	}
 
+    public function createcitizenship()
+	{
+      $postcitizen = Input::all();
+      $data = array('name' => $postcitizen['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('citizenships')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Citizenships', 'create', 'created: '.$postcitizen['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
+
+	public function createeducation()
+	{
+      $posteducation = Input::all();
+      $data = array('education_name' => $posteducation['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('education')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Educations', 'create', 'created: '.$posteducation['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	}  
+
+     public function createbank()
+	{
+      $postbank = Input::all();
+      $data = array('bank_name' => $postbank['name'], 
+      	            'bank_code' => $postbank['code'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('banks')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Banks', 'create', 'created: '.$postbank['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
+
+	public function createbankbranch()
+	{
+      $postbankbranch = Input::all();
+      $data = array('bank_branch_name' => $postbankbranch['name'], 
+      	            'branch_code' => $postbankbranch['code'], 
+      	            'bank_id' => $postbankbranch['bid'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('bank_branches')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Bank Branches', 'create', 'created: '.$postbankbranch['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
+
+     public function createbranch()
+	{
+      $postbranch = Input::all();
+      $data = array('name' => $postbranch['name'],
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('branches')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Banks', 'create', 'created: '.$postbranch['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
+
+    
+    public function createdepartment()
+	{
+      $postdept = Input::all();
+      $data = array('department_name' => $postdept['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('departments')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Departments', 'create', 'created: '.$postdept['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
+
+    public function createtype()
+	{
+      $posttype = Input::all();
+      $data = array('employee_type_name' => $posttype['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('employee_type')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Employee Types', 'create', 'created: '.$posttype['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
+
+	public function creategroup()
+	{
+      $postgroup = Input::all();
+      $data = array('job_group_name' => $postgroup['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('job_group')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Job Groups', 'create', 'created: '.$postgroup['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
 
 	/**
 	 * Show the form for creating a new resource.
@@ -26,6 +180,7 @@ class EmployeesController extends \BaseController {
 	public function create()
 	{
 		//
+    $currency = Currency::find(1);
 		$branches = Branch::all();
 		$departments = Department::all();
 		$jgroups = Jobgroup::all();
@@ -33,7 +188,9 @@ class EmployeesController extends \BaseController {
 		$banks = Bank::all();
 		$bbranches = BBranch::all();
 		$educations = Education::all();
-		return View::make('employees.create', compact('branches','departments','etypes','jgroups','banks','bbranches','educations'));
+		$citizenships = Citizenship::all();
+		$pfn = Employee::orderBy('id', 'DESC')->first();
+		return View::make('employees.create', compact('currency','citizenships','pfn','branches','departments','etypes','jgroups','banks','bbranches','educations'));
 	}
 
 
@@ -117,7 +274,7 @@ class EmployeesController extends \BaseController {
         $employee->gender = Input::get('gender');
         $employee->marital_status = Input::get('status');
         $employee->yob = Input::get('dob');
-        $employee->citizenship = Input::get('citizenship');
+        $employee->citizenship_id = Input::get('citizenship');
         $employee->mode_of_payment = Input::get('modep');
         if(Input::get('bank_account_number') != null ){
         $employee->bank_account_number = Input::get('bank_account_number');
@@ -177,12 +334,69 @@ class EmployeesController extends \BaseController {
 	    }else{
 	    $employee->social_security_applicable = '0';
 	    }
+	    $employee->custom_field1 = Input::get('omode');
 		$employee->organization_id = '1';
-
+        $employee->start_date = Input::get('startdate');
+        $employee->end_date = Input::get('enddate');
 
 		$employee->save();
 
-		 Audit::logaudit('Employee', 'create', 'created: '.$employee->personal_file_number.'-'.$employee->first_name.' '.$employee->last_name);
+    Audit::logaudit('Employee', 'create', 'created: '.$employee->personal_file_number.'-'.$employee->first_name.' '.$employee->last_name);
+
+    $insertedId = $employee->id;
+
+    //parse_str(Input::get('kindata'),$output);
+     
+
+      //parse_str(Input::get('docinfo'),$data);
+
+    for($i=0;$i<count(Input::get('kin_first_name'));$i++){
+        if((Input::get('kin_first_name')[$i] != '' || Input::get('kin_first_name')[$i] != null) && (Input::get('kin_last_name')[$i] != '' || Input::get('kin_last_name')[$i] != null)){
+        $kin = new Nextofkin;
+        $kin->employee_id=$insertedId;
+        $kin->first_name = Input::get('kin_first_name')[$i];
+        $kin->last_name = Input::get('kin_last_name')[$i];
+        $kin->middle_name = Input::get('kin_middle_name')[$i];
+        $kin->relationship = Input::get('relationship')[$i];
+        $kin->contact = Input::get('contact')[$i];
+        $kin->id_number = Input::get('id_number')[$i];
+
+        $kin->save();
+
+        Audit::logaudit('NextofKins', 'create', 'created: '.Input::get('kin_first_name')[$i].' for '.Employee::getEmployeeName($insertedId));
+       }
+     }
+
+      $files = Input::file('path');
+      $j = 0;
+
+       foreach($files as $file){
+       
+       if ( Input::hasFile('path') && (Input::get('doc_name')[$j] != null || Input::get('doc_name')[$j] != '')){
+       $document= new Document;
+        
+        $document->employee_id = $insertedId;
+
+            $name = time().'-'.$file->getClientOriginalName();
+            $file = $file->move('public/uploads/employees/documents/', $name);
+            $input['file'] = '/public/uploads/employees/documents/'.$name;
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+            $document->document_path = $name;
+            $document->document_name = Input::get('doc_name')[$j].'.'.$extension;
+        
+
+        $document->description = Input::get('description')[$j];
+
+        $document->from_date = Input::get('fdate')[$j];
+
+        $document->expiry_date = Input::get('edate')[$j];
+
+        $document->save();
+
+       Audit::logaudit('Documents', 'create', 'created: '.Input::get('doc_name')[$j].' for '.Employee::getEmployeeName($insertedId));
+       $j=$j+1;
+       }
+       }
 
 		return Redirect::route('employees.index')->withFlashMessage('Employee successfully created!');
 		 }
@@ -191,6 +405,22 @@ class EmployeesController extends \BaseController {
         return Redirect::back()->withInput()->withErrors($e->getErrors());
     }
 	}
+
+	public function getIndex(){
+  
+    return Redirect::route('employees.index')->withFlashMessage('Employee successfully created!');
+    
+        
+	}
+
+  public function serializeDoc(){
+  
+    parse_str(Input::get('docinfo'),$data);
+
+    return $data;
+    
+        
+  }
 
 	/**
 	 * Display the specified branch.
@@ -218,10 +448,20 @@ class EmployeesController extends \BaseController {
 		$departments = Department::all();
 		$jgroups = Jobgroup::all();
 		$etypes = EType::all();
+		$citizenships = Citizenship::all();
+		$contract = DB::table('employee')
+		          ->join('employee_type','employee.type_id','=','employee_type.id')
+		          ->where('type_id',2)
+		          ->first();
 		$banks = Bank::all();
 		$bbranches = BBranch::all();
 		$educations = Education::all();
-		return View::make('employees.edit', compact('branches','educations','departments','etypes','jgroups','banks','bbranches','employee'));
+    $kins = Nextofkin::where('employee_id',$id)->get();
+    $docs = Document::where('employee_id',$id)->get();
+    $countk = Nextofkin::where('employee_id',$id)->count();
+    $countd = Document::where('employee_id',$id)->count();
+    $currency = Currency::find(1);
+		return View::make('employees.edit', compact('currency','countk','countd','docs','kins','citizenships','contract','branches','educations','departments','etypes','jgroups','banks','bbranches','employee'));
 	}
 
 	/**
@@ -304,7 +544,7 @@ class EmployeesController extends \BaseController {
         $employee->gender = Input::get('gender');
         $employee->marital_status = Input::get('status');
         $employee->yob = Input::get('dob');
-        $employee->citizenship = Input::get('citizenship');
+        $employee->citizenship_id = Input::get('citizenship');
         $employee->mode_of_payment = Input::get('modep');
         if(Input::get('bank_account_number') != null ){
         $employee->bank_account_number = Input::get('bank_account_number');
@@ -369,10 +609,74 @@ class EmployeesController extends \BaseController {
 	    }else{
 	    $employee->in_employment = 'N';
 	    }
-
+	    $employee->start_date = Input::get('startdate');
+        $employee->end_date = Input::get('enddate');
+        $employee->custom_field1 = Input::get('omode');
 		$employee->update();
 
 		 Audit::logaudit('Employee', 'update', 'updated: '.$employee->personal_file_number.'-'.$employee->first_name.' '.$employee->last_name);
+
+    Nextofkin::where('employee_id', $id)->delete();
+    for($i=0;$i<count(Input::get('kin_first_name'));$i++){
+        if((Input::get('kin_first_name')[$i] != '' || Input::get('kin_first_name')[$i] != null) && (Input::get('kin_last_name')[$i] != '' || Input::get('kin_last_name')[$i] != null)){
+        $kin = new Nextofkin;
+        $kin->employee_id=$id;
+        $kin->first_name = Input::get('kin_first_name')[$i];
+        $kin->last_name = Input::get('kin_last_name')[$i];
+        $kin->middle_name = Input::get('kin_middle_name')[$i];
+        $kin->relationship = Input::get('relationship')[$i];
+        $kin->contact = Input::get('contact')[$i];
+        $kin->id_number = Input::get('id_number')[$i];
+
+        $kin->save();
+
+        Audit::logaudit('NextofKins', 'create', 'created: '.Input::get('kin_first_name')[$i].' for '.Employee::getEmployeeName($id));
+       }
+     }
+
+      Document::where('employee_id', $id)->delete();
+      $files = Input::file('path');
+      $j = 0;
+
+       foreach($files as $file){
+       
+       if ( Input::get('doc_name')[$j] != null || Input::get('doc_name')[$j] != ''){
+       $document= new Document;
+       $document->employee_id=$id;
+       $name = '';
+       if ( $file){
+            if($file->getClientOriginalName() == null){
+              $name = Input::get('curpath')[$j];
+            }else{
+              $name = time().'-'.$file->getClientOriginalName();
+            }
+            $file = $file->move('public/uploads/employees/documents/', $name);
+            $input['file'] = '/public/uploads/employees/documents/'.$name;
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+            $document->document_path = $name;
+            $document->document_name = Input::get('doc_name')[$j].'.'.$extension;
+        
+        }else{
+            $name = Input::get('curpath')[$j];
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+            $document->document_path = $name;
+            $document->document_name = Input::get('doc_name')[$j].'.'.$extension;
+
+        }
+
+        $document->description = Input::get('description')[$j];
+
+        $document->from_date = Input::get('fdate')[$j];
+
+        $document->expiry_date = Input::get('edate')[$j];
+
+        $document->save();
+
+       Audit::logaudit('Documents', 'create', 'created: '.Input::get('doc_name')[$j].' for '.Employee::getEmployeeName($id));
+       $j=$j+1;
+       }
+       }
+
 
 		 if(Confide::user()->user_type == 'member'){
 		 	return Redirect::to('dashboard');
@@ -441,9 +745,13 @@ class EmployeesController extends \BaseController {
 
         $documents = Document::where('employee_id', $id)->get();
 
+        $benefits = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->get();
+
+        $count = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->count();
+
 		$organization = Organization::find(1);
 
-		return View::make('employees.view', compact('employee','appraisals','kins','documents','occurences','properties'));
+		return View::make('employees.view', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
 		
 	}
 
@@ -461,10 +769,15 @@ class EmployeesController extends \BaseController {
 
         $documents = Document::where('employee_id', $id)->get();
 
+        $benefits = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->get();
+
+        $count = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->count();
+
 		$organization = Organization::find(1);
 
-		return View::make('employees.viewdeactive', compact('employee','appraisals','kins','documents','occurences','properties'));
+		return View::make('employees.viewdeactive', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
 		
 	}
 
+	
 }

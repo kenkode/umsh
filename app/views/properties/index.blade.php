@@ -57,6 +57,14 @@ function asMoney($value) {
         <th></th>
 
       </thead>
+      <tfoot>
+
+        <th>#</th>
+        <th>Employee</th>
+        <th>Name</th>
+         <th>Amount</th>
+
+      </tfoot>
       <tbody>
 
         <?php $i = 1; ?>
@@ -65,7 +73,11 @@ function asMoney($value) {
         <tr>
 
           <td> {{ $i }}</td>
+          @if($property->middle_name == null || $property->middle_name == '')
           <td>{{ $property->first_name.' '.$property->last_name }}</td>
+          @else
+          <td>{{ $property->first_name.' '.$property->middle_name.' '.$property->last_name }}</td>
+          @endif
           <td>{{ $property->name }}</td>
           <td align="right">{{ asMoney((double)$property->monetary) }}</td>
           <td>

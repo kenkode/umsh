@@ -1,1 +1,0 @@
-/var/www/html/xara/app/views/paymentmethods/edit.blade.php

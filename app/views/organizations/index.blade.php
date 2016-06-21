@@ -3,65 +3,65 @@
 <br/><br/>
 
 <div class="row">
-	<div class="col-lg-12">
+  <div class="col-lg-12">
 
 <button class="btn btn-info btn-xs " data-toggle="modal" data-target="#logo">update logo</button> 
 &nbsp;&nbsp;&nbsp;
 <button class="btn btn-info btn-xs " data-toggle="modal" data-target="#organization">update details</button>
 
 <hr>
-</div>	
+</div>  
 </div>
 
 
 <div class="row">
-	<div class="col-lg-1">
+  <div class="col-lg-1">
 
 
 
-</div>	
+</div>  
 
 <div class="col-lg-3">
 
-{{ HTML::image("images/ourlogo.png", "Logo") }}
+<img src="{{asset('public/uploads/logo/'.$organization->logo)}}" alt="logo" width="100%">
 
 
-</div>	
+</div>  
 
 
 <div class="col-lg-7 ">
 
-	<table class="table table-bordered table-hover">
+  <table class="table table-bordered table-hover">
 
-		<tr>
+    <tr>
 
-			<td> Name</td><td>{{Organization::getOrganizationName()}}</td>
+      <td> Name</td><td>{{Organization::getOrganizationName()}}</td>
 
-		</tr>
+    </tr>
 
-		<tr>
+    <tr>
 
-			<td> Email </td><td>{{$organization->email}}</td>
+      <td> Email </td><td>{{$organization->email}}</td>
 
-		</tr>
+    </tr>
 
-		<tr>
+    <tr>
 
-			<td> Phone </td><td>{{$organization->phone}}</td>
+      <td> Phone </td><td>{{$organization->phone}}</td>
 
-		</tr>
+    </tr>
 
-		<tr>
+    <tr>
 
-			<td>  Website</td><td>{{$organization->website}}</td>
+      <td>  Website</td><td>{{$organization->website}}</td>
 
-		</tr>
+    </tr>
 
-		<tr>
+    <tr>
 
-			<td> Address </td><td>{{$organization->address}}</td>
+      <td> Address </td><td>{{$organization->address}}</td>
 
-		</tr>
+    </tr>
 
     <tr>
 
@@ -74,7 +74,7 @@
       <td> Nssf Number </td><td>{{$organization->nssf_no}}</td>
 
     </tr>
-		
+    
     <tr>
 
       <td> Nhif Number </td><td>{{$organization->nhif_no}}</td>
@@ -105,21 +105,21 @@
 
     </tr>
 
-	</table>
+  </table>
 
 
-</div>	
+</div>  
 
 
 
 </div>
 
 <div class="row">
-	<div class="col-lg-12">
+  <div class="col-lg-12">
 
 
 <hr>
-</div>	
+</div>  
 </div>
 
 
@@ -142,8 +142,8 @@
       <div class="modal-body">
 
 
-      	
-      	<form method="POST" action="{{{ URL::to('organizations/update/'.$organization->id) }}}" accept-charset="UTF-8">
+        
+        <form method="POST" action="{{{ URL::to('organizations/update/'.$organization->id) }}}" accept-charset="UTF-8">
    
     <fieldset>
         <div class="form-group">
@@ -253,7 +253,7 @@
       <div class="modal-footer">
         
         <div class="form-actions form-group">
-        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary btn-sm">Update Details</button>
         </div>
 
@@ -278,8 +278,8 @@
       <div class="modal-body">
 
 
-      	
-      	<form method="POST" action="{{{ URL::to('organizations/logo/'.$organization->id) }}}" accept-charset="UTF-8" enctype="multipart/form-data">
+        
+        <form method="POST" action="{{{ URL::to('organizations/logo/'.$organization->id) }}}" accept-charset="UTF-8" enctype="multipart/form-data">
    
     <fieldset>
         <div class="form-group">
@@ -314,7 +314,7 @@
       <div class="modal-footer">
         
         <div class="form-actions form-group">
-        	<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary btn-sm">Update Logo</button>
         </div>
 

@@ -24,13 +24,13 @@ class PropertiesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create($id)
+	public function create()
 	{
-        $id = $id;
+		$currency = Currency::find(1);
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
 		          ->get();
-		return View::make('properties.create', compact('employees','id'));
+		return View::make('properties.create', compact('employees','currency'));
 	}
 
 	/**
@@ -100,13 +100,14 @@ class PropertiesController extends \BaseController {
 	{
 		$property = Property::find($id);
 
+        $currency = Currency::find(1);
 		$user = User::findOrFail($property->issued_by);
 
 		if($property->received_by>0){
         $retuser = User::findOrFail($property->received_by);
 		}
 
-		return View::make('properties.edit', compact('property','user','retuser'));
+		return View::make('properties.edit', compact('currency','property','user','retuser'));
 	}
 
 	/**
@@ -132,6 +133,7 @@ class PropertiesController extends \BaseController {
 		$property->digitalserial = Input::get('dserial');
 		$a = str_replace( ',', '', Input::get('amount') );
 		$property->monetary = $a;
+		$property->issue_date = Input::get('idate');
 		$property->scheduled_return_date = Input::get('sdate');
 		if(filter_var(Input::get('active'), FILTER_VALIDATE_BOOLEAN)){
         $property->state = 1;

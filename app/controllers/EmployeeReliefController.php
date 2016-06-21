@@ -13,7 +13,7 @@ class EmployeeReliefController extends \BaseController {
 		          ->join('employee_relief', 'employee.id', '=', 'employee_relief.employee_id')
 		          ->join('relief', 'employee_relief.relief_id', '=', 'relief.id')
 		          ->where('in_employment','=','Y')
-		          ->select('employee_relief.id','first_name','last_name','relief_amount','relief_name')
+		          ->select('employee_relief.id','first_name','middle_name','last_name','relief_amount','relief_name')
 		          ->get();
 		Audit::logaudit('Employee Reliefs', 'view', 'viewed employee relief');
 		return View::make('employee_relief.index', compact('rels'));
@@ -26,12 +26,33 @@ class EmployeeReliefController extends \BaseController {
 	 */
 	public function create()
 	{
+		
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
 		          ->get();
 		$reliefs = Relief::all();
-		return View::make('employee_relief.create',compact('employees','reliefs'));
+		$currency = Currency::find(1);
+		return View::make('employee_relief.create',compact('employees','reliefs','currency'));
 	}
+
+	public function createrelief()
+	{
+      $postrelief = Input::all();
+      $data = array('relief_name' => $postrelief['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('relief')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Reliefs', 'create', 'created: '.$postrelief['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	}    
 
 	/**
 	 * Store a newly created branch in storage.
@@ -86,10 +107,12 @@ class EmployeeReliefController extends \BaseController {
 	 */
 	public function edit($id)
 	{
+		
 		$rel = ERelief::find($id);
 		$employees = Employee::all();
         $reliefs = Relief::all();
-		return View::make('employee_relief.edit', compact('rel','employees','reliefs'));
+        $currency = Currency::find(1);
+		return View::make('employee_relief.edit', compact('rel','employees','reliefs','currency'));
 	}
 
 	/**

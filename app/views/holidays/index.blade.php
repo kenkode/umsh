@@ -29,6 +29,16 @@
         <th>Action</th>
 
       </thead>
+
+     
+      <tfoot>
+
+        <th>#</th>
+        <th>Holiday Name</th>
+        <th>Holiday Date</th>
+
+      </tfoot>
+
       <tbody>
 
         <?php $i = 1; ?>

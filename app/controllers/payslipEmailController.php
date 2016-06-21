@@ -18,16 +18,24 @@ class payslipEmailController extends \BaseController {
         if(!empty(Input::get('sel'))){
         $period = Input::get('period');
         $employees = Employee::all();
+        $select = Input::get("employeeid");
        
         $emps = DB::table('employee')->count();
 
         foreach ($employees as $user) {
 
-        $transacts = DB::table('transact')
+        $transact = DB::table('transact')
             ->join('employee', 'transact.employee_id', '=', 'employee.personal_file_number')
             ->where('financial_month_year' ,'=', Input::get('period'))
             ->where('employee.id' ,'=', $user->id)
             ->get(); 
+
+        $nontaxables = DB::table('transact_nontaxables')
+            ->join('employee', 'transact_nontaxables.employee_id', '=', 'employee.id')
+            ->where('financial_month_year' ,'=', Input::get('period'))
+            ->where('employee.id' ,'=', $user->id)
+            ->groupBy('nontaxable_name')
+            ->get();
 
         $allws = DB::table('transact_allowances')
             ->join('employee', 'transact_allowances.employee_id', '=', 'employee.id')
@@ -49,10 +57,24 @@ class payslipEmailController extends \BaseController {
             ->where('employee.id' ,'=', $user->id)
             ->groupBy('deduction_name')
             ->get();    
- 
-        $currencies = DB::table('currencies')
-            ->select('shortname')
+
+        $overtimes = DB::table('transact_overtimes')
+            ->join('employee', 'transact_overtimes.employee_id', '=', 'employee.id')
+            ->where('financial_month_year' ,'=', Input::get('period'))
+            ->where('employee.id' ,'=', $user->id)
+            ->groupBy('overtime_type')
             ->get();
+
+        $rels = DB::table('transact_reliefs')
+            ->join('employee', 'transact_reliefs.employee_id', '=', 'employee.id')
+            ->where('financial_month_year' ,'=', Input::get('period'))
+            ->where('employee.id' ,'=', $user->id)
+            ->groupBy('relief_name')
+            ->get();
+ 
+        $currency = DB::table('currencies')
+            ->select('shortname')
+            ->first();
 
         $organization = Organization::find(1);
 
@@ -116,7 +138,7 @@ class payslipEmailController extends \BaseController {
         
         $fileName = $user->first_name.'_'.$user->last_name.'_'.$fyear.'.pdf';
         $filePath = 'app/views/temp/';
-        $pdf = PDF::loadView('pdf.monthlySlip', compact('employee','transacts','allws','deds','earnings','period','currencies', 'organization'))->setPaper('a4')->setOrientation('potrait');
+        $pdf = PDF::loadView('pdf.monthlySlip', compact('nontaxables','select','name','employee','transact','allws','deds','earnings','overtimes','rels','period','currency', 'organization'))->setPaper('a4')->setOrientation('potrait');
 
         $pdf->save($filePath.$fileName);
 
@@ -135,12 +157,29 @@ class payslipEmailController extends \BaseController {
         
         $id = Input::get('employeeid');
 
+        $select = Input::get("employeeid");
+
         $employee = Employee::find($id);
 
-        $transacts = DB::table('transact')
+        $name = '';
+
+        if($employee->middle_name == '' || $employee->middle_name == null){
+              $name = $employee->first_name.' '.$employee->last_name;
+              }else{
+              $name = $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name;
+              }
+
+        $transact = DB::table('transact')
             ->join('employee', 'transact.employee_id', '=', 'employee.personal_file_number')
             ->where('financial_month_year' ,'=', Input::get('period'))
             ->where('employee.id' ,'=', Input::get('employeeid'))
+            ->first(); 
+
+         $nontaxables = DB::table('transact_nontaxables')
+            ->join('employee', 'transact_nontaxables.employee_id', '=', 'employee.id')
+            ->where('financial_month_year' ,'=', Input::get('period'))
+            ->where('employee.id' ,'=', Input::get('employeeid'))
+            ->groupBy('nontaxable_name')
             ->get(); 
 
         $allws = DB::table('transact_allowances')
@@ -162,11 +201,26 @@ class payslipEmailController extends \BaseController {
             ->where('financial_month_year' ,'=', Input::get('period'))
             ->where('employee.id' ,'=', Input::get('employeeid'))
             ->groupBy('deduction_name')
-            ->get();    
- 
-        $currencies = DB::table('currencies')
-            ->select('shortname')
+            ->get(); 
+
+        $overtimes = DB::table('transact_overtimes')
+            ->join('employee', 'transact_overtimes.employee_id', '=', 'employee.id')
+            ->where('financial_month_year' ,'=', Input::get('period'))
+            ->where('employee.id' ,'=', Input::get('employeeid'))
+            ->groupBy('overtime_type')
             ->get();
+
+        $rels = DB::table('transact_reliefs')
+            ->join('employee', 'transact_reliefs.employee_id', '=', 'employee.id')
+            ->where('financial_month_year' ,'=', Input::get('period'))
+            ->where('employee.id' ,'=', Input::get('employeeid'))
+            ->groupBy('relief_name')
+            ->get();
+
+ 
+        $currency = DB::table('currencies')
+            ->select('shortname')
+            ->first();
 
         $organization = Organization::find(1);
 
@@ -230,7 +284,7 @@ class payslipEmailController extends \BaseController {
 
         $fileName = $employee->first_name.'_'.$employee->last_name.'_'.$fyear.'.pdf';
         $filePath = 'app/views/temp/';
-        $pdf = PDF::loadView('pdf.monthlySlip', compact('employee','transacts','allws','deds','earnings','period','currencies', 'organization'))->setPaper('a4')->setOrientation('potrait');
+        $pdf = PDF::loadView('pdf.monthlySlip', compact('nontaxables','select','name','employee','transact','allws','deds','earnings','overtimes','rels','period','currency', 'organization'))->setPaper('a4')->setOrientation('potrait');
 
         $pdf->save($filePath.$fileName);
 

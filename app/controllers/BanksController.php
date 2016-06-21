@@ -44,6 +44,8 @@ class BanksController extends \BaseController {
 
 		$bank->bank_name = Input::get('name');
 
+		$bank->bank_code = Input::get('code');
+
         $bank->organization_id = '1';
 
 		$bank->save();
@@ -97,6 +99,7 @@ class BanksController extends \BaseController {
 		}
 
 		$bank->bank_name = Input::get('name');
+		$bank->bank_code = Input::get('code');
 		$bank->update();
         
         Audit::logaudit('Bank', 'update', 'updated: '.$bank->bank_name);
@@ -113,10 +116,16 @@ class BanksController extends \BaseController {
 	public function destroy($id)
 	{
 		$bank = Bank::findOrFail($id);
+		$bc  = DB::table('bank_branches')->where('bank_id',$id)->count();
+		if($bc>0){
+			return Redirect::route('banks.index')->withDeleteMessage('Cannot delete this bank because its assigned to bank branch(es)!');
+		}else{
+		
 		Bank::destroy($id);
 
         Audit::logaudit('Bank', 'delete', 'deleted: '.$bank->bank_name);
 		return Redirect::route('banks.index')->withDeleteMessage('Bank successfully deleted!');
 	}
+}
 
 }

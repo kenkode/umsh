@@ -178,13 +178,19 @@ class AccountsController extends \BaseController {
 
 		$account = Account::findOrFail($id);
 
+		$transact  = DB::table('transact')->where('account_id',$id)->count();
+		if($transact>0){
+			return Redirect::route('accounts.index')->withDeleteMessage('Cannot delete this account because its assigned to employee payroll transaction!');
+		}else{
+
 		Account::destroy($id);
 
 
 		Audit::logaudit('Accounts', 'delete', 'deleted:'.$account->name.' '.$account->code);
 
 
-		return Redirect::route('accounts.index');
+		return Redirect::route('accounts.index')->withDeleteMessage('Account successfully deleted!');
+	}
 	}
 
 }

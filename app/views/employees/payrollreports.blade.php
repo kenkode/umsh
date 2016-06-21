@@ -1,4 +1,4 @@
-@extends('layouts.payroll')
+@extends('layouts.ports')
 @section('content')
 <br/>
 
@@ -31,18 +31,30 @@
        <li>
           <a href="{{ URL::to('payrollReports/selectRemittancePeriod') }}">Pay Remittance</a>
        </li>
+
+       <li>
+          <a href="{{ URL::to('payrollReports/selectEarning') }}"> Earning Report</a>
+       </li> 
+
+       <li>
+          <a href="{{ URL::to('payrollReports/selectOvertime') }}"> Overtime Report</a>
+       </li> 
     
        <li>
           <a href="{{ URL::to('payrollReports/selectAllowance') }}"> Allowance Report</a>
        </li>  
 
        <li>
-         <a href="{{ URL::to('payrollReports/selectDeduction') }}"> Deduction Report</a>     
+          <a href="{{ URL::to('payrollReports/selectnontaxableincome') }}" >Non Taxable Income Report</a>
+       </li> 
+
+       <li>
+          <a href="{{ URL::to('payrollReports/selectRelief') }}"> Relief Report</a>
        </li>  
 
        <li>
-        <a href="reports/blank" target="_blank">Blank report template</a>
-      </li>
+         <a href="{{ URL::to('payrollReports/selectDeduction') }}"> Deduction Report</a>     
+       </li>  
     </ul>
 
   </div>

@@ -25,7 +25,7 @@
 	<table class="table table-responsive table-bordered table-condensed">
    
    <tr>
-   <td><strong>Employee</strong></td><td>{{$leaveapplication->employee->first_name.' '.$leaveapplication->employee->last_name.' '.$leaveapplication->employee->middle_name}}</td>
+   <td><strong>Employee</strong></td><td>{{$leaveapplication->employee->first_name.' '.$leaveapplication->employee->middle_name.' '.$leaveapplication->employee->last_name}}</td>
      
    </tr> 
 

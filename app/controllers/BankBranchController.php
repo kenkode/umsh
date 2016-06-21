@@ -122,6 +122,7 @@ class BankBranchController extends \BaseController {
 		Audit::logaudit('Bank Branch', 'delete', 'deleted: '.$bbranch->bank_branch_name);
 
 		return Redirect::route('bank_branch.index')->withDeleteMessage('Bank Branch successfully deleted!');
-	}
+
+  }
 
 }

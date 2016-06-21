@@ -55,6 +55,16 @@ function asMoney($value) {
         <th>Action</th>
 
       </thead>
+
+      <tfoot>
+
+        <th>#</th>
+        <th>Employee</th>
+        <th>Deduction Type</th>
+        <th>Amount</th>
+
+      </tfoot>
+
       <tbody>
 
         <?php $i = 1; ?>
@@ -63,7 +73,11 @@ function asMoney($value) {
         <tr>
 
           <td> {{ $i }}</td>
+          @if($ded->middle_name == null || $ded->middle_name == '')
           <td>{{ $ded->first_name.' '.$ded->last_name }}</td>
+          @else
+          <td>{{ $ded->first_name.' '.$ded->middle_name.' '.$ded->last_name }}</td>
+          @endif
           <td>{{ $ded->deduction_name }}</td>
           <td align="right">{{ asMoney((double)$ded->deduction_amount) }}</td>
           <td>

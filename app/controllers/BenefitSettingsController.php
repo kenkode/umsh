@@ -116,11 +116,16 @@ class BenefitSettingsController extends \BaseController {
 	public function destroy($id)
 	{
 		$benefit = Benefitsetting::findOrFail($id);
+		$empben  = Employeebenefit::where('benefit_id',$id)->count();
+		if($empben>0){
+			return Redirect::route('benefitsettings.index')->withDeleteMessage('Cannot delete this Benefit because its assigned to a job group!');
+		}else{
 		Benefitsetting::destroy($id);
 
 		Audit::logaudit('Benefits', 'delete', 'deleted: '.$benefit->benefit_name);
 
 		return Redirect::route('benefitsettings.index')->withDeleteMessage('Benefit successfully deleted!');
+	}
 	}
 
 }

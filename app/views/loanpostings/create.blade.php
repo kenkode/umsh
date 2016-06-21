@@ -1,1 +1,0 @@
-C:\xampp\htdocs\xaracbs\app/views/loanpostings/create.blade.php

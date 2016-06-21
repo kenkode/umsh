@@ -19,6 +19,12 @@ class DocumentsController extends \BaseController {
 		return View::make('documents.index', compact('documents'));
 	}
 
+	public function serializecheck(){
+		
+        return Input::get('path');
+        
+	}
+
 	/**
 	 * Show the form for creating a new branch
 	 *
@@ -64,6 +70,10 @@ class DocumentsController extends \BaseController {
         }
 
         $document->description = Input::get('desc');
+
+        $document->from_date = Input::get('fdate');
+
+        $document->expiry_date = Input::get('edate');
 
 		$document->save();
 
@@ -134,6 +144,10 @@ class DocumentsController extends \BaseController {
 
         $document->description = Input::get('desc');
 
+        $document->from_date = Input::get('fdate');
+
+        $document->expiry_date = Input::get('edate');
+
 		$document->update();
 
 		Audit::logaudit('Documents', 'update', 'updated: '.$document->document_name.' for '.Employee::getEmployeeName($document->employee_id));
@@ -164,9 +178,11 @@ class DocumentsController extends \BaseController {
     public function getDownload($id){
         //PDF file is stored under project/public/download/info.pdf
         $document = Document::findOrFail($id);
-        $file= public_path(). "/uploads/employees/documents/".$document->document_path;
+        $extension = pathinfo($document->document_path, PATHINFO_EXTENSION);
+        $name = explode(".", $document->document_path);
+        $file= public_path(). "/uploads/employees/documents/".$name[0];
         
-        return Response::download($file, $document->document_name);
+        return Response::download($file.'.'.$extension, $document->document_name);
 }
 
 }

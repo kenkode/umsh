@@ -19,6 +19,12 @@ class NextOfKinsController extends \BaseController {
 		return View::make('nextofkins.index', compact('kins'));
 	}
 
+	public function serializecheck(){
+		
+        return Input::get('kin_first_name');
+        
+	}
+
 	/**
 	 * Show the form for creating a new kin
 	 *

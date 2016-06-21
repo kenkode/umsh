@@ -1,1 +1,0 @@
-C:\xampp\htdocs\xaracbs\app/views/charges/show.blade.php

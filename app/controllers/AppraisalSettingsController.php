@@ -23,7 +23,27 @@ class AppraisalSettingsController extends \BaseController {
 	 */
 	public function create()
 	{
-		return View::make('appraisalsettings.create');
+		$categories = Appraisalcategory::all();
+		return View::make('appraisalsettings.create',compact('categories'));
+	}
+
+	public function createcategory()
+	{
+      $postallowance = Input::all();
+      $data = array('name' => $postallowance['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('appraisalcategories')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Appraisalcategories', 'create', 'created: '.$postallowance['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
 	}
 
 	/**
@@ -42,7 +62,7 @@ class AppraisalSettingsController extends \BaseController {
 
 		$appraisal = new Appraisalquestion;
 
-		$appraisal->category = Input::get('category');
+		$appraisal->appraisalcategory_id = Input::get('category');
 
         $appraisal->question = Input::get('question');
 
@@ -65,8 +85,8 @@ class AppraisalSettingsController extends \BaseController {
 	public function show($id)
 	{
 		$appraisal = Appraisalquestion::findOrFail($id);
-
-		return View::make('appraisalsettings.show', compact('appraisal'));
+        $categories = Appraisalcategory::all();
+		return View::make('appraisalsettings.show', compact('categories'));
 	}
 
 	/**
@@ -78,8 +98,8 @@ class AppraisalSettingsController extends \BaseController {
 	public function edit($id)
 	{
 		$appraisal = Appraisalquestion::find($id);
-
-		return View::make('appraisalsettings.edit', compact('appraisal'));
+        $categories = Appraisalcategory::all();
+		return View::make('appraisalsettings.edit', compact('appraisal','categories'));
 	}
 
 	/**
@@ -99,7 +119,7 @@ class AppraisalSettingsController extends \BaseController {
 			return Redirect::back()->withErrors($validator)->withInput();
 		}
 
-		$appraisal->category = Input::get('category');
+		$appraisal->appraisalcategory_id = Input::get('category');
 
         $appraisal->question = Input::get('question');
 
@@ -122,13 +142,18 @@ class AppraisalSettingsController extends \BaseController {
 	public function destroy($id)
 	{
 		$appraisal = Appraisalquestion::findOrFail($id);
+
+		$app  = DB::table('Appraisals')->where('Appraisalquestion_id',$id)->count();
+		if($app>0){
+			return Redirect::route('AppraisalSettings.index')->withDeleteMessage('Cannot delete this appraisal question because its assigned to appraisal(s)!');
+		}else{
 		
 		Appraisalquestion::destroy($id);
 
 		Audit::logaudit('Appraisal Question', 'delete', 'deleted: '.$appraisal->question);
 
-
 		return Redirect::route('AppraisalSettings.index')->withDeleteMessage('Appraisal Settings successfully deleted!');
-	}
+	   }
+   }
 
 }

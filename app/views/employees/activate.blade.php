@@ -40,20 +40,40 @@
         </div>
         <div class="panel-body">
 
-      <table id="users" class="table table-condensed table-bordered table-responsive table-hover">
+      <table id="users" class="table table-condensed table-bordered table-responsive table-hover" style="font-size:11px">
 
 
       <thead>
 
         <th>#</th>
-        <th>Personal File Number</th>
-        <th>Employee Name</th>
-        <th>Employee Branch</th>
-        <th>Employee Department</th>
+        <th>PFN</th>
+        <th width="150">Employee Name</th>
+        <th>ID</th>
+        <th>KRA PIN</th>
+        <th>NSSF NO.</th>
+        <th>NHIF NO.</th>
+        <th>Gender</th>
+        <th>Branch</th>
+        <th>Department</th>
 
         <th>Action</th>
 
       </thead>
+
+      <tfoot>
+
+        <th>#</th>
+        <th>PFN</th>
+        <th width="150">Employee Name</th>
+        <th>ID</th>
+        <th>Kra Pin</th>
+        <th>Nssf NO.</th>
+        <th>Nhif NO.</th>
+        <th>Gender</th>
+        <th>Branch</th>
+        <th>Department</th>
+
+      </tfoot>
       <tbody>
 
         <?php $i = 1; ?>
@@ -63,7 +83,12 @@
 
           <td> {{ $i }}</td>
           <td>{{ $employee->personal_file_number }}</td>
-          <td>{{ $employee->first_name.' '.$employee->last_name}}</td>
+          <td width="150">{{ $employee->first_name.' '.$employee->last_name}}</td>
+          <td>{{ $employee->identity_number }}</td>
+          <td>{{ $employee->pin }}</td>
+          <td>{{ $employee->social_security_number }}</td>
+          <td>{{ $employee->hospital_insurance_number }}</td>
+          <td>{{ $employee->gender }}</td>
           <?php if( $employee->branch_id!=0){ ?>
           <td>{{ Branch::getName($employee->branch_id) }}</td>
           <?php }else{?>
@@ -81,7 +106,7 @@
                     Action <span class="caret"></span>
                   </button>
           
-                  <ul class="dropdown-menu" role="menu">
+                  <ul class="dropdown-menu" style="margin-left:0px" role="menu">
 
                     <li><a href="{{URL::to('employees/viewdeactive/'.$employee->id)}}">View</a></li>
                    

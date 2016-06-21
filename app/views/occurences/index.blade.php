@@ -46,6 +46,13 @@
         <th>Action</th>
 
       </thead>
+      <tfoot>
+
+        <th>#</th>
+        <th>Employee</th>
+        <th>Occurence</th>
+
+      </tfoot>
       <tbody>
 
         <?php $i = 1; ?>
@@ -54,7 +61,11 @@
         <tr>
 
           <td> {{ $i }}</td>
+          @if($occurence->middle_name == null || $occurence->middle_name == '')
           <td>{{ $occurence->first_name.' '.$occurence->last_name }}</td>
+          @else
+          <td>{{ $occurence->first_name.' '.$occurence->middle_name.' '.$occurence->last_name }}</td>
+          @endif
           <td>{{ $occurence->occurence_brief }}</td>
           <td>
 
@@ -65,7 +76,7 @@
           
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="{{URL::to('occurences/view/'.$occurence->id)}}">View</a></li>
-
+                     <li><a target="blank" href="{{asset('/public/uploads/employees/documents/'.$occurence->doc_path) }}">Download</a></li>
                     <li><a href="{{URL::to('occurences/edit/'.$occurence->id)}}">Update</a></li>
                    
                     <li><a href="{{URL::to('occurences/delete/'.$occurence->id)}}" onclick="return (confirm('Are you sure you want to delete this employee`s occurence?'))">Delete</a></li>

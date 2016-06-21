@@ -1,4 +1,4 @@
-@extends('layouts.leave')
+@extends('layouts.ports')
 @section('content')
 <br/>
 
@@ -24,7 +24,7 @@
         </div>
         @endif
 
-		 <form method="POST" action="{{URL::to('leaveReports/IndividualEmployeeLeave')}}" accept-charset="UTF-8">
+		 <form target="_blank" method="POST" action="{{URL::to('leaveReports/IndividualEmployeeLeave')}}" accept-charset="UTF-8">
    
     <fieldset>
 
@@ -33,13 +33,22 @@
                         <select name="employeeid" class="form-control">
                             <option></option>
                             @foreach($employees as $employee)
-                            <option value="{{$employee->id}}"> {{ $employee->first_name.' '.$employee->last_name }}</option>
+                            <option value="{{$employee->id}}"> {{ $employee->personal_file_number.' : '.$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</option>
                             @endforeach
 
                         </select>
                 
             </div>
 
+        <div class="form-group">
+                        <label for="username">Download as: <span style="color:red">*</span></label>
+                        <select required name="format" class="form-control">
+                            <option></option>
+                            <option value="excel"> Excel</option>
+                            <option value="pdf"> PDF</option>
+                        </select>
+                
+            </div>
                         
         
         <div class="form-actions form-group">

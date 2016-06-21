@@ -54,6 +54,7 @@
         <tr>
 
           <td> {{ $i }}</td>
+          @if($document->middle_name == null || $document->middle_name == '')
           <td>{{ $document->first_name.' '.$document->last_name }}</td>
           <td>{{ $document->document_name }}</td>
           <td>
@@ -64,7 +65,7 @@
                   </button>
           
                   <ul class="dropdown-menu" role="menu">
-                   <li><a href="{{URL::to('documents/download/'.$document->id)}}">Download</a></li>
+                   <li><a target="blank" href="{{asset('/public/uploads/employees/documents/'.$document->document_path) }}">Download</a></li>
                     <li><a href="{{URL::to('documents/edit/'.$document->id)}}">Update</a></li>
                    
                     <li><a href="{{URL::to('documents/delete/'.$document->id)}}" onclick="return (confirm('Are you sure you want to delete this employee`s document?'))">Delete</a></li>

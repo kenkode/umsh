@@ -21,8 +21,8 @@
 
   <thead>
     
-    <th>Employee #</th>
-    <th>Employee</th>
+    <th>PFN</th>
+    <th width="150">Employee</th>
     <th>Leave Type</th>
     <th>Approval Date</th>
     <th>Start Date</th>
@@ -33,6 +33,18 @@
 
   </thead>
 
+  <tfoot>
+    
+    <th>PFN</th>
+    <th width="150">Employee</th>
+    <th>Leave Type</th>
+    <th>Approval Date</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Leave Days</th>
+
+  </tfoot>
+
   <tbody>
 
    
@@ -42,7 +54,7 @@
          <tr>
 
           <td>{{$leaveapplication->employee->personal_file_number}}</td>
-          <td>{{$leaveapplication->employee->first_name." ".$leaveapplication->employee->last_name." ".$leaveapplication->employee->middle_name}}</td>
+          <td width="150">{{$leaveapplication->employee->first_name." ".$leaveapplication->employee->middle_name." ".$leaveapplication->employee->last_name}}</td>
           <td>{{$leaveapplication->leavetype->name}}</td>
           <td>{{$leaveapplication->date_approved}}</td>
            <td>{{$leaveapplication->approved_start_date}}</td>

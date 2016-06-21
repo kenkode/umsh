@@ -17,20 +17,20 @@ Route::get('/', function()
     $count = count(User::all());
 
     if($count <= 1 ){
-
-        return View::make('login');
+        $organization = Organization::find(1);
+        return View::make('login',compact('organization'));
     }
 
 
-	if (Confide::user()) {
-
-   
+  if (Confide::user()) {
 
         return Redirect::to('/dashboard');
         } else {
-            return View::make('login');
+          $organization = Organization::find(1);
+            return View::make('login',compact('organization'));
         }
 });
+
 
 
 
@@ -308,6 +308,7 @@ Route::post('leaveapplications/approve/{id}', 'LeaveapplicationsController@doapp
 Route::get('leaveapplications/cancel', 'LeaveapplicationsController@cancel');
 Route::get('leaveapplications/reject/{id}', 'LeaveapplicationsController@reject');
 Route::get('leaveapplications/show/{id}', 'LeaveapplicationsController@show');
+Route::post('createLeave', 'LeaveapplicationsController@createleave');
 
 Route::get('leaveapplications/approvals', 'LeaveapplicationsController@approvals');
 Route::get('leaveapplications/rejects', 'LeaveapplicationsController@rejects');
@@ -453,32 +454,55 @@ Route::get('template/allowances', function(){
 
 
               $sheet->row(1, array(
-     'EMPLOYEE', 'ALLOWANCE TYPE', 'AMOUNT'
-));
+              'EMPLOYEE', 'ALLOWANCE TYPE', 'FORMULAR', 'INSTALMENTS','AMOUNT','ALLOWANCE DATE',
+              ));
 
-             
-                $empdata = array();
+              $sheet->setWidth(array(
+                    'A'     =>  30,
+                    'B'     =>  30,
+                    'C'     =>  30,
+                    'D'     =>  30,
+                    'E'     =>  30,
+                    'F'     =>  30,
+              ));
 
-                foreach($employees as $d){
+             $sheet->getStyle('F2:F1000')
+            ->getNumberFormat()
+            ->setFormatCode('yyyy-mm-dd');
 
-                  $empdata[] = $d->personal_file_number.':'.$d->first_name.' '.$d->last_name.' '.$d->middle_name;
-                }
 
-                $emplist = implode(", ", $empdata);
+
+                $row = 2;
+                $r = 2;
+            
+            for($i = 0; $i<count($employees); $i++){
+            
+             $sheet->SetCellValue("YY".$row, $employees[$i]->personal_file_number." : ".$employees[$i]->first_name.' '.$employees[$i]->last_name);
+             $row++;
+            }  
+
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'names', $sheet, 'YY2:YY'.(count($employees)+1)
+                        )
+                );
 
                 
 
-                $listdata = array();
+               for($i = 0; $i<count($data); $i++){
+            
+             $sheet->SetCellValue("YZ".$r, $data[$i]->allowance_name);
+             $r++;
+            }  
 
-                foreach($data as $d){
-
-                  $listdata[] = $d->allowance_name;
-                }
-
-                $list = implode(", ", $listdata);
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'allowances', $sheet, 'YZ2:YZ'.(count($data)+1)
+                        )
+                );
    
 
-    for($i=2; $i <= 250; $i++){
+    for($i=2; $i <= 1000; $i++){
 
                 $objValidation = $sheet->getCell('B'.$i)->getDataValidation();
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
@@ -491,9 +515,7 @@ Route::get('template/allowances', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$list.'"'); //note this!
-
-
+                $objValidation->setFormula1('allowances'); //note this!
 
                 $objValidation = $sheet->getCell('A'.$i)->getDataValidation();
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
@@ -506,18 +528,25 @@ Route::get('template/allowances', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$emplist.'"'); //note this!
+                $objValidation->setFormula1('names'); //note this!
 
-    }
-
-                
-
-                
-        
+                $objValidation = $sheet->getCell('C'.$i)->getDataValidation();
+                $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                $objValidation->setAllowBlank(false);
+                $objValidation->setShowInputMessage(true);
+                $objValidation->setShowErrorMessage(true);
+                $objValidation->setShowDropDown(true);
+                $objValidation->setErrorTitle('Input error');
+                $objValidation->setError('Value is not in list.');
+                $objValidation->setPromptTitle('Pick from list');
+                $objValidation->setPrompt('Please pick a value from the drop-down list.');
+                $objValidation->setFormula1('"One Time, Recurring, Instalments"'); //note this!
+                }
 
     });
 
-  })->export('xls');
+  })->export('xlsx');
 
 
 
@@ -528,39 +557,72 @@ Route::get('template/allowances', function(){
 *
 */
 
+
 Route::get('template/earnings', function(){
+   $data = Employee::all();
 
-  $employees = Employee::all();
+ \Excel::create('Earnings', function($excel) use($data) {
+            require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/NamedRange.php");
+            require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/Cell/DataValidation.php");
 
+              
 
-  Excel::create('Earnings', function($excel) use($employees) {
-
-    require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/NamedRange.php");
-    require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/Cell/DataValidation.php");
-
-    
-
-    $excel->sheet('earnings', function($sheet) use($employees){
-
+              $excel->sheet('Earnings', function($sheet) use($data) {
 
               $sheet->row(1, array(
-     'EMPLOYEE', 'EARNING TYPE','NARRATIVE', 'AMOUNT'
-));
+             'EMPLOYEE', 'EARNING TYPE','NARRATIVE', 'FORMULAR', 'INSTALMENTS','AMOUNT','EARNING DATE',
+              ));
 
-             
-                $empdata = array();
+              $sheet->setWidth(array(
+                    'A'     =>  30,
+                    'B'     =>  30,
+                    'C'     =>  30,
+                    'D'     =>  30,
+                    'E'     =>  30,
+                    'F'     =>  30,
+                    'G'     =>  30,
+              ));
 
-                foreach($employees as $d){
+             $sheet->getStyle('G2:G1000')
+            ->getNumberFormat()
+            ->setFormatCode('yyyy-mm-dd');
 
-                  $empdata[] = $d->personal_file_number.':'.$d->first_name.' '.$d->last_name.' '.$d->middle_name;
-                }
+            $row = 2;
+            
+            for($i = 0; $i<count($data); $i++){
+            
+             $sheet->SetCellValue("ZZ".$row, $data[$i]->personal_file_number." : ".$data[$i]->first_name.' '.$data[$i]->last_name);
+             $row++;
+            }  
 
-                $emplist = implode(", ", $empdata);
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'names', $sheet, 'ZZ2:ZZ'.(count($data)+1)
+                        )
+                );
 
-                
-   
+                $objPHPExcel = new PHPExcel;
+                $objSheet = $objPHPExcel->getActiveSheet();
 
-    for($i=2; $i <= 250; $i++){
+               $objSheet->protectCells('ZZ2:ZZ'.(count($data)+1), 'PHP');
+
+                $objSheet->getStyle('G2:G1000')->getNumberFormat()->setFormatCode('yyyy-mm-dd');
+
+
+                for($i=2; $i <= 1000; $i++){
+
+                $objValidation = $sheet->getCell('A'.$i)->getDataValidation();
+                $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                $objValidation->setAllowBlank(false);
+                $objValidation->setShowInputMessage(true);
+                $objValidation->setShowErrorMessage(true);
+                $objValidation->setShowDropDown(true);
+                $objValidation->setErrorTitle('Input error');
+                $objValidation->setError('Value is not in list.');
+                $objValidation->setPromptTitle('Pick from list');
+                $objValidation->setPrompt('Please pick a value from the drop-down list.');
+                $objValidation->setFormula1('names'); //note this!
 
                 $objValidation = $sheet->getCell('B'.$i)->getDataValidation();
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
@@ -575,9 +637,7 @@ Route::get('template/earnings', function(){
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
                 $objValidation->setFormula1('"Bonus, Commission, Others"'); //note this!
 
-
-
-                $objValidation = $sheet->getCell('A'.$i)->getDataValidation();
+                $objValidation = $sheet->getCell('D'.$i)->getDataValidation();
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
                 $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
                 $objValidation->setAllowBlank(false);
@@ -588,23 +648,15 @@ Route::get('template/earnings', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$emplist.'"'); //note this!
+                $objValidation->setFormula1('"One Time, Recurring, Instalments"'); //note this!
+                }
+            });
 
-    }
+            
 
-                
-
-                
-        
-
-    });
-
-  })->export('xls');
-
-
+        })->download("xlsx");
 
 });
-
 /*
 *Relief template
 *
@@ -631,27 +683,45 @@ Route::get('template/reliefs', function(){
 ));
 
              
-                $empdata = array();
+                $sheet->setWidth(array(
+                    'A'     =>  30,
+                    'B'     =>  30,
+                    'C'     =>  30,
+              ));
 
-                foreach($employees as $d){
 
-                  $empdata[] = $d->personal_file_number.':'.$d->first_name.' '.$d->last_name.' '.$d->middle_name;
-                }
 
-                $emplist = implode(", ", $empdata);
+                $row = 2;
+                $r = 2;
+            
+            for($i = 0; $i<count($employees); $i++){
+            
+             $sheet->SetCellValue("YY".$row, $employees[$i]->personal_file_number." : ".$employees[$i]->first_name.' '.$employees[$i]->last_name);
+             $row++;
+            }  
+
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'names', $sheet, 'YY2:YY'.(count($employees)+1)
+                        )
+                );
 
                 
-                $listdata = array();
 
-                foreach($data as $d){
+               for($i = 0; $i<count($data); $i++){
+            
+             $sheet->SetCellValue("YZ".$r, $data[$i]->relief_name);
+             $r++;
+            }  
 
-                  $listdata[] = $d->relief_name;
-                }
-
-                $list = implode(", ", $listdata);
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'reliefs', $sheet, 'YZ2:YZ'.(count($data)+1)
+                        )
+                );
    
 
-    for($i=2; $i <= 250; $i++){
+    for($i=2; $i <= 1000; $i++){
 
                 $objValidation = $sheet->getCell('B'.$i)->getDataValidation();
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
@@ -664,7 +734,7 @@ Route::get('template/reliefs', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$list.'"'); //note this!
+                $objValidation->setFormula1('reliefs'); //note this!
 
 
 
@@ -679,7 +749,7 @@ Route::get('template/reliefs', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$emplist.'"'); //note this!
+                $objValidation->setFormula1('names'); //note this!
 
     }
 
@@ -690,7 +760,7 @@ Route::get('template/reliefs', function(){
 
     });
 
-  })->export('xls');
+  })->export('xlsx');
 
 
 
@@ -720,32 +790,54 @@ Route::get('template/deductions', function(){
 
 
               $sheet->row(1, array(
-     'EMPLOYEE', 'DEDUCTION TYPE', 'AMOUNT','Date'
+     'EMPLOYEE', 'DEDUCTION TYPE', 'FORMULAR','INSTALMENTS','AMOUNT','DATE'
 ));
 
              
-                $empdata = array();
+               $sheet->setWidth(array(
+                    'A'     =>  30,
+                    'B'     =>  30,
+                    'C'     =>  30,
+                    'D'     =>  30,
+                    'E'     =>  30,
+                    'F'     =>  30,
+              ));
 
-                foreach($employees as $d){
+             $sheet->getStyle('F2:F1000')
+            ->getNumberFormat()
+            ->setFormatCode('yyyy-mm-dd');
 
-                  $empdata[] = $d->personal_file_number.':'.$d->first_name.' '.$d->last_name.' '.$d->middle_name;
-                }
+            $row = 2;
+                $r = 2;
+            
+            for($i = 0; $i<count($employees); $i++){
+            
+             $sheet->SetCellValue("YY".$row, $employees[$i]->personal_file_number." : ".$employees[$i]->first_name.' '.$employees[$i]->last_name);
+             $row++;
+            }  
 
-                $emplist = implode(", ", $empdata);
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'names', $sheet, 'YY2:YY'.(count($employees)+1)
+                        )
+                );
 
                 
 
-                $listdata = array();
+               for($i = 0; $i<count($data); $i++){
+            
+             $sheet->SetCellValue("YZ".$r, $data[$i]->deduction_name);
+             $r++;
+            }  
 
-                foreach($data as $d){
-
-                  $listdata[] = $d->deduction_name;
-                }
-
-                $list = implode(", ", $listdata);
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'deductions', $sheet, 'YZ2:YZ'.(count($data)+1)
+                        )
+                );
    
 
-    for($i=2; $i <= 250; $i++){
+    for($i=2; $i <= 1000; $i++){
 
                 $objValidation = $sheet->getCell('B'.$i)->getDataValidation();
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
@@ -758,7 +850,7 @@ Route::get('template/deductions', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$list.'"'); //note this!
+                $objValidation->setFormula1('deductions'); //note this!
 
 
 
@@ -773,7 +865,20 @@ Route::get('template/deductions', function(){
                 $objValidation->setError('Value is not in list.');
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
-                $objValidation->setFormula1('"'.$emplist.'"'); //note this!
+                $objValidation->setFormula1('names'); //note this!
+
+                $objValidation = $sheet->getCell('C'.$i)->getDataValidation();
+                $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                $objValidation->setAllowBlank(false);
+                $objValidation->setShowInputMessage(true);
+                $objValidation->setShowErrorMessage(true);
+                $objValidation->setShowDropDown(true);
+                $objValidation->setErrorTitle('Input error');
+                $objValidation->setError('Value is not in list.');
+                $objValidation->setPromptTitle('Pick from list');
+                $objValidation->setPrompt('Please pick a value from the drop-down list.');
+                $objValidation->setFormula1('"One Time, Recurring, Instalments"');
 
     }
 
@@ -784,7 +889,7 @@ Route::get('template/deductions', function(){
 
     });
 
-  })->export('xls');
+  })->export('xlsx');
 
 
 
@@ -885,15 +990,21 @@ Route::post('import/earnings', function(){
 
     Excel::selectSheetsByIndex(0)->load(public_path().'/migrations/'.$file, function($reader){
 
-          $results = $reader->get();    
+          $results = $reader->get();   
+        
   
     foreach ($results as $result) {
 
-    $name = explode(':', $result->employee);
+      if($result->employee != null){
 
+
+         $name = explode(' : ', $result->employee);
+
+          
     
     $employeeid = DB::table('employee')->where('personal_file_number', '=', $name[0])->pluck('id');
 
+         
     $earning = new Earnings;
 
     $earning->employee_id = $employeeid;
@@ -902,13 +1013,55 @@ Route::post('import/earnings', function(){
 
     $earning->narrative = $result->narrative;
 
-    $earning->earnings_amount = $result->amount;
+    $earning->formular = $result->formular;
+
+     
+
+     if($result->formular == 'Instalments'){
+        $earning->instalments = $result->instalments;
+        $insts = $result->instalments;
+
+        $a = str_replace( ',', '',$result->amount);
+        $earning->earnings_amount = $a;
+
+        $earning->earning_date = $result->earning_date;
+
+        $effectiveDate = date('Y-m-d', strtotime("+".($insts-1)." months", strtotime($result->earning_date)));
+
+        $First  = date('Y-m-01', strtotime($result->earning_date));
+        $Last   = date('Y-m-t', strtotime($effectiveDate));
+
+        $earning->first_day_month = $First;
+
+        $earning->last_day_month = $Last;
+
+      }else{
+      $earning->instalments = '1';
+        $a = str_replace( ',', '', $result->amount );
+        $earning->earnings_amount = $a;
+
+        $earning->earning_date = $result->earning_date;
+
+        $First  = date('Y-m-01', strtotime($result->earning_date));
+        $Last   = date('Y-m-t', strtotime($result->earning_date));
+        
+
+        $earning->first_day_month = $First;
+
+        $earning->last_day_month = $Last;
+
+      }
+
 
     $earning->save();
-      
-    }
-    
 
+
+      }
+
+   
+
+  
+    }
     
 
   });
@@ -920,7 +1073,9 @@ Route::post('import/earnings', function(){
 
 
 
-  return Redirect::back()->with('notice', 'earnings have been succeffully imported');
+ return Redirect::back()->with('notice', 'earnings have been successfully imported');
+
+
 
 
 
@@ -952,6 +1107,7 @@ Route::post('import/reliefs', function(){
           $results = $reader->get();    
   
     foreach ($results as $result) {
+       if($result->employee != null){
 
     $name = explode(':', $result->employee);
 
@@ -972,7 +1128,7 @@ Route::post('import/reliefs', function(){
       
     }
     
-
+   }
     
 
   });
@@ -1025,10 +1181,9 @@ Route::post('import/allowances', function(){
   
     foreach ($results as $result) {
 
+      if($result->employee != null){
+
     $name = explode(':', $result->employee);
-
-    
-
     
     $employeeid = DB::table('employee')->where('personal_file_number', '=', $name[0])->pluck('id');
 
@@ -1040,11 +1195,48 @@ Route::post('import/allowances', function(){
 
     $allowance->allowance_id = $allowanceid;
 
-    $allowance->allowance_amount = $result->amount;
+    $allowance->formular = $result->formular;
+
+     
+
+     if($result->formular == 'Instalments'){
+        $allowance->instalments = $result->instalments;
+        $insts = $result->instalments;
+
+        $a = str_replace( ',', '',$result->amount);
+        $allowance->allowance_amount = $a;
+
+        $allowance->allowance_date = $result->allowance_date;
+
+        $effectiveDate = date('Y-m-d', strtotime("+".($insts-1)." months", strtotime($result->allowance_date)));
+
+        $First  = date('Y-m-01', strtotime($result->allowance_date));
+        $Last   = date('Y-m-t', strtotime($effectiveDate));
+
+        $allowance->first_day_month = $First;
+
+        $allowance->last_day_month = $Last;
+
+      }else{
+      $allowance->instalments = '1';
+        $a = str_replace( ',', '', $result->amount );
+        $allowance->allowance_amount = $a;
+
+        $allowance->allowance_date = $result->allowance_date;
+
+        $First  = date('Y-m-01', strtotime($result->allowance_date));
+        $Last   = date('Y-m-t', strtotime($result->allowance_date));
+        
+
+        $allowance->first_day_month = $First;
+
+        $allowance->last_day_month = $Last;
+
+      }
 
     $allowance->save();
 
-    
+    }
       
     }
     
@@ -1100,10 +1292,10 @@ Route::post('import/deductions', function(){
   
     foreach ($results as $result) {
 
+      if($result->employee != null){
+
+
     $name = explode(':', $result->employee);
-
-    
-
     
     $employeeid = DB::table('employee')->where('personal_file_number', '=', $name[0])->pluck('id');
 
@@ -1115,32 +1307,51 @@ Route::post('import/deductions', function(){
 
     $deduction->deduction_id = $deductionid;
 
-    $deduction->deduction_amount = $result->amount;
+    $deduction->formular = $result->formular;
+
+     $a = str_replace( ',', '', $result->amount );
+        $deduction->deduction_amount = $a;
 
     $deduction->deduction_date = $result->date;
 
+    if($result->formular == 'Instalments'){
+    $deduction->instalments = $result->instalments;
+        $insts = $result->instalments;
+
+        $effectiveDate = date('Y-m-d', strtotime("+".($insts-1)." months", strtotime($result->date)));
+
+        $First  = date('Y-m-01', strtotime($result->date));
+        $Last   = date('Y-m-t', strtotime($effectiveDate));
+
+        $deduction->first_day_month = $First;
+
+        $deduction->last_day_month = $Last;
+
+      }else{
+      $deduction->instalments = '1';
+
+        $First  = date('Y-m-01', strtotime($result->date));
+        $Last   = date('Y-m-t', strtotime($result->date));
+        
+
+        $deduction->first_day_month = $First;
+
+        $deduction->last_day_month = $Last;
+
+      }
+
     $deduction->save();
 
-    
+    }
       
     }
-    
-
     
 
   });
-
-
-
       
     }
 
-
-
   return Redirect::back()->with('notice', 'deductions have been succefully imported');
-
-
-
   
 
 });
@@ -1242,6 +1453,8 @@ Route::post('import/banks', function(){
 
     $bank->bank_name = $result->bank_name;
 
+    $bank->bank_code = $result->bank_code;
+
     $bank->organization_id = $result->organization_id;
 
     $bank->save();
@@ -1304,6 +1517,15 @@ Route::get('allowances/delete/{id}', 'AllowancesController@destroy');
 Route::get('allowances/edit/{id}', 'AllowancesController@edit');
 
 /*
+* earningsettings routes
+*/
+
+Route::resource('earningsettings', 'EarningsettingsController');
+Route::post('earningsettings/update/{id}', 'EarningsettingsController@update');
+Route::get('earningsettings/delete/{id}', 'EarningsettingsController@destroy');
+Route::get('earningsettings/edit/{id}', 'EarningsettingsController@edit');
+
+/*
 * benefits setting routes
 */
 
@@ -1329,6 +1551,15 @@ Route::resource('deductions', 'DeductionsController');
 Route::post('deductions/update/{id}', 'DeductionsController@update');
 Route::get('deductions/delete/{id}', 'DeductionsController@destroy');
 Route::get('deductions/edit/{id}', 'DeductionsController@edit');
+
+/*
+* nontaxables routes
+*/
+
+Route::resource('nontaxables', 'NonTaxablesController');
+Route::post('nontaxables/update/{id}', 'NonTaxablesController@update');
+Route::get('nontaxables/delete/{id}', 'NonTaxablesController@destroy');
+Route::get('nontaxables/edit/{id}', 'NonTaxablesController@edit');
 
 /*
 * nssf routes
@@ -1368,6 +1599,24 @@ Route::get('employee_type/delete/{id}', 'EmployeeTypeController@destroy');
 Route::get('employee_type/edit/{id}', 'EmployeeTypeController@edit');
 
 /*
+* occurence settings routes
+*/
+
+Route::resource('occurencesettings', 'OccurencesettingsController');
+Route::post('occurencesettings/update/{id}', 'OccurencesettingsController@update');
+Route::get('occurencesettings/delete/{id}', 'OccurencesettingsController@destroy');
+Route::get('occurencesettings/edit/{id}', 'OccurencesettingsController@edit');
+
+/*
+* citizenship routes
+*/
+
+Route::resource('citizenships', 'CitizenshipController');
+Route::post('citizenships/update/{id}', 'CitizenshipController@update');
+Route::get('citizenships/delete/{id}', 'CitizenshipController@destroy');
+Route::get('citizenships/edit/{id}', 'CitizenshipController@edit');
+
+/*
 * employees routes
 */
 
@@ -1388,6 +1637,27 @@ Route::get('employees/edit/{id}', 'EmployeesController@edit');
 Route::get('employees/view/{id}', 'EmployeesController@view');
 Route::get('employees/viewdeactive/{id}', 'EmployeesController@viewdeactive');
 
+Route::post('createCitizenship', 'EmployeesController@createcitizenship');
+Route::post('createEducation', 'EmployeesController@createeducation');
+Route::post('createBank', 'EmployeesController@createbank');
+Route::post('createBankBranch', 'EmployeesController@createbankbranch');
+Route::post('createBranch', 'EmployeesController@createbranch');
+Route::post('createDepartment', 'EmployeesController@createdepartment');
+Route::post('createType', 'EmployeesController@createtype');
+Route::post('createGroup', 'EmployeesController@creategroup');
+Route::post('createEmployee', 'EmployeesController@serializeDoc');
+Route::get('employeeIndex', 'EmployeesController@getIndex');
+
+Route::get('EmployeeForm', function(){
+
+  $organization = Organization::find(1);
+
+  $pdf = PDF::loadView('pdf.employee_form', compact('organization'))->setPaper('a4')->setOrientation('potrait');
+    
+  return $pdf->stream('Employee_Form.pdf');
+
+});
+
 /*
 * occurences routes
 */
@@ -1397,9 +1667,8 @@ Route::post('occurences/update/{id}', 'OccurencesController@update');
 Route::get('occurences/delete/{id}', 'OccurencesController@destroy');
 Route::get('occurences/edit/{id}', 'OccurencesController@edit');
 Route::get('occurences/view/{id}', 'OccurencesController@view');
-Route::get('occurences/create/{id}', 'OccurencesController@create');
-
-
+Route::get('occurences/download/{id}', 'OccurencesController@getDownload');
+Route::post('createOccurence', 'OccurencesController@createoccurence');
 /*
 * employee earnings routes
 */
@@ -1409,6 +1678,7 @@ Route::post('other_earnings/update/{id}', 'EarningsController@update');
 Route::get('other_earnings/delete/{id}', 'EarningsController@destroy');
 Route::get('other_earnings/edit/{id}', 'EarningsController@edit');
 Route::get('other_earnings/view/{id}', 'EarningsController@view');
+Route::post('createEarning', 'EarningsController@createearning');
 
 /*
 * employee reliefs routes
@@ -1419,6 +1689,7 @@ Route::post('employee_relief/update/{id}', 'EmployeeReliefController@update');
 Route::get('employee_relief/delete/{id}', 'EmployeeReliefController@destroy');
 Route::get('employee_relief/edit/{id}', 'EmployeeReliefController@edit');
 Route::get('employee_relief/view/{id}', 'EmployeeReliefController@view');
+Route::post('createRelief', 'EmployeeReliefController@createrelief');
 
 /*
 * employee allowances routes
@@ -1429,6 +1700,19 @@ Route::post('employee_allowances/update/{id}', 'EmployeeAllowancesController@upd
 Route::get('employee_allowances/delete/{id}', 'EmployeeAllowancesController@destroy');
 Route::get('employee_allowances/edit/{id}', 'EmployeeAllowancesController@edit');
 Route::get('employee_allowances/view/{id}', 'EmployeeAllowancesController@view');
+Route::post('createAllowance', 'EmployeeAllowancesController@createallowance');
+Route::post('reloaddata', 'EmployeeAllowancesController@display');
+
+/*
+* employee nontaxables routes
+*/
+
+Route::resource('employeenontaxables', 'EmployeeNonTaxableController');
+Route::post('employeenontaxables/update/{id}', 'EmployeeNonTaxableController@update');
+Route::get('employeenontaxables/delete/{id}', 'EmployeeNonTaxableController@destroy');
+Route::get('employeenontaxables/edit/{id}', 'EmployeeNonTaxableController@edit');
+Route::get('employeenontaxables/view/{id}', 'EmployeeNonTaxableController@view');
+Route::post('createNontaxable', 'EmployeeNonTaxableController@createnontaxable');
 
 /*
 * employee deductions routes
@@ -1439,7 +1723,7 @@ Route::post('employee_deductions/update/{id}', 'EmployeeDeductionsController@upd
 Route::get('employee_deductions/delete/{id}', 'EmployeeDeductionsController@destroy');
 Route::get('employee_deductions/edit/{id}', 'EmployeeDeductionsController@edit');
 Route::get('employee_deductions/view/{id}', 'EmployeeDeductionsController@view');
-
+Route::post('createDeduction', 'EmployeeDeductionsController@creatededuction');
 /*
 * payroll routes
 */
@@ -1447,8 +1731,28 @@ Route::get('employee_deductions/view/{id}', 'EmployeeDeductionsController@view')
 
 Route::resource('payroll', 'PayrollController');
 Route::post('deleterow', 'PayrollController@del_exist');
+Route::post('showrecord', 'PayrollController@display');
+Route::post('shownet', 'PayrollController@disp');
+Route::post('showgross', 'PayrollController@dispgross');
 Route::post('payroll/preview', 'PayrollController@create');
+Route::get('payrollpreviewprint/{period}', 'PayrollController@previewprint');
+Route::post('createNewAccount', 'PayrollController@createaccount');
 
+Route::get('payrollcalculator', function(){
+  $currency = Currency::find(1);
+  return View::make('payroll.payroll_calculator',compact('currency'));
+
+});
+
+/*
+* advance routes
+*/
+
+
+Route::resource('advance', 'AdvanceController');
+Route::post('deleteadvance', 'AdvanceController@del_exist');
+Route::post('advance/preview', 'AdvanceController@create');
+Route::post('createAccount', 'AdvanceController@createaccount');
 
 /*
 * employees routes
@@ -1463,7 +1767,10 @@ Route::post('employees/update/{id}', 'EmployeesController@update');
 Route::get('employees/delete/{id}', 'EmployeesController@destroy');
 
 
+Route::get('advanceReports', function(){
 
+    return View::make('employees.advancereports');
+});
 
 
 Route::get('payrollReports', function(){
@@ -1484,15 +1791,34 @@ Route::get('reports/employees', function(){
     return View::make('employees.reports');
 });
 
-Route::get('reports/employeelist', 'ReportsController@employees');
+Route::get('reminders', function(){
+$employees = Employee::where('type_id',2)->where('in_employment','Y')->whereNotNull('start_date')->whereNotNull('end_date')->get();
+        Mail::send('reminders.message', compact('employees'), function($message){
+        $message->to('ken.wango@lixnet.net', 'Ken Wango')->subject('Contract Reminders');
+        });
+     echo 'sent';
+     //return Redirect::back()->with('success', 'Email Sent!');
+});
+
+
+Route::get('reports/selectEmployeeStatus', 'ReportsController@selstate');
+Route::post('reports/employeelist', 'ReportsController@employees');
 Route::get('employee/select', 'ReportsController@emp_id');
 Route::post('reports/employee', 'ReportsController@individual');
 Route::get('payrollReports/selectPeriod', 'ReportsController@period_payslip');
 Route::post('payrollReports/payslip', 'ReportsController@payslip');
 Route::get('payrollReports/selectAllowance', 'ReportsController@employee_allowances');
 Route::post('payrollReports/allowances', 'ReportsController@allowances');
+Route::get('payrollReports/selectEarning', 'ReportsController@employee_earnings');
+Route::post('payrollReports/earnings', 'ReportsController@earnings');
+Route::get('payrollReports/selectOvertime', 'ReportsController@employee_overtimes');
+Route::post('payrollReports/overtimes', 'ReportsController@overtimes');
+Route::get('payrollReports/selectRelief', 'ReportsController@employee_reliefs');
+Route::post('payrollReports/reliefs', 'ReportsController@reliefs');
 Route::get('payrollReports/selectDeduction', 'ReportsController@employee_deductions');
 Route::post('payrollReports/deductions', 'ReportsController@deductions');
+Route::get('payrollReports/selectnontaxableincome', 'ReportsController@employeenontaxableselect');
+Route::post('payrollReports/nontaxables', 'ReportsController@employeenontaxables');
 Route::get('payrollReports/selectPayePeriod', 'ReportsController@period_paye');
 Route::post('payrollReports/payeReturns', 'ReportsController@payeReturns');
 Route::get('payrollReports/selectRemittancePeriod', 'ReportsController@period_rem');
@@ -1513,6 +1839,14 @@ Route::get('reports/Appraisals/selectPeriod', 'ReportsController@appraisalperiod
 Route::post('reports/appraisal', 'ReportsController@appraisal');
 Route::get('reports/nextofkin/selectEmployee', 'ReportsController@selempkin');
 Route::post('reports/EmployeeKin', 'ReportsController@kin');
+Route::get('advanceReports/selectRemittancePeriod', 'ReportsController@period_advrem');
+Route::post('advanceReports/advanceRemittances', 'ReportsController@payeAdvRems');
+Route::get('advanceReports/selectSummaryPeriod', 'ReportsController@period_advsummary');
+Route::post('advanceReports/advanceSummary', 'ReportsController@payAdvSummary');
+
+
+
+
 
 /*
 *#################################################################
@@ -1894,7 +2228,7 @@ Route::post('loanrepayments/offsetloan', 'LoanrepaymentsController@offsetloan');
 
 Route::get('reports', function(){
 
-    return View::make('members.reports');
+    return View::make('reports');
 });
 
 Route::get('reports/combined', function(){
@@ -2195,10 +2529,85 @@ Route::get('api/dropdown', function(){
     return $bbranch->lists('bank_branch_name', 'id');
 });
 
+Route::get('api/branchemployee', function(){
+    $bid = Input::get('option');
+    $did = Input::get('deptid');
+    $employee = array();
+
+    if(($bid == 'All' || $bid == '' || $bid == 0) && ($did == 'All' || $did == '' || $did == 0)){
+    $employee = Employee::select('id', DB::raw('CONCAT(personal_file_number," : ",first_name ," ", middle_name, " ", last_name) AS full_name'))
+    ->lists('full_name', 'id');
+    }else if(($bid != 'All' || $bid != '' || $bid != 0) && ($did == 'All' || $did == '' || $did == 0)){
+    $employee = Employee::select('id', DB::raw('CONCAT(personal_file_number," : ",first_name ," ", middle_name, " ", last_name) AS full_name'))
+    ->where('branch_id',$bid)
+    ->lists('full_name', 'id');
+    }else if(($did != 'All' || $did != '' || $did != 0) && ($bid != 'All' || $bid != '' || $bid != 0) ){
+    $employee = Employee::select('id', DB::raw('CONCAT(personal_file_number," : ",first_name ," ", middle_name, " ", last_name) AS full_name'))
+    ->where('branch_id',$bid)
+    ->where('department_id',$did)
+    ->lists('full_name', 'id');
+    }
+
+    return $employee;
+});
+
+Route::get('api/deptemployee', function(){
+    $did = Input::get('option');
+    $bid = Input::get('bid');
+    $employee = array();
+
+    if(($did == 'All' || $did == '' || $did == 0) && ($bid == 'All' || $bid == '' || $bid == 0)){
+    $employee = Employee::select('id', DB::raw('CONCAT(personal_file_number," : ",first_name ," ", middle_name, " ", last_name) AS full_name'))
+    ->lists('full_name', 'id');
+    }else if(($did != 'All' || $did != '' || $did != 0) && ($bid == 'All' || $bid == '' || $bid == 0)){
+    $employee = Employee::select('id', DB::raw('CONCAT(personal_file_number," : ",first_name ," ", middle_name, " ", last_name) AS full_name'))
+    ->where('department_id',$did)
+    ->lists('full_name', 'id');
+    }else if(($did != 'All' || $did != '' || $did != 0) && ($bid != 'All' || $bid != '' || $bid != 0) ){
+    $employee = Employee::select('id', DB::raw('CONCAT(personal_file_number," : ",first_name ," ", middle_name, " ", last_name) AS full_name'))
+    ->where('branch_id',$bid)
+    ->where('department_id',$did)
+    ->lists('full_name', 'id');
+    }
+
+    return $employee;
+});
+
+Route::get('api/getDays', function(){
+    $id = Input::get('employee');
+    $lid = Input::get('leave');
+    $d = Input::get('option');
+    $total = 0;
+    $balance = 0;
+ 
+    $leavedays = DB::table('leavetypes')
+                       ->where('id',$lid)
+                       ->first();
+    
+
+    $leaveapplications = DB::table('leaveapplications')
+                       ->join('leavetypes','leaveapplications.leavetype_id','=','leavetypes.id')
+                       ->where('employee_id',$id)
+                       ->where('leavetype_id',$lid)
+                       ->where('date_approved','<>','')
+                       ->get();
+    foreach ($leaveapplications as $leaveapplication) {
+      $total+=Leaveapplication::getLeaveDays($leaveapplication->applied_start_date, $leaveapplication->applied_end_date);
+    }
+    $balance = $leavedays->days-$total-$d;
+    return $balance;
+});
+
 Route::get('api/score', function(){
     $id = Input::get('option');
     $rate = Appraisalquestion::find($id);
     return $rate->rate;
+});
+
+Route::get('api/pay', function(){
+    $id = Input::get('option');
+    $employee = Employee::find($id);
+    return number_format($employee->basic_pay,2);
 });
 
 Route::get('empedit/{id}', function($id){
@@ -2521,6 +2930,7 @@ Route::get('documents/delete/{id}', 'DocumentsController@destroy');
 Route::get('documents/edit/{id}', 'DocumentsController@edit');
 Route::get('documents/download/{id}', 'DocumentsController@getDownload');
 Route::get('documents/create/{id}', 'DocumentsController@create');
+Route::post('createDoc', 'DocumentsController@serializecheck');
 
 Route::resource('NextOfKins', 'NextOfKinsController');
 Route::post('NextOfKins/update/{id}', 'NextOfKinsController@update');
@@ -2528,25 +2938,31 @@ Route::get('NextOfKins/delete/{id}', 'NextOfKinsController@destroy');
 Route::get('NextOfKins/edit/{id}', 'NextOfKinsController@edit');
 Route::get('NextOfKins/view/{id}', 'NextOfKinsController@view');
 Route::get('NextOfKins/create/{id}', 'NextOfKinsController@create');
+Route::post('createKin', 'NextOfKinsController@serializecheck');
 
 Route::resource('Appraisals', 'AppraisalsController');
 Route::post('Appraisals/update/{id}', 'AppraisalsController@update');
 Route::get('Appraisals/delete/{id}', 'AppraisalsController@destroy');
 Route::get('Appraisals/edit/{id}', 'AppraisalsController@edit');
-Route::get('Appraisals/create/{id}', 'AppraisalsController@create');
 Route::get('Appraisals/view/{id}', 'AppraisalsController@view');
+Route::post('createQuestion', 'AppraisalsController@createquestion');
 
 Route::resource('Properties', 'PropertiesController');
 Route::post('Properties/update/{id}', 'PropertiesController@update');
 Route::get('Properties/delete/{id}', 'PropertiesController@destroy');
 Route::get('Properties/edit/{id}', 'PropertiesController@edit');
 Route::get('Properties/view/{id}', 'PropertiesController@view');
-Route::get('Properties/create/{id}', 'PropertiesController@create');
 
 Route::resource('AppraisalSettings', 'AppraisalSettingsController');
 Route::post('AppraisalSettings/update/{id}', 'AppraisalSettingsController@update');
 Route::get('AppraisalSettings/delete/{id}', 'AppraisalSettingsController@destroy');
 Route::get('AppraisalSettings/edit/{id}', 'AppraisalSettingsController@edit');
+Route::post('createCategory', 'AppraisalSettingsController@createcategory');
+
+Route::resource('appraisalcategories', 'AppraisalCategoryController');
+Route::post('appraisalcategories/update/{id}', 'AppraisalCategoryController@update');
+Route::get('appraisalcategories/delete/{id}', 'AppraisalCategoryController@destroy');
+Route::get('appraisalcategories/edit/{id}', 'AppraisalCategoryController@edit');
 
 
 Route::resource('itemcategories', 'ItemcategoriesController');
@@ -2623,17 +3039,27 @@ Route::post('import/categories', function(){
 
 
   return Redirect::back()->with('notice', 'Employees have been succeffully imported');
-
-
-
   
 
 });
 
+Route::get('reports/AllowanceExcel', 'ReportsController@excelAll');
 
+Route::get('itax/download', 'ReportsController@getDownload');
 
+Route::resource('reminderview', 'RemindersController');
+Route::get('reminderdoc/indexdoc', 'RemindersController@indexdoc');
+Route::post('reminderview/update/{id}', 'RemindersController@update');
+Route::get('reminderdoc/download/{id}', 'RemindersController@getDownload');
+Route::get('reminderview/delete/{id}', 'RemindersController@destroy');
+Route::get('reminderview/edit/{id}', 'RemindersController@edit');
+Route::get('reminderview/show/{id}', 'RemindersController@show');
 
-
+Route::get('api/ded', function(){
+    $id = Input::get('option');
+    $employee = Employee::find($id);
+    return number_format($employee->basic_pay,2);
+});
 
 
 

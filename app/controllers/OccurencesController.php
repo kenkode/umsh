@@ -23,14 +23,34 @@ class OccurencesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create($id)
+	public function create()
 	{
-		$id=$id;
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
 		          ->get();
-		return View::make('occurences.create',compact('employees','id'));
+		$occurences = Occurencesetting::all();
+		return View::make('occurences.create',compact('employees','occurences'));
 	}
+
+	public function createoccurence()
+	{
+      $postocc = Input::all();
+      $data = array('occurence_type' => $postocc['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('occurencesettings')->insertGetId( $data );
+     // $id = DB::table('earningsettings')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Occurencesettings', 'create', 'created: '.$postocc['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
 
 	/**
 	 * Store a newly created branch in storage.
@@ -52,11 +72,21 @@ class OccurencesController extends \BaseController {
 
 		$occurence->employee_id = Input::get('employee');
 
-		$occurence->occurence_type = Input::get('type');
+		$occurence->occurencesetting_id = Input::get('type');
 
 		$occurence->narrative = Input::get('narrative');
 
 		$occurence->occurence_date = Input::get('date');
+
+		if ( Input::hasFile('path')) {
+
+            $file = Input::file('path');
+            $name = $file->getClientOriginalName();
+            $file = $file->move('public/uploads/employees/documents/', $name);
+            $input['file'] = '/public/uploads/employees/documents/'.$name;
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+            $occurence->doc_path = $name;
+        }
 
         $occurence->organization_id = '1';
 
@@ -91,9 +121,11 @@ class OccurencesController extends \BaseController {
 	{
 		$occurence = Occurence::find($id);
 
+		$occurencesettings = Occurencesetting::all();
+
 		$employees = Employee::all();
 
-		return View::make('occurences.edit', compact('occurence','employees'));
+		return View::make('occurences.edit', compact('occurence','employees','occurencesettings'));
 	}
 
 	/**
@@ -115,11 +147,21 @@ class OccurencesController extends \BaseController {
 
 		$occurence->occurence_brief = Input::get('brief');
 
-		$occurence->occurence_type = Input::get('type');
+		$occurence->occurencesetting_id = Input::get('type');
 
 		$occurence->narrative = Input::get('narrative');
 
 		$occurence->occurence_date = Input::get('date');
+
+		if ( Input::hasFile('path')) {
+
+            $file = Input::file('path');
+            $name = $file->getClientOriginalName();
+            $file = $file->move('public/uploads/employees/documents/', $name);
+            $input['file'] = '/public/uploads/employees/documents/'.$name;
+            $extension = pathinfo($name, PATHINFO_EXTENSION);
+            $occurence->doc_path = $name;
+        }
 
 		$occurence->update();
 
@@ -153,5 +195,13 @@ class OccurencesController extends \BaseController {
 		return View::make('occurences.view', compact('occurence'));
 		
 	}
+
+	public function getDownload($id){
+        //PDF file is stored under project/public/download/info.pdf
+        $occurence = Occurence::findOrFail($id);
+        $file= public_path(). "/uploads/employees/documents/".$occurence->doc_path;
+        
+        return Response::download($file, $occurence->doc_path);
+}
 
 }

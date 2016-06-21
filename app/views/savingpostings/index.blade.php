@@ -1,1 +1,0 @@
-C:\xampp\htdocs\xaracbs\app/views/savingpostings/index.blade.php

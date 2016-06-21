@@ -55,6 +55,16 @@ function asMoney($value) {
         <th>Action</th>
 
       </thead>
+
+      <tfoot>
+
+        <th>#</th>
+        <th>Employee</th>
+        <th>Earning Type</th>
+        <th>Amount</th>
+
+      </tfoot>
+
       <tbody>
 
         <?php $i = 1; ?>
@@ -63,8 +73,12 @@ function asMoney($value) {
         <tr>
 
           <td> {{ $i }}</td>
+          @if($earning->middle_name == null || $earning->middle_name == '')
           <td>{{ $earning->first_name.' '.$earning->last_name }}</td>
-          <td>{{ $earning->earnings_name }}</td>
+          @else
+          <td>{{ $earning->first_name.' '.$earning->middle_name.' '.$earning->last_name }}</td>
+          @endif
+          <td>{{ $earning->earning_name }}</td>
           <td align="right">{{ asMoney((double)$earning->earnings_amount) }}</td>
           <td>
 

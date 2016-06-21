@@ -57,7 +57,7 @@
 
           <td>{{ $i }}</td>
           <td>{{ $appraisal->question }}</td>
-          <td>{{ $appraisal->category }}</td>
+          <td>{{ Appraisalcategory::getCategory($appraisal->appraisalcategory_id) }}</td>
           <td>{{ $appraisal->rate }}</td>
           <td>
 

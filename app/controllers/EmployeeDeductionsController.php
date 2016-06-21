@@ -13,7 +13,7 @@ class EmployeeDeductionsController extends \BaseController {
 		          ->join('employee_deductions', 'employee.id', '=', 'employee_deductions.employee_id')
 		          ->join('deductions', 'employee_deductions.deduction_id', '=', 'deductions.id')
 		          ->where('in_employment','=','Y')
-		          ->select('employee_deductions.id','first_name','last_name','deduction_amount','deduction_name')
+		          ->select('employee_deductions.id','first_name','middle_name','last_name','deduction_amount','deduction_name')
 		          ->get();
 		return View::make('employee_deductions.index', compact('deds'));
 	}
@@ -23,14 +23,35 @@ class EmployeeDeductionsController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
+
+   public function create()
 	{
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
 		          ->get();
 		$deductions = Deduction::all();
-		return View::make('employee_deductions.create',compact('employees','deductions'));
+		$currency = Currency::find(1);
+		return View::make('employee_deductions.create',compact('employees','deductions','currency'));
 	}
+
+	public function creatededuction()
+	{
+      $postdeduction = Input::all();
+      $data = array('deduction_name' => $postdeduction['name'], 
+      	            'organization_id' => 1,
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('deductions')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Deductions', 'create', 'created: '.$postdeduction['name']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
+	} 
 
 	/**
 	 * Store a newly created branch in storage.
@@ -53,6 +74,12 @@ class EmployeeDeductionsController extends \BaseController {
 		$ded->deduction_id = Input::get('deduction');
 
 		$ded->formular = Input::get('formular');
+
+		$ded->deduction_method = Input::get('method');
+
+		$ded->method_type = Input::get('type');
+
+		$ded->period = Input::get('period');
 
 		if(Input::get('formular') == 'Instalments'){
 		$ded->instalments = Input::get('instalments');
@@ -125,7 +152,8 @@ class EmployeeDeductionsController extends \BaseController {
 		$ded = EDeduction::find($id);
 		$employees = Employee::all();
         $deductions = Deduction::all();
-		return View::make('employee_deductions.edit', compact('ded','employees','deductions'));
+        $currency = Currency::find(1);
+		return View::make('employee_deductions.edit', compact('ded','employees','deductions','currency'));
 	}
 
 	/**
@@ -148,6 +176,12 @@ class EmployeeDeductionsController extends \BaseController {
 		$ded->deduction_id = Input::get('deduction');
 
 		$ded->formular = Input::get('formular');
+
+		$ded->deduction_method = Input::get('method');
+
+		$ded->method_type = Input::get('type');
+
+		$ded->period = Input::get('period');
 
 		if(Input::get('formular') == 'Instalments'){
 		$ded->instalments = Input::get('instalments');

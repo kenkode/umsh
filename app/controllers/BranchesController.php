@@ -108,9 +108,15 @@ class BranchesController extends \BaseController {
 	public function destroy($id)
 	{
 		$branch = Branch::findOrFail($id);
+		$app  = DB::table('employee')->where('branch_id',$id)->count();
+		if($app>0){
+			return Redirect::route('branches.index')->withDeleteMessage('Cannot delete this branch because its assigned to an employee(s)!');
+		}else{
+		
 		Branch::destroy($id);
         Audit::logaudit('Branches', 'delete', 'deleted: '.$branch->name);
 		return Redirect::route('branches.index')->withDeleteMessage('Branch successfully deleted!');
 	}
+}
 
 }

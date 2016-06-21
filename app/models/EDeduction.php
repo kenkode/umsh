@@ -19,7 +19,8 @@ public static $rules = [
 		'employee' => 'required',
 		'deduction' => 'required',
 		'formular' => 'required',
-		'amount' => 'required|regex:/^[0-9]{1,3}(,[0-9]{3})*\.[0-9]+$/',
+		'method' => 'required',
+		'amount' => 'required|regex:/^(\$?(?(?=\()(\())\d+(?:,\d+)?(?:\.\d+)?(?(2)\)))$/',
 		'ddate' => 'required',
 	];
 
@@ -27,6 +28,7 @@ public static $messages = array(
         'employee.required'=>'Please select employee!',
         'deduction.required'=>'Please select deduction type!',
         'formular.required'=>'Please select deduction formular!',
+        'method.required'=>'Please select deduction method!',
         'amount.required'=>'Please insert amount!',
         'amount.regex'=>'Please insert a valid amount!',
         'ddate.required'=>'Please select date!',

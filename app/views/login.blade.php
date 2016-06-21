@@ -8,7 +8,7 @@
                       
                     <div class="panel-body">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ HTML::image("images/ourlogo.png", "Logo") }}
+                        <img src="{{asset('public/uploads/logo/'.$organization->logo)}}" alt="logo" width="60%">
 
                         <br>
                

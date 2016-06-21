@@ -207,23 +207,17 @@ public function logo($id){
 
 
 	
-
-
-
-
-
-
-	if(Input::hasFile('logo')){
+if(Input::hasFile('photo')){
 
 			$destination = public_path().'/uploads/logo/';
 
 			$filename = str_random(12);
 
-			$ext = Input::file('logo')->getClientOriginalExtension();
+			$ext = Input::file('photo')->getClientOriginalExtension();
 			$photo = $filename.'.'.$ext;
 			
 			
-			Input::file('logo')->move($destination, $photo);
+			Input::file('photo')->move($destination, $photo);
 
 			
 			$organization = Organization::findOrFail($id);
@@ -233,12 +227,7 @@ public function logo($id){
 			
 		}
 
-
-
-	
-
-		//return Redirect::to('organizations');
-
+		return Redirect::to('organizations');
 }
 
 

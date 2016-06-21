@@ -113,11 +113,16 @@ class DepartmentsController extends \BaseController {
 	public function destroy($id)
 	{
 		$department = Department::findOrFail($id);
-
+        $dept  = DB::table('employee')->where('department_id',$id)->count();
+		if($dept>0){
+			return Redirect::route('departments.index')->withDeleteMessage('Cannot delete this departments because its assigned to an employee(s)!');
+		}else{
 		Department::destroy($id);
 
         Audit::logaudit('Department', 'delete', 'deleted: '.$department->department_name);
 		return Redirect::route('departments.index')->withDeleteMessage('Deduction successfully deleted!');
 	}
+
+}
 
 }

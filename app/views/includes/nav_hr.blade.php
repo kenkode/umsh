@@ -1,4 +1,14 @@
- <nav class="navbar-default navbar-static-side" role="navigation">
+<style type="text/css">
+#wrap{
+    margin-top: 90px !important;
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    border-radius: 0 0 0.5em 0.5em;
+}
+</style>
+
+ <nav class="navbar-default navbar-static-side" id="wrap" role="navigation">
 
             <div class="sidebar-collapse">
 
@@ -21,6 +31,14 @@
                     </li>
 
                     <li>
+                        <a href="{{ URL::to('citizenships') }}"><i class="fa fa-users fa-fw"></i> Citizenship</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ URL::to('occurencesettings') }}"><i class="fa fa-list fa-fw"></i> Occurence Settings</a>
+                    </li>
+
+                    <li>
                         <a href="{{ URL::to('benefitsettings') }}"><i class="fa fa-list fa-fw"></i> Benefits</a>
                     </li>
 
@@ -30,6 +48,10 @@
                    
                     <li>
                         <a href="{{ URL::to('AppraisalSettings') }}"><i class="fa fa-list fa-fw"></i> Appraisal Setting</a>
+                    </li>
+
+                    <li>
+                        <a href="{{ URL::to('appraisalcategories') }}"><i class="fa fa-list fa-fw"></i> Appraisal Category</a>
                     </li>
 
                 </ul>

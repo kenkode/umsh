@@ -92,7 +92,7 @@ class Leaveapplication extends \Eloquent {
 		$application->update();
 
 
-		$employeeid = DB::table('leaveapplications')->where('id', '=', $application->id)->pluck('employee_id');
+		/*$employeeid = DB::table('leaveapplications')->where('id', '=', $application->id)->pluck('employee_id');
 
   		$employee = Employee::findorfail($employeeid);
 
@@ -103,7 +103,7 @@ class Leaveapplication extends \Eloquent {
 		{
     		
     		$message->to($employee->email_office )->subject( 'Leave Approval' );
-		});
+		});*/
 
 	}
 

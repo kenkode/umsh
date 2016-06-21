@@ -1,4 +1,14 @@
- <nav class="navbar-default navbar-static-side" role="navigation">
+<style type="text/css">
+#wrap{
+    margin-top: 90px !important;
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+    border-radius: 0 0 0.5em 0.5em;
+}
+</style>
+
+ <nav class="navbar-default navbar-static-side" id="wrap" role="navigation">
 
             <div class="sidebar-collapse">
 
@@ -6,6 +16,14 @@
                     
                     <li>
                         <a href="{{ URL::to('allowances') }}"><i class="glyphicon glyphicon-home fa-fw"></i> Allowances</a>
+                    </li>
+
+                     <li>
+                        <a href="{{ URL::to('earningsettings') }}"><i class="fa fa-list fa-fw"></i> Earning</a>
+                    </li>
+                    
+                    <li>
+                        <a href="{{ URL::to('nontaxables') }}"><i class="fa fa-list fa-fw"></i> Non Taxable Income</a>
                     </li>
 
                      <li>

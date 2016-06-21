@@ -1,47 +1,11 @@
 @extends('layouts.main')
+<style type="text/css"></style>
 @section('content')
 
 <br><br>
-    
-                    <div class="row">
-                      <div class="col-md-2">
-                        <a class="btn btn-default btn-icon input-block-level" href="{{ URL::to('employees')}}">
-                          <i class="fa fa-users fa-2x"></i>
-                          <div>Manage Employess</div>
-                          
-                        </a>
-                      </div>
-                      <div class="col-md-2">
-                        <a class="btn btn-default btn-icon input-block-level" href="{{URL::to('')}}">
-                          <i class="glyphicon glyphicon-user fa-2x"></i>
-                          <div>Manage Leaves</div>
-                          
-                        </a>
-                      </div>
-
-                      <div class="col-md-2">
-                        <a class="btn btn-default btn-icon input-block-level" href="{{ URL::to('')}}">
-                          <i class="glyphicon glyphicon-credit-card fa-2x"></i>
-                          <div>Manage Earnings</div>
-                          
-                        </a>
-                      </div>
-                      
-                      <div class="col-md-2">
-                        <a class="btn btn-default btn-icon input-block-level" href="{{ URL::to('')}}">
-                          <i class="glyphicon glyphicon-barcode fa-2x"></i>
-                          <div>Manage Deductions</div>
-                          
-                        </a>
-                      </div>
-
-                      
-                    </div>
-                  
 
 
-
-<div class="row">
+<div class="row" >
   
   <div class="col-lg-12">
     <hr>
@@ -50,11 +14,11 @@
 </div>
 
 
-<div class="row">
+<div class="row" >
   
 
 
-  <div class="col-lg-12">
+  <div class="col-lg-12" >
 
 @if (Session::has('flash_message'))
 
@@ -76,20 +40,41 @@
         </div>
         <div class="panel-body">
 
-      <table id="users" class="table table-condensed table-bordered table-responsive table-hover">
+      <table id="users" class="table table-condensed table-bordered table-responsive table-hover" style="font-size:12px">
 
 
       <thead>
 
         <th>#</th>
-        <th>Personal File Number</th>
-        <th>Employee Name</th>
-        <th>Employee Branch</th>
-        <th>Employee Department</th>
+        <th>PFN</th>
+        <th width="150">Employee Name</th>
+        <th>ID</th>
+        <th>KRA PIN</th>
+        <th>NSSF NO.</th>
+        <th>NHIF NO.</th>
+        <th>Gender</th>
+        <th>Branch</th>
+        <th>Department</th>
 
         <th>Action</th>
 
       </thead>
+
+      <tfoot>
+
+        <th>#</th>
+        <th>PFN</th>
+        <th width="150">Employee Name</th>
+        <th>ID</th>
+        <th>Kra Pin</th>
+        <th>Nssf NO.</th>
+        <th>Nhif NO.</th>
+        <th>Gender</th>
+        <th>Branch</th>
+        <th>Department</th>
+
+      </tfoot>
+
       <tbody>
 
         <?php $i = 1; ?>
@@ -99,7 +84,16 @@
 
           <td> {{ $i }}</td>
           <td>{{ $employee->personal_file_number }}</td>
-          <td>{{ $employee->first_name.' '.$employee->last_name}}</td>
+          @if($employee->middle_name == null || $employee->middle_name == '')
+          <td width="150">{{ $employee->first_name.' '.$employee->last_name}}</td>
+          @else
+          <td width="150">{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}</td>
+          @endif
+          <td>{{ $employee->identity_number }}</td>
+          <td>{{ $employee->pin }}</td>
+          <td>{{ $employee->social_security_number }}</td>
+          <td>{{ $employee->hospital_insurance_number }}</td>
+          <td>{{ $employee->gender }}</td>
           <?php if( $employee->branch_id!=0){ ?>
           <td>{{ Branch::getName($employee->branch_id) }}</td>
           <?php }else{?>

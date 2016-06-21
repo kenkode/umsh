@@ -116,11 +116,20 @@ class AllowancesController extends \BaseController {
 	public function destroy($id)
 	{
 		$allowance = Allowance::findOrFail($id);
+
+        $allc  = DB::table('employee_allowances')->where('allowance_id',$id)->count();
+		if($id == 1 || $id == 2){
+			return Redirect::route('allowances.index')->withDeleteMessage('Cannot delete this allowance!');
+		}elseif($allc>0){
+			return Redirect::route('allowances.index')->withDeleteMessage('Cannot delete this allowance because its assigned to an employee(s)!');
+		} else{
+
 		Allowance::destroy($id);
 
 		Audit::logaudit('Allowances', 'delete', 'deleted: '.$allowance->allowance_name);
 
 		return Redirect::route('allowances.index')->withDeleteMessage('Allowance successfully deleted!');
 	}
+}
 
 }

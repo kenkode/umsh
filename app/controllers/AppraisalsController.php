@@ -15,7 +15,7 @@ class AppraisalsController extends \BaseController {
 		          ->join('appraisals', 'employee.id', '=', 'appraisals.employee_id')
 		          ->join('appraisalquestions', 'appraisals.appraisalquestion_id', '=', 'appraisalquestions.id')
 		          ->where('in_employment','=','Y')
-		          ->select('appraisals.id','appraisalquestion_id','first_name','last_name','question','performance','appraisals.rate')
+		          ->select('appraisals.id','appraisalquestion_id','first_name','middle_name','last_name','question','performance','appraisals.rate')
 		          ->get();
 
 		Audit::logaudit('Appraisals', 'view', 'viewed appraisals');
@@ -28,14 +28,34 @@ class AppraisalsController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create($id)
+	public function create()
 	{
-		$id = $id;
 		$employees = DB::table('employee')
 		          ->where('in_employment','=','Y')
 		          ->get();
 		$appraisals = Appraisalquestion::all();
-		return View::make('appraisals.create',compact('employees','appraisals','id'));
+		$categories = Appraisalcategory::all();
+		return View::make('appraisals.create',compact('employees','appraisals','categories'));
+	}
+
+	public function createquestion()
+	{
+      $postapp = Input::all();
+      $data = array('appraisalcategory_id' => $postapp['category'], 
+      	            'rate' => $postapp['rate'], 
+      	            'question' => $postapp['question'],
+      	            'created_at' => DB::raw('NOW()'),
+      	            'updated_at' => DB::raw('NOW()'));
+      $check = DB::table('appraisalquestions')->insertGetId( $data );
+
+		if($check > 0){
+         
+		Audit::logaudit('Appraisalquestions', 'create', 'created: '.$postapp['question']);
+        return $check;
+        }else{
+         return 1;
+        }
+      
 	}
 
 	/**
@@ -100,8 +120,8 @@ class AppraisalsController extends \BaseController {
 		$appraisal = Appraisal::find($id);
 		$appraisalqs = Appraisalquestion::all();
 		$user = User::find($appraisal->examiner);
-
-		return View::make('appraisals.edit', compact('appraisal','appraisalqs','user'));
+        $categories = Appraisalcategory::all();
+		return View::make('appraisals.edit', compact('appraisal','appraisalqs','user','categories'));
 	}
 
 	/**
@@ -126,6 +146,8 @@ class AppraisalsController extends \BaseController {
         $appraisal->performance = Input::get('performance');
 
         $appraisal->rate = Input::get('score');
+
+        $appraisal->appraisaldate = Input::get('date');
 
         $appraisal->comment = Input::get('comment');
 
