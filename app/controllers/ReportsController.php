@@ -9886,6 +9886,10 @@ public function period_advrem()
               'BANK ACCOUNT:', $organization->bank_account_number
               ));
 
+              $sheet->setColumnFormat(array(
+              'B3' => '0',
+              ));
+
               $sheet->cell('A3', function($cell) {
 
                // manipulate the cell
@@ -9986,6 +9990,10 @@ public function period_advrem()
              $sheet->row($row, array(
              $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
+
+             $sheet->setColumnFormat(array(
+              'F' => '0',
+              ));
 
              $sheet->cell('H'.$row, function($cell) {
 
@@ -10122,6 +10130,10 @@ public function period_advrem()
               'BANK ACCOUNT:', $organization->bank_account_number
               ));
 
+              $sheet->setColumnFormat(array(
+              'B3' => '0',
+              ));
+
               $sheet->cell('A3', function($cell) {
 
                // manipulate the cell
@@ -10222,6 +10234,10 @@ public function period_advrem()
              $sheet->row($row, array(
              $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
+
+             $sheet->setColumnFormat(array(
+              'F' => '0',
+              ));
 
              $sheet->cell('H'.$row, function($cell) {
 
@@ -10356,6 +10372,10 @@ public function period_advrem()
               'BANK ACCOUNT:', $organization->bank_account_number
               ));
 
+              $sheet->setColumnFormat(array(
+              'B3' => '0',
+              ));
+
               $sheet->cell('A3', function($cell) {
 
                // manipulate the cell
@@ -10456,6 +10476,10 @@ public function period_advrem()
              $sheet->row($row, array(
              $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
+
+             $sheet->setColumnFormat(array(
+              'F' => '0',
+              ));
 
              $sheet->cell('H'.$row, function($cell) {
 
@@ -10600,6 +10624,10 @@ public function period_advrem()
 
               });
 
+              $sheet->setColumnFormat(array(
+              'B3' => '0',
+              ));
+
               $sheet->row(4, array(
               'BANK ACCOUNT:', $organization->swift_code
               ));
@@ -10692,6 +10720,10 @@ public function period_advrem()
              $sheet->row($row, array(
              $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
+
+             $sheet->setColumnFormat(array(
+              'F' => '0',
+              ));
 
              $sheet->cell('H'.$row, function($cell) {
 
