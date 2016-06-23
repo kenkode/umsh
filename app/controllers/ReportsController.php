@@ -9995,6 +9995,10 @@ public function period_advrem()
               'F' => '0',
               ));
 
+             $sheet->setColumnFormat(array(
+              'F13' => '0',
+              ));
+
              $sheet->cell('H'.$row, function($cell) {
 
                // manipulate the cell
@@ -10239,6 +10243,10 @@ public function period_advrem()
               'F' => '0',
               ));
 
+             $sheet->setColumnFormat(array(
+              'F13' => '0',
+              ));
+
              $sheet->cell('H'.$row, function($cell) {
 
                // manipulate the cell
@@ -10479,6 +10487,10 @@ public function period_advrem()
 
              $sheet->setColumnFormat(array(
               'F' => '0',
+              ));
+
+             $sheet->setColumnFormat(array(
+              'F13' => '0',
               ));
 
              $sheet->cell('H'.$row, function($cell) {
@@ -10723,6 +10735,10 @@ public function period_advrem()
 
              $sheet->setColumnFormat(array(
               'F' => '0',
+              ));
+
+             $sheet->setColumnFormat(array(
+              'F13' => '0',
               ));
 
              $sheet->cell('H'.$row, function($cell) {
