@@ -9984,7 +9984,7 @@ public function period_advrem()
              }
 
              $sheet->row($row, array(
-             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,$data[$i]->bank_account_number,$data[$i]->swift_code,$data[$i]->amount
+             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
 
              $sheet->cell('H'.$row, function($cell) {
@@ -10220,7 +10220,7 @@ public function period_advrem()
              }
 
              $sheet->row($row, array(
-             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,$data[$i]->bank_account_number,$data[$i]->swift_code,$data[$i]->amount
+             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
 
              $sheet->cell('H'.$row, function($cell) {
@@ -10454,7 +10454,7 @@ public function period_advrem()
              }
 
              $sheet->row($row, array(
-             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,$data[$i]->bank_account_number,$data[$i]->swift_code,$data[$i]->amount
+             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
 
              $sheet->cell('H'.$row, function($cell) {
@@ -10690,7 +10690,7 @@ public function period_advrem()
                $name=$data[$i]->first_name.' '.$data[$i]->middle_name.' '.$data[$i]->last_name;
              }
              $sheet->row($row, array(
-             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,$data[$i]->bank_account_number,$data[$i]->swift_code,$data[$i]->amount
+             $data[$i]->personal_file_number,$name,$data[$i]->identity_number,$bankname,$bankbranchname,round($data[$i]->bank_account_number,0),$data[$i]->swift_code,$data[$i]->amount
              ));
 
              $sheet->cell('H'.$row, function($cell) {
