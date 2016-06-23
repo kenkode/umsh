@@ -27,6 +27,7 @@
         </div>
         @endif
 
+<<<<<<< HEAD
         {{ HTML::style('jquery-ui-1.11.4.custom/jquery-ui.css') }}
   {{ HTML::script('jquery-ui-1.11.4.custom/jquery-ui.js') }}
 
@@ -191,6 +192,8 @@
   </form>
 </div>
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 		 <form method="POST" action="{{{ URL::to('occurences') }}}" accept-charset="UTF-8" enctype="multipart/form-data">
    
     <fieldset>
@@ -215,7 +218,10 @@
                         <label for="username">Occurence Type: <span style="color:red">*</span></label>
                         <select name="type" id="type" class="form-control">
                            <option></option>
+<<<<<<< HEAD
                            <option value="cnew">Create New</option>
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             @foreach($occurences as $occurence)
                             <option value="{{ $occurence->id }}"> {{ $occurence->occurence_type }}</option>
                             @endforeach

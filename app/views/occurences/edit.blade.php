@@ -27,6 +27,7 @@
         </div>
         @endif
 
+<<<<<<< HEAD
          {{ HTML::style('jquery-ui-1.11.4.custom/jquery-ui.css') }}
   {{ HTML::script('jquery-ui-1.11.4.custom/jquery-ui.js') }}
 
@@ -191,6 +192,8 @@
   </form>
 </div>
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
          <form method="POST" action="{{{ URL::to('occurences/update/'.$occurence->id) }}}" accept-charset="UTF-8" enctype="multipart/form-data">
    
     <fieldset>
@@ -221,6 +224,16 @@
          <div class="form-group">
                         <label for="username">Current Document</label><span style="color:red">*</span><br>
                         <input readonly class="form-control" placeholder="" type="text" name="curpath" value="{{ $occurence->doc_path }}">
+                    </div>
+
+        <div class="form-group">
+                        <label for="username">Update Document</label><br>
+                        <input class="img" placeholder="" type="file" name="path" id="path" value="{{ $occurence->doc_path }}">
+                    </div>
+
+        <div class="form-group">
+                        <label for="username">Current Document</label><br>
+                        <input class="form-control" readonly placeholder="" type="text" name="curpath" value="{{ $occurence->doc_path }}">
                     </div>
 
         <div class="form-group">

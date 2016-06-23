@@ -55,9 +55,13 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
+<<<<<<< HEAD
 			'database'  => 'umashcok_umash',
+=======
+			'database'  => 'xpoz',
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 			'username'  => 'root',
-			'password'  => 'mysql',
+			'password'  => '',
 			'port' => '3306',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',

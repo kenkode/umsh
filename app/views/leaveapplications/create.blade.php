@@ -4,20 +4,20 @@
 
 @section('content')
 <div class="row">
-	<div class="col-lg-12">
+    <div class="col-lg-12">
  
 
 <hr>
-</div>	
+</div>  
 </div>
 
 
 <div class="row">
-	<div class="col-lg-5">
+    <div class="col-lg-5">
 
     
-		
-		 @if ($errors->has())
+        
+         @if ($errors->has())
         <div class="alert alert-danger">
             @foreach ($errors->all() as $error)
                 {{ $error }}<br>        
@@ -25,6 +25,7 @@
         </div>
         @endif
 
+<<<<<<< HEAD
         {{ HTML::style('jquery-ui-1.11.4.custom/jquery-ui.css') }}
   {{ HTML::script('jquery-ui-1.11.4.custom/jquery-ui.js') }}
 
@@ -194,6 +195,9 @@
 </div>
 
 		 <form method="POST" action="{{{ URL::to('leaveapplications') }}}" accept-charset="UTF-8">
+=======
+         <form method="POST" action="{{{ URL::to('leaveapplications') }}}" accept-charset="UTF-8">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
    
     <fieldset>
 
@@ -201,9 +205,17 @@
             <label for="username">Employee</label>
             <select class="form-control" name="employee_id" id="employee">
             <option> select employee</option>
+<<<<<<< HEAD
               @foreach($employees as $employee)  
                     <option value="{{$employee->id}}">{{$employee->first_name." ".$employee->middle_name." ".$employee->last_name}}</option>
               @endforeach
+=======
+              @foreach($employees as $employee)
+		@if($employee->in_employment == 'Y')  
+                    <option value="{{$employee->id}}">{{$employee->first_name." ".$employee->last_name." ".$employee->middle_name}}</option>
+@endif             
+ @endforeach
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
             </select>
         </div>
 
@@ -258,11 +270,12 @@
 
     </fieldset>
 </form>
-		
+        
 
   </div>
 
 </div>
+<<<<<<< HEAD
 
 
 <script type="text/javascript">
@@ -318,5 +331,61 @@ $(document).ready(function(){
 
 
 @stop
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+
+    $('#days').keyup(function(){
+
+       var date = new Date($("#appliedstartdate").val()),
+           days = parseInt($("#days").val(), 10);
+
+        if(!isNaN(date.getTime())){
+            date.setDate(date.getDate() + days);
+
+            $("#applied_end_date").val(date.toInputFormat());
+        } else {
+             
+        }
+
+         $.get("{{ url('api/getDays')}}", 
+         { employee: $('#employee').val(),
+           leave: $('#leave').val(),
+           option: $('#days').val()
+         }, 
+         function(data) {
+         if(data<0){
+          console.log(data);
+          alert("Days given exceed assigned leave days! Current employee balance is "+(parseInt($("#days").val())+parseInt(data)));
+          $('#days').val(0);
+          $('#applied_end_date').val('');
+         }
+         
+      });
+
+    });
+
+
+    //From: http://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+    Date.prototype.toInputFormat = function() {
+       var yyyy = this.getFullYear().toString();
+       var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+       var dd  = this.getDate().toString();
+       return yyyy + "-" + (mm[1]?mm:"0"+mm[0]) + "-" + (dd[1]?dd:"0"+dd[0]); // padding
+    };
+
+
+});
+
+
+
+</script>
+
+
+@stop
 

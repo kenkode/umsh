@@ -76,7 +76,13 @@
           
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="{{URL::to('occurences/view/'.$occurence->id)}}">View</a></li>
+<<<<<<< HEAD
                      <li><a target="blank" href="{{asset('/public/uploads/employees/documents/'.$occurence->doc_path) }}">Download</a></li>
+=======
+
+                     <li><a href="{{URL::to('occurences/download/'.$occurence->id)}}">Download</a></li>
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                     <li><a href="{{URL::to('occurences/edit/'.$occurence->id)}}">Update</a></li>
                    
                     <li><a href="{{URL::to('occurences/delete/'.$occurence->id)}}" onclick="return (confirm('Are you sure you want to delete this employee`s occurence?'))">Delete</a></li>

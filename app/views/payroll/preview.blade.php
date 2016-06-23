@@ -146,6 +146,7 @@ function asMoney($value) {
 <div class="row" >
   <div class="col-lg-12">
 
+<<<<<<< HEAD
     <div class="wmd-view-topscroll">
        <div class="scroll-div">
         &nbsp;
@@ -156,11 +157,24 @@ function asMoney($value) {
       
         <div class="panel panel-body dynamic-div" style="margin-left:-10px;">
     
+=======
+    <div class="panel panel-default">
+      <div class="panel panel-success">
+      <div class="panel-heading">
+          <h4>Payroll Preview for {{ $period }}</h4>
+        </div>
+        <div class="panel-body" style="margin-left:-10px;">
+    <form method="POST" action="{{{ URL::to('payroll') }}}" accept-charset="UTF-8">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
       <input type="hidden" name="period" value="{{ $period }}"> 
        <input type="hidden" name="account" value="{{ $account }}"> 
 
+<<<<<<< HEAD
     <table id="example" data-show-refresh="true" style="font-size:10px;width:1000px" class="table table-condensed table-bordered table-responsive table-hover nowrap">
+=======
+    <table id="users" data-show-refresh="true" style="font-size:10px;width:1000px" class="table table-condensed table-bordered table-responsive table-hover">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 
       <thead>
@@ -198,6 +212,7 @@ function asMoney($value) {
       </thead>
       <tbody class="displayrecord">
 
+<<<<<<< HEAD
         <?php $i = 1; 
          $totalsalary = 0.00;
          $totalearning = 0.00;
@@ -216,6 +231,9 @@ function asMoney($value) {
          $totaldeduction = 0.00;
          $totalnet = 0.00;
         ?>
+=======
+        <?php $i = 1; ?>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         @foreach($employees as $employee)
 
         <tr>
@@ -227,6 +245,7 @@ function asMoney($value) {
            $totalsalary = $totalsalary + (double)$employee->basic_pay;
           ?>
           <td align="right">{{ asMoney((double)$employee->basic_pay) }}</td>
+<<<<<<< HEAD
           @foreach($earnings as $earning)
           <td align="right">{{ asMoney((double)Payroll::earnings($employee->id,$earning->id,$period)) }}</td>
           @endforeach
@@ -291,6 +310,16 @@ function asMoney($value) {
           ?>
           <td align="right"><strong>{{ asMoney((double)Payroll::total_deductions($employee->id,$period)) }}</strong></td>
           <td align="right"><strong>{{ asMoney((double)Payroll::net($employee->id,$period)) }}</strong></td>
+=======
+          <td align="right">{{ asMoney((double)Payroll::total_benefits($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::gross($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::tax($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::nssf($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::nhif($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::deductions($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::total_deductions($employee->id,$period)) }}</td>
+          <td align="right">{{ asMoney((double)Payroll::net($employee->id,$period)) }}</td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
           
         </tr>
          

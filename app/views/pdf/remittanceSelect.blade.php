@@ -63,6 +63,31 @@
                 
             </div>
 
+<<<<<<< HEAD
+        
+        <div class="form-group">
+                        <label for="username">Download as: <span style="color:red">*</span></label>
+                        <select required name="format" class="form-control">
+                            <option></option>
+                            <option value="excel"> Excel</option>
+                            <option value="pdf"> PDF</option>
+=======
+            
+            <div class="form-group">
+                        <label for="username">Select Payment Mode: <span style="color:red">*</span></label>
+                        <select required name="mode" class="form-control">
+                            <option></option>
+                            <option value='All'>All</option>
+                            <option value="Bank">Bank</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
+                        </select>
+                
+            </div>
+
+<<<<<<< HEAD
+=======
         
         <div class="form-group">
                         <label for="username">Download as: <span style="color:red">*</span></label>
@@ -74,6 +99,7 @@
                 
             </div>
 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         <div class="form-actions form-group">
         
           <button type="submit" class="btn btn-primary btn-sm">Select</button>

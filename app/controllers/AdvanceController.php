@@ -9,6 +9,7 @@ class AdvanceController extends \BaseController {
 	 */
 	public function index()
 	{
+<<<<<<< HEAD
 		
         $accounts = Account::all();
         
@@ -36,6 +37,13 @@ class AdvanceController extends \BaseController {
       
 	} 
 
+=======
+        $accounts = Account::all();
+
+		return View::make('advances.index', compact('accounts'));
+	}
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     public function preview_advance()
 	{
 
@@ -106,6 +114,46 @@ class AdvanceController extends \BaseController {
     exit();
 	}
 
+<<<<<<< HEAD
+=======
+	public function display(){
+      $display = "";
+      $postedit = Input::all();
+      $part1    = $postedit['period1'];
+      $part2    = $postedit['period2'];
+      $part3    = $postedit['period3'];
+
+      $fperiod   = $part1.$part2.$part3; 
+      $employees = DB::table('employee')
+                  ->join('employee_deductions', 'employee.id', '=', 'employee_deductions.employee_id')
+                  ->where('in_employment','=','Y')
+                  ->where('deduction_id',1)
+                  ->where('instalments','>',0)
+                  ->get();
+        
+        $i=1;
+        foreach($employees as $employee){
+        $deductions = number_format($employee->deduction_amount);
+
+        $display .="
+        <tr>
+
+          <td> $i </td>
+          <td >$employee->personal_file_number</td>
+          <td>$employee->first_name $employee->last_name </td>
+          <td align='right'>$deductions</td>
+          
+        </tr>
+        ";
+         $i++;
+         
+        } 
+        return $display;
+        exit();
+
+    }
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 	/**
 	 * Store a newly created branch in storage.
 	 *

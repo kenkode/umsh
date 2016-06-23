@@ -23,7 +23,11 @@
 
 <div class="col-lg-3">
 
+<<<<<<< HEAD
 <img src="{{asset('public/uploads/logo/'.$organization->logo)}}" alt="logo" width="100%">
+=======
+<img src="{{ asset('public/uploads/logos/'.$organization->logo) }}" alt="LOGO" width="80%"/>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 
 </div>  

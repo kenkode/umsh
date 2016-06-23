@@ -25,7 +25,11 @@ th {
 }
 .table {
   width: 100%;
+<<<<<<< HEAD
   margin-bottom: 50px;
+=======
+  margin-bottom: 2px;
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 }
 hr {
   margin-top: 1px;
@@ -45,7 +49,11 @@ body {
 
 
  @page { margin: 170px 30px; }
+<<<<<<< HEAD
  .header { position: top; left: 0px; top: -150px; right: 0px; height: 150px;  text-align: center; }
+=======
+ .header { position: fixed; left: 0px; top: -150px; right: 0px; height: 150px;  text-align: center; }
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
  .content {margin-top: -100px; margin-bottom: -150px}
  .footer { position: fixed; left: 0px; bottom: -180px; right: 0px; height: 50px;  }
  .footer .page:after { content: counter(page, upper-roman); }
@@ -58,7 +66,11 @@ body {
 
 <body>
 
+<<<<<<< HEAD
   <div class="header" style="margin-top:-150px">
+=======
+  <div class="header">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
      <table >
 
       <tr>
@@ -67,17 +79,28 @@ body {
        
         <td style="width:150px">
 
+<<<<<<< HEAD
             <img src="{{public_path().'/uploads/logo/'.$organization->logo}}" alt="logo" width="80%">
+=======
+            <img src="{{public_path().'/uploads/logos/'.$organization->logo}}" alt="logo" width="80%">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     
         </td>
 
         <td>
         <strong>
+<<<<<<< HEAD
           {{ strtoupper($organization->name)}}
           </strong><br>
           {{ $organization->phone}}<br>
           {{ $organization->email}}<br>
+=======
+          {{ strtoupper($organization->name)}}<br>
+          </strong>
+          {{ $organization->phone}} |
+          {{ $organization->email}} |
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
           {{ $organization->website}}<br>
           {{ $organization->address}}
        
@@ -105,7 +128,11 @@ body {
    </div>
 
 
+<<<<<<< HEAD
 	<div class="content" style='margin-top:-70px;'>
+=======
+	<div class="content" style='margin-top:0px;'>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 <div align="center"><strong>Employee List Report For Deactived Employees </strong></div><br>
     <table class="table table-bordered" border='1' cellspacing='0' cellpadding='0'>
@@ -133,11 +160,15 @@ body {
 
        <td td width='20'>{{$i}}</td>
         <td>{{$employee->personal_file_number}}</td>
+<<<<<<< HEAD
          @if($employee->middle_name != null || $employee->middle_name != '')
         <td> {{$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}</td>
         @else
         <td> {{$employee->first_name.' '.$employee->last_name}}</td>
         @endif
+=======
+        <td> {{$employee->last_name.' '.$employee->first_name.' '.$employee->middle_name}}</td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
          @if($employee->branch_id != 0)
         <td> {{ $employee->branch->name}}</td>

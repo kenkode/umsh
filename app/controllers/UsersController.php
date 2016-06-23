@@ -28,8 +28,9 @@ class UsersController extends Controller
     public function edit($user){
 
         $user = User::find($user);
+        $roles = Role::all();
 
-        return View::make('users.edit')->with('user', $user);
+        return View::make('users.edit', compact('user', 'roles'));
     }
 
 
@@ -44,7 +45,15 @@ class UsersController extends Controller
         $user->email = Input::get('email');
         $user->update();
 
-        return Redirect::to('users/profile/'.$user->id);
+        $user->detachRoles($user->roles);
+
+        $roles = Input::get('role');
+        foreach ($roles as $role) {
+
+                $user->attachRole($role);
+            }
+
+        return Redirect::to('users');
     }
 
 
@@ -343,6 +352,37 @@ class UsersController extends Controller
     }
 
 
+
+    public function updateCreds($user){
+
+        $user = User::find($user);
+
+        $password_confirmation = Input::get('password_confirmation');
+        $password = Input::get('password');
+
+        if($password != $password_confirmation){
+
+            return Redirect::back()->with('error', 'passwords do not match');
+        } 
+        else
+        {
+
+            $pass = Hash::make($password);
+            
+            DB::table('users')->where('id', $user->id)->update(array('password' => $pass));
+
+
+           // return Redirect::to('users/profile/'.$user->id);
+
+            return Redirect::to('users/logout');
+        }
+
+
+
+    }
+
+
+
     public function password($user){
 
         $user = User::find($user);
@@ -359,6 +399,14 @@ class UsersController extends Controller
         $user = User::find($user);
 
         return View::make('users.profile', compact('user'));
+    }
+
+
+     public function client($user){
+
+        $user = User::find($user);
+
+        return View::make('users.client', compact('user'));
     }
 
 
@@ -383,10 +431,10 @@ class UsersController extends Controller
 
 
 
+/*
 
 
-
-    public function changePassword2(){
+    public function changePassword(){
 
         $user_id = Confide::user()->id;
 
@@ -429,6 +477,17 @@ class UsersController extends Controller
 
         $user = Confide::user()->id;
         return View::make('css.password', compact('user'));
+
+    }
+
+
+    */
+
+
+    public function change($id){
+
+        $user = User::findorfail($id);
+        return View::make('users.change', compact('user'));
 
     }
 
@@ -485,25 +544,41 @@ class UsersController extends Controller
         $repo = App::make('UserRepository');
         $user = $repo->register($input);
          
+         echo '<pre>';
+       
+     
+        foreach ($roles as $rol) {
+                
+            $role = Role::find($rol);
 
-            foreach ($roles as $role) {
+            $user_id = DB::table('users')->where('username', '=', $user->username)->where('email', '=', $user->email)->pluck('id');
+              
 
-                $user->attachRole($role);
-            }
+            DB::table('assigned_roles')->insert(
+                    array('user_id' => $user_id, 'role_id' => $role->id)
+                );
+                
+                
+        }
         
 
-        return Redirect::to('users');
+       return Redirect::to('users');
     }
 
 
     public function show($id){
 
-        
-
-         Confide::logout();
+        Confide::logout();
 
         return Redirect::to('/');
+
+         //$user = User::findorfail($id);
+
+         //return View::make('users.show', compact('user'));
     }
+
+
+
 
 
 }

@@ -28,6 +28,9 @@
 					</thead>
 					<tbody>
               			 @foreach($users as $user)
+
+
+                     @if($user->user_type == 'admin')
               			 <tr>
                			
                			<td>{{ $user->username }}</td>
@@ -47,6 +50,7 @@
   								</button>
   				
   								<ul class="dropdown-menu" role="menu">
+                    <li><a href="{{URL::to('userview/'.$user->id)}}">View</a></li>
     								<li><a href="{{URL::to('users/edit/'.$user->id)}}">Edit</a></li>
 
     								<?php if($user->confirmed){ ?>
@@ -65,6 +69,7 @@
 
                			</td>
                		</tr>
+                  @endif
                			@endforeach
 
  

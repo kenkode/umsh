@@ -12,7 +12,11 @@ class OvertimesController extends \BaseController {
 		$overtimes = DB::table('employee')
 		          ->join('overtimes', 'employee.id', '=', 'overtimes.employee_id')
 		          ->where('in_employment','=','Y')
+<<<<<<< HEAD
 		          ->select('overtimes.id','type','first_name','middle_name','last_name','amount','period')
+=======
+		          ->select('overtimes.id','type','first_name','last_name','amount','period')
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 		          ->get();
 
 		Audit::logaudit('Overtimes', 'view', 'viewed employee overtime');
@@ -52,7 +56,11 @@ class OvertimesController extends \BaseController {
         
         $overtime->employee_id = Input::get('employee');
 
+<<<<<<< HEAD
         $overtime->type = Input::get('type');
+=======
+		$overtime->type = Input::get('type');
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 		$overtime->period = Input::get('period');
 
@@ -156,6 +164,7 @@ class OvertimesController extends \BaseController {
 
 		$overtime->period = Input::get('period');
 
+<<<<<<< HEAD
         $overtime->formular = Input::get('formular');
 
 		if(Input::get('formular') == 'Instalments'){
@@ -181,6 +190,8 @@ class OvertimesController extends \BaseController {
 
 	    }else{
 	    $overtime->instalments = '1';
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         $a = str_replace( ',', '', Input::get('amount') );
 
 		$overtime->amount = $a;

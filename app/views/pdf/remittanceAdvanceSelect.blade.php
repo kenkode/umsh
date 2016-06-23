@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @extends('layouts.ports')
+=======
+@extends('layouts.payroll')
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 @section('content')
 <br/>
 
@@ -63,6 +67,22 @@
                 
             </div>
 
+<<<<<<< HEAD
+=======
+           
+            <div class="form-group">
+                        <label for="username">Select Payment Mode: <span style="color:red">*</span></label>
+                        <select required name="mode" class="form-control">
+                            <option></option>
+                            <option value='All'>All</option>
+                            <option value="Bank">Bank</option>
+                            <option value="Cash">Cash</option>
+                            <option value="Cheque">Cheque</option>
+                        </select>
+                
+            </div>
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
             <div class="form-group">
                         <label for="username">Download as: <span style="color:red">*</span></label>

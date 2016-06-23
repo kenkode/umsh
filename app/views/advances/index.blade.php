@@ -27,6 +27,7 @@ var per = document.getElementById("period").value;
 
     
 		
+<<<<<<< HEAD
 		 
 
     {{ HTML::style('jquery-ui-1.11.4.custom/jquery-ui.css') }}
@@ -212,11 +213,18 @@ var per = document.getElementById("period").value;
 </div>
 
 @if (Session::has('flash_message'))
+=======
+		 @if (Session::has('flash_message'))
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
       <div class="alert alert-success">
       {{ Session::get('flash_message') }}
      </div>
+<<<<<<< HEAD
     @else
+=======
+    @endif
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 		 <form method="POST" action="{{ URL::to('advance/preview')}}" accept-charset="UTF-8">
    
@@ -229,9 +237,14 @@ var per = document.getElementById("period").value;
         
         <div class="form-group">
                         <label for="username">Select Account <span style="color:red">*</span></label>
+<<<<<<< HEAD
                         <select name="account" id="account" class="form-control" required>
                            <option></option>
                            <option value="cnew">Create New</option>
+=======
+                        <select name="account" class="form-control" required>
+                           <option></option>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             @foreach($accounts as $account)
                             <option value="{{ $account->id }}"> {{ $account->code.' '.$account->name }}</option>
                             @endforeach
@@ -246,7 +259,11 @@ var per = document.getElementById("period").value;
 
     </fieldset>
 </form>
+<<<<<<< HEAD
 		@endif
+=======
+		
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
   </div>
 

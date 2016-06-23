@@ -144,6 +144,7 @@ $(document).ready(function() {
                     </div>
                     
 
+<<<<<<< HEAD
           <div class="form-group">
             <label for="username">Period Worked <span style="color:red">*</span> </label>
             <input class="form-control" placeholder="" type="text" name="period" onkeypress="totalB()" onkeyup="totalB()" id="period" value="{{{ Input::old('period') }}}">
@@ -160,6 +161,9 @@ $(document).ready(function() {
                         </select>
                 
                     </div>
+=======
+                    
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
         <div class="form-group insts" id="insts">
             <label for="username">Instalments </label>
@@ -167,11 +171,17 @@ $(document).ready(function() {
         </div>
 
         <div class="form-group">
+<<<<<<< HEAD
             <label for="username">Amount </label>
             <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
             <input class="form-control" readonly placeholder="" type="text" name="amount" id="amount" onkeypress="totalBalance()" onkeyup="totalBalance()">
            </div>
+=======
+            <label for="username">Amount <span style="color:red">*</span> </label>
+            <input class="form-control" placeholder="" type="text" name="amount" onkeypress="totalBalance()" onkeyup="totalBalance()" id="amount" value="{{{ Input::old('amount') }}}">
+           
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         </div>
         
         <div class="form-group">

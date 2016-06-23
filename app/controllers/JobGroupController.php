@@ -106,12 +106,23 @@ class JobGroupController extends \BaseController {
 		$jobgroup = Jobgroup::find($id);
 
 		$benefits = Employeebenefit::where('jobgroup_id', $id)->get();
+<<<<<<< HEAD
 
 		$bens = Benefitsetting::all();
 
 		$count = Employeebenefit::where('jobgroup_id', $id)->count();
 
 		return View::make('job_group.edit', compact('jobgroup','benefits','count','bens'));
+=======
+
+		$bens = Benefitsetting::all();
+
+		$count = Employeebenefit::where('jobgroup_id', $id)->count();
+
+		$countb = Benefitsetting::all()->count();
+
+		return View::make('job_group.edit', compact('jobgroup','benefits','count','countb','bens'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 	}
 
 	/**
@@ -133,6 +144,7 @@ class JobGroupController extends \BaseController {
         $count = DB::table('benefitsettings')->count();
 
 		$c = count(Input::get('chbox'));
+<<<<<<< HEAD
 
 		$c1 = count(Input::get('chbox1'));
 
@@ -140,6 +152,15 @@ class JobGroupController extends \BaseController {
 
 		$ben = Input::get('chbox');
 
+=======
+
+		$c1 = count(Input::get('chbox1'));
+
+		$count= Input::get('count');
+
+		$ben = Input::get('chbox');
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 		$bens = Input::get('chbox1');
 
         $amt = str_replace( ',', '', Input::get('amount'));
@@ -159,6 +180,8 @@ class JobGroupController extends \BaseController {
         $benefit->amount = $amt[$i];
 
         $benefit->save();
+<<<<<<< HEAD
+=======
         }
         }else{
          for ( $i=0; $i< $c1; $i++) {
@@ -170,8 +193,23 @@ class JobGroupController extends \BaseController {
         $benefit->save();
         }
 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
+        }
+        }else{
+         for ( $i=0; $i< $c1; $i++) {
+        $benefit = new Employeebenefit;
+        $benefit->jobgroup_id=$id;
+        $benefit->benefit_id = $bens[$i];
+        $benefit->amount = $amts[$i];
+
+<<<<<<< HEAD
+        $benefit->save();
         }
 
+        }
+
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
          
         
         Audit::logaudit('Job Groups', 'update', 'updated: '.$jgroup->job_group_name);

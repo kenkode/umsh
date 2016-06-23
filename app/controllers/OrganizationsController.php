@@ -206,10 +206,16 @@ class OrganizationsController extends \BaseController {
 public function logo($id){
 
 
+<<<<<<< HEAD
 	
 if(Input::hasFile('photo')){
+=======
 
-			$destination = public_path().'/uploads/logo/';
+
+	if(Input::hasFile('photo')){
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
+
+			$destination = public_path().'/uploads/logos/';
 
 			$filename = str_random(12);
 
@@ -227,7 +233,16 @@ if(Input::hasFile('photo')){
 			
 		}
 
+<<<<<<< HEAD
 		return Redirect::to('organizations');
+=======
+
+
+	
+
+		return Redirect::to('organizations');
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 }
 
 

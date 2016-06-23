@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'driver' => 'smtp',
+	'driver' => Mailsender::driver(),
 
 	/*
 	|--------------------------------------------------------------------------
@@ -28,7 +28,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'host' => 'smtp.gmail.com',
+=======
+	'host' => Mailsender::host(),
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,7 +45,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'port' => 465,
+=======
+	'port' => Mailsender::port(),
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 	/*
 	|--------------------------------------------------------------------------
@@ -54,7 +62,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'from' => array('address' => 'info@lixnet.net', 'name' => 'Umash Limited'), 
+=======
+	'from' => array('address' => Mailsender::username(), 'name' => 'Xpose Limited'), 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 	/*
 	|--------------------------------------------------------------------------
@@ -67,7 +79,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'encryption' => 'ssl',
+=======
+	'encryption' => Mailsender::encryption(),
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +96,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'username' => 'wangoken2@gmail.com',
+=======
+	'username' => Mailsender::username(),
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 	/*
 	|--------------------------------------------------------------------------
@@ -93,7 +113,11 @@ return array(
 	|
 	*/
 
+<<<<<<< HEAD
 	'password' => 'samsonkennedy',
+=======
+	'password' => Mailsender::password(),
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 	/*
 	|--------------------------------------------------------------------------

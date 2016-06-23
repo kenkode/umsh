@@ -161,6 +161,7 @@ $(document).ready(function() {
            
         </div>
 
+<<<<<<< HEAD
          <div class="form-group">
                         <label for="username">Formular <span style="color:red">*</span></label>
                         <select name="formular" id="formular" class="form-control forml">
@@ -171,6 +172,9 @@ $(document).ready(function() {
                         </select>
                 
                     </div>
+=======
+                  
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
         <div class="form-group" id="insts">
             <label for="username">Instalments </label>
@@ -178,11 +182,17 @@ $(document).ready(function() {
         </div>
 
         <div class="form-group">
+<<<<<<< HEAD
             <label for="username">Amount</label>
             <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
             <input class="form-control" readonly placeholder="" type="text" onkeypress="totalBalance()" onkeyup="totalBalance()" name="amount" id="amount" value="{{$overtime->amount}}">
             </div>
+=======
+            <label for="username">Amount <span style="color:red">*</span> </label>
+            <input class="form-control" placeholder="" type="text" onkeypress="totalBalance()" onkeyup="totalBalance()" name="amount" id="amount" value="{{$overtime->amount}}">
+            
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         </div>
         
         <div class="form-group">

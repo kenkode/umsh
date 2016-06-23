@@ -29,7 +29,12 @@ class OccurencesController extends \BaseController {
 		          ->where('in_employment','=','Y')
 		          ->get();
 		$occurences = Occurencesetting::all();
+<<<<<<< HEAD
 		return View::make('occurences.create',compact('employees','occurences'));
+=======
+
+		return View::make('occurences.create',compact('employees','id','occurences'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 	}
 
 	public function createoccurence()
@@ -72,7 +77,11 @@ class OccurencesController extends \BaseController {
 
 		$occurence->employee_id = Input::get('employee');
 
+<<<<<<< HEAD
 		$occurence->occurencesetting_id = Input::get('type');
+=======
+		$occurence->occurence_type_id = Input::get('type');
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 		$occurence->narrative = Input::get('narrative');
 
@@ -125,7 +134,13 @@ class OccurencesController extends \BaseController {
 
 		$employees = Employee::all();
 
+<<<<<<< HEAD
 		return View::make('occurences.edit', compact('occurence','employees','occurencesettings'));
+=======
+		$occurencetypes = Occurencesetting::all();
+
+		return View::make('occurences.edit', compact('occurence','employees','occurencetypes'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 	}
 
 	/**
@@ -147,7 +162,11 @@ class OccurencesController extends \BaseController {
 
 		$occurence->occurence_brief = Input::get('brief');
 
+<<<<<<< HEAD
 		$occurence->occurencesetting_id = Input::get('type');
+=======
+		$occurence->occurence_type_id = Input::get('type');
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 		$occurence->narrative = Input::get('narrative');
 
@@ -161,6 +180,13 @@ class OccurencesController extends \BaseController {
             $input['file'] = '/public/uploads/employees/documents/'.$name;
             $extension = pathinfo($name, PATHINFO_EXTENSION);
             $occurence->doc_path = $name;
+<<<<<<< HEAD
+=======
+        }else{
+        	$name = Input::get('curpath');
+            $occurence->doc_path = $name;
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         }
 
 		$occurence->update();

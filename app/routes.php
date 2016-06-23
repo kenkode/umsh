@@ -13,12 +13,17 @@
 
 Route::get('/', function()
 {
-
+    $organization = DB::table('organizations')->where('id', '=', 1)->first();
     $count = count(User::all());
 
     if($count <= 1 ){
+<<<<<<< HEAD
         $organization = Organization::find(1);
         return View::make('login',compact('organization'));
+=======
+
+        return View::make('login', compact('organization'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     }
 
 
@@ -26,12 +31,21 @@ Route::get('/', function()
 
         return Redirect::to('/dashboard');
         } else {
+<<<<<<< HEAD
           $organization = Organization::find(1);
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
             return View::make('login',compact('organization'));
         }
 });
 
+Route::get('roles/show/{id}', 'RolesController@show');
 
+Route::get('mail', function(){
+	$mail = Mailsender::find(1);	
+	return View::make('system.mail', compact('mail'));
+
+});
 
 
 Route::get('/dashboard', function()
@@ -101,6 +115,11 @@ Route::get('users/profile/{user}', 'UsersController@profile');
 Route::get('users/show/{user}', 'UsersController@show');
 
 
+Route::post('users/changepassword/{user}', 'UsersController@updateCreds');
+Route::get('users/client/{user}', 'UsersController@client');
+Route::get('users/change/{user}', 'UsersController@change');
+
+
 
 Route::post('users/pass', 'UsersController@changePassword2');
 
@@ -110,7 +129,7 @@ Route::resource('roles', 'RolesController');
 Route::get('roles/create', 'RolesController@create');
 Route::get('roles/edit/{id}', 'RolesController@edit');
 Route::post('roles/update/{id}', 'RolesController@update');
-Route::get('roles/delete/{id}', 'RolesController@destroy');
+Route::get('roles/destroy/{id}', 'RolesController@destroy');
 
 });
 
@@ -316,6 +335,17 @@ Route::get('leaveapplications/cancellations', 'LeaveapplicationsController@cance
 Route::get('leaveapplications/amends', 'LeaveapplicationsController@amended');
 
 
+Route::get('leaveapplicationenddate', function(){
+
+   
+
+    $enddate = date('Y-m-d');
+
+    return json_encode($enddate);
+
+});
+
+
 Route::get('leaveapprovals', function(){
 
   $leaveapplications = Leaveapplication::all();
@@ -417,20 +447,175 @@ Route::get('template/employees', function(){
                 }
 
                 $list = implode(", ", $listdata);
-   
-
-    
-
-                
-
-                
-        
 
     });
 
   })->export('xls');
 });
 
+Route::get('template/items', function(){
+
+  $locations = Location::all();
+
+  $categories = Itemcategory::all();
+
+  Excel::create('Items', function($excel) use($locations,$categories) {
+
+
+    require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/NamedRange.php");
+    require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/Cell/DataValidation.php");
+
+    
+
+    $excel->sheet('items', function($sheet) use($locations,$categories){
+
+
+              $sheet->row(1, array(
+     'NAME','DESCRIPTION', 'PURCHASE PRICE', 'SELLING PRICE', 'LOCATION','DURATION','CATEGORY','STORE KEEPING UNIT', 'TAG ID', 'REORDER LEVEL'
+));
+
+               $sheet->row(1, function($cell) {
+
+               // manipulate the cell
+                $cell->setFontWeight('bold');
+
+              });
+
+               $sheet->setWidth(array(
+                    'A'     =>  30,
+                    'B'     =>  30,
+                    'C'     =>  30,
+                    'D'     =>  30,
+                    'E'     =>  30,
+                    'F'     =>  30,
+                    'G'     =>  30,
+                    'H'     =>  30,
+                    'I'     =>  30,
+                    'J'     =>  30,
+              ));
+             
+                $locdata = array();
+
+                foreach($locations as $d){
+
+                  $locdata[] = $d->name;
+                }
+
+                $loclist = implode(", ", $locdata);
+
+               $catdata = array();
+
+                foreach($categories as $d){
+
+                  $catdata[] = $d->name;
+                }
+
+                $catlist = implode(", ", $catdata);
+
+
+                $row = 2;
+                $r = 2;
+            
+            for($i = 0; $i<count($locations); $i++){
+            
+             $sheet->SetCellValue("YY".$row, $locations[$i]->name);
+             $row++;
+            }  
+
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'names', $sheet, 'YY2:YY'.(count($locations)+1)
+                        )
+                );
+
+                for($i = 0; $i<count($categories); $i++){
+            
+             $sheet->SetCellValue("YZ".$r, $categories[$i]->name);
+             $r++;
+            }  
+
+                $sheet->_parent->addNamedRange(
+                        new \PHPExcel_NamedRange(
+                        'categories', $sheet, 'YZ2:YZ'.(count($categories)+1)
+                        )
+                );
+   
+
+    for($i=2; $i <= 1000; $i++){
+                $objValidation = $sheet->getCell('E'.$i)->getDataValidation();
+                $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                $objValidation->setAllowBlank(false);
+                $objValidation->setShowInputMessage(true);
+                $objValidation->setShowErrorMessage(true);
+                $objValidation->setShowDropDown(true);
+                $objValidation->setErrorTitle('Input error');
+                $objValidation->setError('Value is not in list.');
+                $objValidation->setPromptTitle('Pick from list');
+                $objValidation->setPrompt('Please pick a value from the drop-down list.');
+                $objValidation->setFormula1('names'); //note this!
+
+                $objValidation = $sheet->getCell('G'.$i)->getDataValidation();
+                $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
+                $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
+                $objValidation->setAllowBlank(false);
+                $objValidation->setShowInputMessage(true);
+                $objValidation->setShowErrorMessage(true);
+                $objValidation->setShowDropDown(true);
+                $objValidation->setErrorTitle('Input error');
+                $objValidation->setError('Value is not in list.');
+                $objValidation->setPromptTitle('Pick from list');
+                $objValidation->setPrompt('Please pick a value from the drop-down list.');
+                $objValidation->setFormula1('categories'); //note this!
+                }
+
+    });
+
+  })->export('xlsx');
+
+});
+
+Route::get('template/assetregister', function(){
+
+  Excel::create('Asset Register', function($excel) {
+
+
+    require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/NamedRange.php");
+    require_once(base_path()."/vendor/phpoffice/phpexcel/Classes/PHPExcel/Cell/DataValidation.php");
+
+    
+
+    $excel->sheet('Assets', function($sheet){
+
+
+              $sheet->row(1, array(
+     'DATE','QUANTITY', 'ASSET SERIAL NUMBER', 'DESCRIPTION', 'UNIT PRICE','AMOUNT','ASSET TYPE'
+));
+
+              $sheet->row(1, function($cell) {
+
+               // manipulate the cell
+                $cell->setFontWeight('bold');
+
+              });
+
+
+               $sheet->setWidth(array(
+                    'A'     =>  30,
+                    'B'     =>  30,
+                    'C'     =>  30,
+                    'D'     =>  30,
+                    'E'     =>  30,
+                    'F'     =>  30,
+                    'G'     =>  30,
+              ));
+             
+
+    });
+
+  })->export('xlsx');
+
+});
 
 /*
 *allowance template
@@ -636,8 +821,15 @@ Route::get('template/earnings', function(){
                 $objValidation->setPromptTitle('Pick from list');
                 $objValidation->setPrompt('Please pick a value from the drop-down list.');
                 $objValidation->setFormula1('"Bonus, Commission, Others"'); //note this!
+<<<<<<< HEAD
 
                 $objValidation = $sheet->getCell('D'.$i)->getDataValidation();
+=======
+                
+                
+
+                $objValidation = $sheet->getCell('A'.$i)->getDataValidation();
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                 $objValidation->setType(\PHPExcel_Cell_DataValidation::TYPE_LIST);
                 $objValidation->setErrorStyle(\PHPExcel_Cell_DataValidation::STYLE_INFORMATION);
                 $objValidation->setAllowBlank(false);
@@ -909,12 +1101,7 @@ Route::post('import/employees', function(){
       $filename = str_random(12);
 
       $ext = Input::file('employees')->getClientOriginalExtension();
-      $file = $filename.'.'.$ext;
-
-
-
-      
-      
+      $file = $filename.'.'.$ext;      
      
       Input::file('employees')->move($destination, $file);
 
@@ -967,7 +1154,101 @@ Route::post('import/employees', function(){
 
 });
 
+Route::post('import/items', function(){
 
+  
+  if(Input::hasFile('items')){
+
+      $destination = public_path().'/migrations/';
+
+      $filename = str_random(12);
+
+      $ext = Input::file('items')->getClientOriginalExtension();
+      $file = $filename.'.'.$ext;      
+     
+      Input::file('items')->move($destination, $file);
+
+
+    Excel::selectSheetsByIndex(0)->load(public_path().'/migrations/'.$file, function($reader){
+
+          $results = $reader->get();   
+
+      foreach ($results as $result) {
+      if($result->name != ''){
+      
+      $location = DB::table('locations')->where('name', '=', $result->location)->pluck('id');
+      $item = new Item;
+      $item->name = $result->name;
+      $item->description = $result->description;
+      $item->purchase_price = $result->purchase_price;
+      $item->selling_price = $result->selling_price;
+      $item->sku = $result->store_keeping_unit;
+      $item->tag_id = $result->tag_id;
+      $item->category = $result->category;
+      $item->location_id = $location;
+      $item->duration = $result->duration;
+      $item->reorder_level = $result->reorder_level;
+      $item->save();
+    }
+      
+    }
+
+  });
+  
+  }
+
+
+
+  return Redirect::back()->with('notice', 'Items have been succefully imported');
+
+
+
+  
+
+});
+
+Route::post('import/assetregister', function(){
+
+  
+  if(Input::hasFile('asset')){
+
+      $destination = public_path().'/migrations/';
+
+      $filename = str_random(12);
+
+      $ext = Input::file('asset')->getClientOriginalExtension();
+      $file = $filename.'.'.$ext;      
+     
+      Input::file('asset')->move($destination, $file);
+
+
+    Excel::selectSheetsByIndex(0)->load(public_path().'/migrations/'.$file, function($reader){
+
+          $results = $reader->get(); 
+
+      foreach ($results as $result) {
+      $asset = new Asset;
+      $asset->name = $result->description;
+      $asset->purchase_date = $result->date;
+      $asset->serial_number = $result->asset_serial_number;
+      $asset->quantity = $result->quantity;
+      if($result->unit_price == ''){
+      $asset->cost = $result->amount/$result->quantity;
+      }else{
+      $asset->cost = $result->unit_price;
+      }
+      $asset->asset_type = $result->asset_type;
+      $asset->save();
+      
+    }
+
+  });
+  
+  }
+
+  return Redirect::back()->with('notice', 'Assets have been succefully imported');
+
+});
 
 
 /* #################### IMPORT EARNINGS ################################## */
@@ -1517,6 +1798,7 @@ Route::get('allowances/delete/{id}', 'AllowancesController@destroy');
 Route::get('allowances/edit/{id}', 'AllowancesController@edit');
 
 /*
+<<<<<<< HEAD
 * earningsettings routes
 */
 
@@ -1524,6 +1806,15 @@ Route::resource('earningsettings', 'EarningsettingsController');
 Route::post('earningsettings/update/{id}', 'EarningsettingsController@update');
 Route::get('earningsettings/delete/{id}', 'EarningsettingsController@destroy');
 Route::get('earningsettings/edit/{id}', 'EarningsettingsController@edit');
+=======
+* occurence settings routes
+*/
+
+Route::resource('occurencesettings', 'OccurencesettingsController');
+Route::post('occurencesettings/update/{id}', 'OccurencesettingsController@update');
+Route::get('occurencesettings/delete/{id}', 'OccurencesettingsController@destroy');
+Route::get('occurencesettings/edit/{id}', 'OccurencesettingsController@edit');
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 /*
 * benefits setting routes
@@ -1668,7 +1959,24 @@ Route::get('occurences/delete/{id}', 'OccurencesController@destroy');
 Route::get('occurences/edit/{id}', 'OccurencesController@edit');
 Route::get('occurences/view/{id}', 'OccurencesController@view');
 Route::get('occurences/download/{id}', 'OccurencesController@getDownload');
+<<<<<<< HEAD
 Route::post('createOccurence', 'OccurencesController@createoccurence');
+=======
+Route::get('occurences/create/{id}', 'OccurencesController@create');
+
+/*
+* occurences routes
+*/
+
+Route::resource('EmergencyContacts', 'EmergencyContactsController');
+Route::post('EmergencyContacts/update/{id}', 'EmergencyContactsController@update');
+Route::get('EmergencyContacts/delete/{id}', 'EmergencyContactsController@destroy');
+Route::get('EmergencyContacts/edit/{id}', 'EmergencyContactsController@edit');
+Route::get('EmergencyContacts/view/{id}', 'EmergencyContactsController@view');
+Route::get('EmergencyContacts/create/{id}', 'EmergencyContactsController@create');
+
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 /*
 * employee earnings routes
 */
@@ -1732,8 +2040,11 @@ Route::post('createDeduction', 'EmployeeDeductionsController@creatededuction');
 Route::resource('payroll', 'PayrollController');
 Route::post('deleterow', 'PayrollController@del_exist');
 Route::post('showrecord', 'PayrollController@display');
+<<<<<<< HEAD
 Route::post('shownet', 'PayrollController@disp');
 Route::post('showgross', 'PayrollController@dispgross');
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 Route::post('payroll/preview', 'PayrollController@create');
 Route::get('payrollpreviewprint/{period}', 'PayrollController@previewprint');
 Route::post('createNewAccount', 'PayrollController@createaccount');
@@ -1753,6 +2064,17 @@ Route::resource('advance', 'AdvanceController');
 Route::post('deleteadvance', 'AdvanceController@del_exist');
 Route::post('advance/preview', 'AdvanceController@create');
 Route::post('createAccount', 'AdvanceController@createaccount');
+
+/*
+* advance routes
+*/
+
+
+Route::resource('advance', 'AdvanceController');
+Route::post('deleteadvance', 'AdvanceController@del_exist');
+Route::post('showadvance', 'AdvanceController@display');
+Route::post('advance/preview', 'AdvanceController@create');
+
 
 /*
 * employees routes
@@ -1791,6 +2113,7 @@ Route::get('reports/employees', function(){
     return View::make('employees.reports');
 });
 
+<<<<<<< HEAD
 Route::get('reminders', function(){
 $employees = Employee::where('type_id',2)->where('in_employment','Y')->whereNotNull('start_date')->whereNotNull('end_date')->get();
         Mail::send('reminders.message', compact('employees'), function($message){
@@ -1800,6 +2123,8 @@ $employees = Employee::where('type_id',2)->where('in_employment','Y')->whereNotN
      //return Redirect::back()->with('success', 'Email Sent!');
 });
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 Route::get('reports/selectEmployeeStatus', 'ReportsController@selstate');
 Route::post('reports/employeelist', 'ReportsController@employees');
@@ -1847,6 +2172,11 @@ Route::post('advanceReports/advanceSummary', 'ReportsController@payAdvSummary');
 
 
 
+
+Route::get('advanceReports/selectRemittancePeriod', 'ReportsController@period_advrem');
+Route::post('advanceReports/advanceRemittances', 'ReportsController@payeAdvRems');
+Route::get('advanceReports/selectSummaryPeriod', 'ReportsController@period_advsummary');
+Route::post('advanceReports/advanceSummary', 'ReportsController@payAdvSummary');
 
 /*
 *#################################################################
@@ -1947,6 +2277,16 @@ Route::get('cbsmgmt', function(){
 Route::get('import', function(){
 
     return View::make('import');
+});
+
+Route::get('items/import', function(){
+
+    return View::make('items.import');
+});
+
+Route::get('asset/import', function(){
+
+    return View::make('assets.import');
 });
 
 
@@ -2465,24 +2805,131 @@ echo "Decoded L code: ".$name4."<br>";
 
 /* ########################  ERP ROUTES ################################ */
 
-Route::resource('clients', 'ClientsController');
+Route::group(['before' => 'manage_clients'], function() {
+
+  Route::resource('clients', 'ClientsController');
 Route::get('clients/edit/{id}', 'ClientsController@edit');
 Route::post('clients/update/{id}', 'ClientsController@update');
 Route::get('clients/delete/{id}', 'ClientsController@destroy');
 
-Route::resource('items', 'ItemsController');
+    
+});
+
+
+Route::group(['before' => 'manage_items'], function() {
+
+
+    Route::resource('items', 'ItemsController');
 Route::get('items/edit/{id}', 'ItemsController@edit');
 Route::post('items/update/{id}', 'ItemsController@update');
 Route::get('items/delete/{id}', 'ItemsController@destroy');
+
+Route::get('items/show/{id}', 'ItemsController@show');
+
+    
+});
+
+
+Route::group(['before' => 'manage_bookings'], function() {
+
+
+    Route::resource('bookings', 'BookingsController');
+Route::get('bookings/edit/{id}', 'BookingsController@edit');
+Route::post('bookings/update/{id}', 'BookingsController@update');
+Route::get('bookings/delete/{id}', 'BookingsController@destroy');
+Route::get('bookings/show/{id}', 'BookingsController@show');
+Route::post('bookings/add', 'BookingsController@add');
+Route::post('bookings/additems', 'BookingsController@additems');
+Route::get('bookingscommit', function(){
+
+    $bookingitems =Session::get('bookingitems');
+      $bking =Session::get('booking');
+
+      $client = Client::findOrFail($bking['client_id']);
+
+     
+
+      
+      $booking = new Booking;
+      $booking->client()->associate($client);
+      $booking->event = $bking['event'];
+      $booking->start_date = $bking['start_date'];
+      $booking->end_date = $bking['end_date'];
+      $booking->venue = $bking['venue'];
+      $booking->lead = $bking['lead'];
+      $booking->save();
+
+      foreach($bookingitems as $bookingitem){
+        
+          $item = Item::findOrFail($bookingitem['item']);
+          $bookingitem = new Bookingitem;
+          $bookingitem->item()->associate($item);
+          $bookingitem->booking()->associate($booking);
+          $bookingitem->save();
+      }
+      
+
+  return Redirect::to('bookings');
+
+  
+
+});
+
+    
+});
+
+
+
+
+Route::group(['before' => 'manage_stores'], function() {
+
+
+   Route::resource('locations', 'LocationsController');
+Route::get('locations/edit/{id}', 'LocationsController@edit');
+Route::get('locations/delete/{id}', 'LocationsController@destroy');
+Route::post('locations/update/{id}', 'LocationsController@update');
+
+
+    
+});
+
+
+Route::group(['before' => 'manage_checkin'], function() {
+
+
+
+Route::get('checks/checkin/{id}', 'ChecksController@checkin');
+Route::post('checks/checkin/{id}', 'ChecksController@docheckin');
+
+    
+});
+
+
+Route::group(['before' => 'manage_checkout'], function() {
+
+
+
+ Route::resource('checks', 'ChecksController');
+Route::get('checks/edit/{id}', 'ChecksController@edit');
+Route::get('checks/delete/{id}', 'ChecksController@destroy');
+Route::post('checks/update/{id}', 'ChecksController@update');
+Route::get('checks/show/{id}', 'ChecksController@show');
+
+Route::get('checks/checkout', 'ChecksController@checkout');
+
+    
+});
+
+
+
+
+  
+
 
 
 Route::resource('paymentmethods', 'PaymentmethodsController');
 
 
-Route::resource('locations', 'LocationsController');
-Route::get('locations/edit/{id}', 'LocationsController@edit');
-Route::get('locations/delete/{id}', 'LocationsController@destroy');
-Route::post('locations/update/{id}', 'LocationsController@update');
 
 
 
@@ -2529,6 +2976,7 @@ Route::get('api/dropdown', function(){
     return $bbranch->lists('bank_branch_name', 'id');
 });
 
+<<<<<<< HEAD
 Route::get('api/branchemployee', function(){
     $bid = Input::get('option');
     $did = Input::get('deptid');
@@ -2573,6 +3021,8 @@ Route::get('api/deptemployee', function(){
     return $employee;
 });
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 Route::get('api/getDays', function(){
     $id = Input::get('employee');
     $lid = Input::get('leave');
@@ -2965,10 +3415,78 @@ Route::get('appraisalcategories/delete/{id}', 'AppraisalCategoryController@destr
 Route::get('appraisalcategories/edit/{id}', 'AppraisalCategoryController@edit');
 
 
+
+Route::group(['before' => 'manage_items'], function() {
+
 Route::resource('itemcategories', 'ItemcategoriesController');
 Route::get('itemcategories/edit/{id}', 'ItemcategoriesController@edit');
 Route::get('itemcategories/delete/{id}', 'ItemcategoriesController@destroy');
 Route::post('itemcategories/update/{id}', 'ItemcategoriesController@update');
+
+    
+});
+
+
+
+
+Route::group(['before' => 'manage_maintenance'], function() {
+
+
+  Route::resource('tests', 'TestsController');
+Route::get('tests/edit/{id}', 'TestsController@edit');
+Route::get('tests/delete/{id}', 'TestsController@destroy');
+Route::post('tests/update/{id}', 'TestsController@update');
+
+
+Route::resource('maintenances', 'MaintenancesController');
+Route::get('maintenances/edit/{id}', 'MaintenancesController@edit');
+Route::get('maintenances/delete/{id}', 'MaintenancesController@destroy');
+Route::post('maintenances/update/{id}', 'MaintenancesController@update');
+
+
+Route::resource('assets', 'AssetsController');
+Route::get('assets/edit/{id}', 'AssetsController@edit');
+Route::get('assets/delete/{id}', 'AssetsController@destroy');
+Route::post('assets/update/{id}', 'AssetsController@update');
+Route::get('assets/dispose/{id}', 'AssetsController@dispose');
+Route::post('assets/dispose/{id}', 'AssetsController@submitdispose');
+Route::get('assets/show/{id}', 'AssetsController@show');
+
+
+    
+});
+
+
+
+
+Route::group(['before' => 'manage_inventory_reports'], function() {
+
+    Route::get('invreports', function(){
+
+
+      $items = Item::all();
+      $stores = Location::all();
+
+      return View::make('invreports', compact('items', 'stores'));
+
+    });
+
+
+     Route::post('invreports', function(){
+
+
+     $data = Input::all();
+
+     return Redirect::back()->with('notice', 'You do not have sufficient information to generate this report');
+
+    });
+
+
+
+});
+
+
+
 
 
 Route::get('erpmigrate', function(){
@@ -3040,9 +3558,48 @@ Route::post('import/categories', function(){
 
   return Redirect::back()->with('notice', 'Employees have been succeffully imported');
   
+<<<<<<< HEAD
+=======
 
 });
 
+Route::get('reports/AllowanceExcel', 'ReportsController@excelAll');
+
+Route::get('itax/download', 'ReportsController@getDownload');
+
+
+
+Route::get('errorboard', function(){
+
+  return View::make('errorboard');
+
+});
+
+
+
+
+Route::resource('mails', 'MailsController');
+Route::get('mailtest', 'MailsController@test');
+
+
+Route::get('seedmail', function(){
+
+  $mail = new Mailsender;
+
+  $mail->driver = 'smtp';
+  $mail->save();
+});
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
+
+Route::get('userview/{user}', function($id){
+
+    $user = User::findorfail($id);
+
+    return View::make('users.show', compact('user'));
+});
+
+<<<<<<< HEAD
 Route::get('reports/AllowanceExcel', 'ReportsController@excelAll');
 
 Route::get('itax/download', 'ReportsController@getDownload');
@@ -3060,6 +3617,74 @@ Route::get('api/ded', function(){
     $employee = Employee::find($id);
     return number_format($employee->basic_pay,2);
 });
+=======
+Route::get('perms', function(){
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_checkout';
+    $perm->display_name = 'Checkout Items';
+    $perm->category = 'Inventory';
+    $perm->save();
 
 
+    $perm = new Permission;
+
+    $perm->name = 'manage_checkin';
+    $perm->display_name = 'Checkin Items';
+    $perm->category = 'Inventory';
+    $perm->save();
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_bookings';
+    $perm->display_name = 'Manage Bookings';
+    $perm->category = 'Inventory';
+    $perm->save();
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_maintenance';
+    $perm->display_name = 'Manage Maintenance';
+    $perm->category = 'Inventory';
+    $perm->save();
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_items';
+    $perm->display_name = 'Manage Items';
+    $perm->category = 'Inventory';
+    $perm->save();
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_clients';
+    $perm->display_name = 'Manage Clients';
+    $perm->category = 'Inventory';
+    $perm->save();
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_stores';
+    $perm->display_name = 'Manage Stores';
+    $perm->category = 'Inventory';
+    $perm->save();
+
+    $perm = new Permission;
+
+    $perm->name = 'manage_inventory_reports';
+    $perm->display_name = 'View Reports';
+    $perm->category = 'Inventory';
+    $perm->save();
+
+   
+
+});
+
+
+Route::get('templates', function(){
+
+  return View::make('organization.templates');
+});
 

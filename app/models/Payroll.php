@@ -36,10 +36,14 @@ public static $rules = [
 
     // Don't forget to fill this array
     protected $fillable = [];
+<<<<<<< HEAD
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     public function employees(){
 
+<<<<<<< HEAD
         return $this->hasMany('Employee');
     }
 
@@ -49,6 +53,14 @@ public static $rules = [
     $start = $part[1]."-".$part[0]."-01";
     $end  = date('Y-m-t', strtotime($start));
 
+=======
+    public function employees(){
+
+        return $this->hasMany('Employee');
+    }
+
+    public static function allowances($id,$period){
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     $allw = 0.00;
     
     $total_allws = DB::table('employee_allowances')
@@ -126,6 +138,7 @@ public static $rules = [
     $allw = $total_allw->total_allowances;
     }
     return round($allw,2);
+<<<<<<< HEAD
 
     }
 
@@ -216,6 +229,12 @@ public static $rules = [
     }
 
     public static function reliefs($id,$relief_id,$period){
+=======
+
+    }
+
+    public static function reliefs($id,$period){
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     $rel = 0.00;
     
     $total_rels = DB::table('employee_relief')
@@ -230,6 +249,7 @@ public static $rules = [
 
     }
 
+<<<<<<< HEAD
     public static function totalreliefs($relief_id,$period){
     
     $rel = DB::table('employee_relief')
@@ -257,6 +277,9 @@ public static $rules = [
     }
 
     public static function earnings($id,$earning_id,$period){
+=======
+    public static function earnings($id,$period){
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
  
     $part = explode("-", $period);
     $start = $part[1]."-".$part[0]."-01";
@@ -266,6 +289,7 @@ public static $rules = [
 
     $total_earns = DB::table('earnings')
                      ->select(DB::raw('COALESCE(sum(earnings_amount),0.00) as total_earnings,instalments'))
+<<<<<<< HEAD
                      ->where(function ($query) use ($id,$earning_id,$start){
                        $query->where('employee_id', '=', $id)
                              ->where('earning_id', '=', $earning_id)
@@ -275,6 +299,15 @@ public static $rules = [
                       ->orWhere(function ($query) use ($id,$earning_id,$start) {
                         $query->where('employee_id', '=', $id)
                               ->where('earning_id', '=', $earning_id)
+=======
+                     ->where(function ($query) use ($id,$start){
+                       $query->where('employee_id', '=', $id)
+                             ->where('formular', '=', 'Recurring')
+                             ->where('first_day_month','<=',$start);
+                       })
+                      ->orWhere(function ($query) use ($id,$start) {
+                        $query->where('employee_id', '=', $id)
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                               ->where('instalments', '>', 0)
                               ->where('first_day_month','<=',$start)
                               ->where('last_day_month','>=',$start);
@@ -285,6 +318,7 @@ public static $rules = [
     $earn = $total_earn->total_earnings;
     }else{
     $earn = 0.00;
+<<<<<<< HEAD
     }
     }
     
@@ -357,6 +391,10 @@ public static $rules = [
     $earn = 0.00;
     }
     }
+=======
+    }
+    }
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     
     return round($earn,2);
 
@@ -1149,6 +1187,7 @@ public static $rules = [
     foreach($total_deds as $total_ded){
     $deductions = $total_ded->deduction_name;
     }
+<<<<<<< HEAD
     
     return $deductions;
 
@@ -1157,6 +1196,13 @@ public static $rules = [
     public static function processedDeductions($id,$period){
 
     $deductions = 0.00;
+=======
+    return round($salary,2);
+   }
+
+   public static function overtimes($id,$period){
+    $otime = 0.00;
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     
     $total_deds= DB::table('transact_deductions')
                      ->select('employee_id',DB::raw('COALESCE(sum(deduction_amount),0.00) as total_deductions'))
@@ -1168,6 +1214,7 @@ public static $rules = [
     foreach($total_deds as $total_ded){
     $deductions = $total_ded->total_deductions;
     }
+<<<<<<< HEAD
     
     return  number_format($deductions,2);
 
@@ -1202,6 +1249,27 @@ public static $rules = [
                      ->where('employee_id', '=', $id)
                      ->groupBy('employee_id')
                      ->get();
+=======
+    return round($otime,2);
+
+    }
+
+    public static function total_benefits($id,$period){
+    $total_earnings = 0.00;
+    
+    $total_earnings = static::allowances($id,$period)+static::earnings($id,$period)+static::overtimes($id,$period);
+
+    return round($total_earnings,2);
+
+    }
+
+    public static function gross($id,$period){
+    $total_gross = 0.00;
+    
+    $total_gross = static::salary_pay($id,$period)+static::total_benefits($id,$period);
+
+    return round($total_gross,2);
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     foreach($total_nets as $total_net){
     $net = $total_net->total_net;
@@ -1211,15 +1279,23 @@ public static $rules = [
 
     }
 
+<<<<<<< HEAD
     public static function payecalc($gross){
     $paye = 0.00;
     $a = str_replace( ',', '', $gross);
 
     $total_pay = $a;
     $total_nssf = static::nssfcalc($gross);
+=======
+    public static function tax($id,$period){
+    $paye = 0.00;
+    $total_pay = static::gross($id,$period);
+    $total_nssf = static::nssf($id,$period);
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     $taxable = $total_pay-$total_nssf;
     
     if($taxable>=11135.67 && $taxable<19741){
+<<<<<<< HEAD
     $paye = (1016.4+($taxable-10165)*15/100)-1162;
     }else if($taxable>=19741 && $taxable<29317){
     $paye = (2452.8+($taxable-19741)*20/100)-1162;
@@ -1227,6 +1303,19 @@ public static $rules = [
     $paye = (4368+($taxable-29317)*25/100)-1162;
     }else if($taxable>=38893){
     $paye = (6762+($taxable-38893)*30/100)-1162;
+=======
+    $paye = 1016.4+($taxable-10165)*15/100;
+    $paye = $paye-1162.00-static::reliefs($id,$period);
+    }else if($taxable>=19741 && $taxable<29317){
+    $paye = 2452.8+($taxable-19741)*20/100;
+    $paye = $paye-1162.00-static::reliefs($id,$period);
+    }else if($taxable>=29317 && $taxable<38893){
+    $paye = 4368+($taxable-29317)*25/100;
+    $paye = $paye-1162.00-static::reliefs($id,$period);
+    }else if($taxable>=38893){
+    $paye = 6762+($taxable-38893)*30/100;
+    $paye = $paye-1162.00-static::reliefs($id,$period);
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     }else{
     $paye = 0.00;
     }
@@ -1283,6 +1372,7 @@ public static $rules = [
     $taxable = $total_pay-$total_nssf;
     
     if($taxable>=11135.67 && $taxable<19741){
+<<<<<<< HEAD
     $paye = (1016.4+($taxable-10165)*15/100)-1162;
     }else if($taxable>=19741 && $taxable<29317){
     $paye = (2452.8+($taxable-19741)*20/100)-1162;
@@ -1290,17 +1380,41 @@ public static $rules = [
     $paye = (4368+($taxable-29317)*25/100)-1162;
     }else if($taxable>=38893){
     $paye = (6762+($taxable-38893)*30/100)-1162;
+=======
+    $paye = 1016.4+($taxable-10165)*15/100;
+    $paye = $paye-static::reliefs($id,$period);
+    }else if($taxable>=19741 && $taxable<29317){
+    $paye = 2452.8+($taxable-19741)*20/100;
+    $paye = $paye-static::reliefs($id,$period);
+    }else if($taxable>=29317 && $taxable<38893){
+    $paye = 4368+($taxable-29317)*25/100;
+    $paye = $paye-static::reliefs($id,$period);
+    }else if($taxable>=38893){
+    $paye = 6762+($taxable-38893)*30/100;
+    $paye = $paye-static::reliefs($id,$period);
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     }else{
     $paye = 0.00;
     }
     return round($paye,2);
    }
 
+<<<<<<< HEAD
    public static function nssfncalc($net){
     $nssfAmt = 0.00;
     $a = str_replace( ',', '', $net);
     $total = $a;
     
+=======
+    public static function nssf($id,$period){
+    $nssfAmt = 0.00;
+    $total = static::gross($id,$period);
+    $emps = DB::table('employee')->where('id', '=', $id)->get();
+    foreach($emps as $emp){
+    if($emp->social_security_applicable=='0'){
+    $nssfAmt=0.00;
+    }else{
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     $nssf_amts = DB::table('social_security')->get();
     foreach($nssf_amts as $nssf_amt){
     $from=$nssf_amt->income_from;
@@ -1309,6 +1423,7 @@ public static $rules = [
     $nssfAmt=$nssf_amt->ss_amount_employee;
     }
     }
+<<<<<<< HEAD
     return round($nssfAmt,2);
    }
 
@@ -1317,6 +1432,21 @@ public static $rules = [
     $a = str_replace( ',', '', $net);
     $total = $a;
    
+=======
+    }
+    }
+    return round($nssfAmt,2);
+   }
+
+   public static function nhif($id,$period){
+    $nhifAmt = 0.00;
+    $total = static::gross($id,$period);
+    $emps = DB::table('employee')->where('id', '=', $id)->get();
+    foreach($emps as $emp){
+    if($emp->hospital_insurance_applicable=='0'){
+    $nhifAmt=0.00;
+    }else{
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     $nhif_amts = DB::table('hospital_insurance')->get();
     foreach($nhif_amts as $nhif_amt){
     $from=$nhif_amt->income_from;
@@ -1366,7 +1496,15 @@ public static $rules = [
     $earn = $total_earn->total_earnings;
     }
     
+<<<<<<< HEAD
     return round($earn,2);
+=======
+    public static function deductions($id,$period){
+    
+    $part = explode("-", $period);
+    $start = $part[1]."-".$part[0]."-01";
+    $end  = date('Y-m-t', strtotime($start));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     }
 
@@ -1409,6 +1547,7 @@ public static $rules = [
     return round($allw,2);
 
     }
+<<<<<<< HEAD
 
     public static function transactnontaxables($id,$name,$period){
 
@@ -1523,6 +1662,26 @@ public static $rules = [
    $allowances = 0.00;
 
    $total_allowances = array();
+=======
+    return round($other_ded,2);
+   }
+
+   public static function total_deductions($id,$period){
+    $total_deds = 0.00;
+    
+    $total_deds = static::tax($id,$period)+static::nssf($id,$period)+static::nhif($id,$period)+static::deductions($id,$period);
+
+    return round($total_deds,2);
+
+    }
+
+    public static function net($id,$period){
+    $total_net = 0.00;
+    
+    $total_net = static::gross($id,$period)-static::total_deductions($id,$period);
+
+    return round($total_net,2);
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     if($branch == 'All' && $dept == 'All'){
        $total_allowances = DB::table('transact_allowances')
@@ -1763,5 +1922,161 @@ public static $rules = [
     return round($paye,2);
    }
 
+
+    public static function processedsalaries($id,$period){
+
+    $salary = 0.00;
+    
+    $pays = DB::table('transact')
+                     ->select('employee_id',DB::raw('COALESCE(sum(basic_pay),0.00) as total_pay'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id', '=', $id)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($pays as $pay){
+    $salary = $pay->total_pay;
+    }
+    
+    return  number_format($salary,2);
+
+    }
+
+    public static function processedhouseallowances($id,$period){
+
+    $hallw = 0.00;
+    
+    $total_hallws = DB::table('transact_allowances')
+                     ->select('employee_id',DB::raw('COALESCE(sum(allowance_amount),0.00) as total_allowances'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id', '=', $id)
+                     ->where('employee_allowance_id', '=', 1)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($total_hallws as $total_hallw){
+    $hallw = $total_hallw->total_allowances;
+    }
+    
+    return  number_format($hallw,2);
+
+    }
+
+   public static function processedtransportallowances($id,$period){
+
+    $tallw = 0.00;
+    
+    $total_tallws = DB::table('transact_allowances')
+                     ->select('employee_id',DB::raw('COALESCE(sum(allowance_amount),0.00) as total_allowances'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id', '=', $id)
+                     ->where('employee_allowance_id', '=', 2)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($total_tallws as $total_tallw){
+    $tallw = $total_tallw->total_allowances;
+    }
+    
+    return  number_format($tallw,2);
+
+    }
+
+    public static function processedotherallowances($id,$period){
+
+    $oallw = 0.00;
+    
+    $total_oallws = DB::table('transact_allowances')
+                     ->select('employee_id',DB::raw('COALESCE(sum(allowance_amount),0.00) as total_allowances'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id', '=', $id)
+                     ->where('employee_allowance_id', '<>', 1)
+                     ->where('employee_allowance_id', '<>', 2)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($total_oallws as $total_oallw){
+    $oallw = $total_oallw->total_allowances;
+    }
+    
+    return  $oallw;
+
+    }
+
+    public static function processedreliefs($id,$period){
+
+    $rel = 0.00;
+    
+    $total_rels = DB::table('transact_reliefs')
+                     ->select('employee_id',DB::raw('COALESCE(sum(relief_amount),0.00) as total_reliefs'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id', '=', $id)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($total_rels as $total_rel){
+    $rel = $total_rel->total_reliefs;
+    }
+    
+    return  $rel;
+
+    }
+
+    public static function processedearnings($id,$period){
+
+    $earn = 0.00;
+    
+    $total_earns = DB::table('transact_earnings')
+        ->select('employee_id',DB::raw('COALESCE(sum(earning_amount),0.00) as total_earnings'))
+        ->where('financial_month_year' ,'=', $period)
+        ->where('employee_id' ,'=', $id)
+        ->groupBy('employee_id')
+        ->get();
+
+    foreach($total_earns as $total_earn){
+    $earn = $total_earn->total_earnings;
+    }
+    
+    return  $earn;
+
+    }
+
+   public static function processedovertimes($id,$period){
+
+    $otime = 0.00;
+    
+    $total_overtimes = DB::table('transact_overtimes')
+                     ->select('employee_id',DB::raw('COALESCE(sum(overtime_period*overtime_amount),0.00) as overtimes'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id' ,'=', $id)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($total_overtimes as $total_overtime){
+    $otime = $total_overtime->overtimes;
+    }
+    
+    return  number_format($otime,2);
+
+    }
+
+    public static function processedpaye($id,$period){
+
+    $tax = 0.00;
+    
+    $payes = DB::table('transact')
+                     ->select('employee_id',DB::raw('COALESCE(sum(paye),0.00) as total_paye'))
+                     ->where('financial_month_year' ,'=', $period)
+                     ->where('employee_id', '=', $id)
+                     ->groupBy('employee_id')
+                     ->get();
+
+    foreach($payes as $paye){
+    $tax = $paye->total_paye;
+    }
+    
+    return $tax+60.3;
+
+    }
 
 }

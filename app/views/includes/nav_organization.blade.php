@@ -42,8 +42,14 @@
                   </li>
 
                    <li>
-                        <a href="{{ URL::to('deactives') }}"><i class="fa fa-users fa-fw"></i> Activate Employee</a>
+                        <a href="{{ URL::to('deactives') }}"><i class="fa fa-users fa-fw"></i> Deactivated Employees</a>
                     </li>
+
+<!--
+                     <li>
+                        <a href="{{ URL::to('templates') }}"><i class="fa fa-file fa-fw"></i> HR Tempaltes</a>
+                    </li>
+                -->
 
                     
                     

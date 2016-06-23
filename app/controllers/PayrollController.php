@@ -9,13 +9,17 @@ class PayrollController extends \BaseController {
      */
     public function index()
     {
+<<<<<<< HEAD
       
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         $accounts = Account::all();
         
 
         return View::make('payroll.index', compact('accounts'));
     }
 
+<<<<<<< HEAD
     public function createaccount()
   {
       $postaccount = Input::all();
@@ -36,6 +40,10 @@ class PayrollController extends \BaseController {
         }
       
   } 
+=======
+        return View::make('payroll.index', compact('accounts'));
+    }
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     public function preview_payroll()
     {
@@ -44,12 +52,19 @@ class PayrollController extends \BaseController {
                   ->where('in_employment','=','Y')
                   ->get();
 
+<<<<<<< HEAD
         $earnings = Earningsetting::all();
 
         //print_r($accounts);
+=======
+        //print_r($accounts);
+
+        Audit::logaudit('Payroll', 'preview', 'previewed payroll');
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
         Audit::logaudit('Payroll', 'preview', 'previewed payroll');
 
+<<<<<<< HEAD
 
         return View::make('payroll.preview', compact('employees','earnings'));
     }
@@ -81,11 +96,42 @@ class PayrollController extends \BaseController {
         $nontaxables = Nontaxable::all();
         $reliefs = Relief::all();
         $deductions = Deduction::all();
+=======
+        return View::make('payroll.preview', compact('employees'));
+    }
+
+    public function valid()
+    {
+        $period = Input::get('period');
+
+        //print_r($accounts);
+
+        return View::make('payroll.valid', compact('period'));
+    }
+
+    /**
+     * Show the form for creating a new branch
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $employees = DB::table('employee')
+                  ->where('in_employment','=','Y')
+                  ->get();
+        $period = Input::get('period');
+        $account = Input::get('account');
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         //print_r($accounts);
 
         Audit::logaudit('Payroll', 'preview', 'previewed payroll');
 
+<<<<<<< HEAD
         return View::make('payroll.preview', compact('employees','period','account','nontaxables','earnings','overtimes','allowances','reliefs','deductions'));
+=======
+        return View::make('payroll.preview', compact('employees','period','account'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     }
 
     public function del_exist()
@@ -97,6 +143,7 @@ class PayrollController extends \BaseController {
 
     $period   = $part1.$part2.$part3;  
 
+<<<<<<< HEAD
     DB::table('employee_allowances')
               ->join('transact_allowances','employee_allowances.id','=','transact_allowances.employee_allowance_id')
               ->where('financial_month_year', '=', $period)
@@ -115,6 +162,8 @@ class PayrollController extends \BaseController {
                })
               ->increment('instalments');
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
      DB::table('employee_deductions')
               ->join('transact_deductions','employee_deductions.id','=','transact_deductions.employee_deduction_id')
               ->where('financial_month_year', '=', $period)
@@ -132,6 +181,7 @@ class PayrollController extends \BaseController {
                       ->orWhere('formular','=','Instalments');
                })
               ->increment('instalments');
+<<<<<<< HEAD
 
     DB::table('overtimes')
               ->join('transact_overtimes','overtimes.id','=','transact_overtimes.overtime_id')
@@ -141,6 +191,8 @@ class PayrollController extends \BaseController {
                       ->orWhere('formular','=','Instalments');
                })
               ->increment('instalments');
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     
     $data     = DB::table('transact')->where('financial_month_year',$period)->delete(); 
     $data2    = DB::table('transact_allowances')->where('financial_month_year', '=', $period)->delete();
@@ -148,7 +200,11 @@ class PayrollController extends \BaseController {
     $data4    = DB::table('transact_earnings')->where('financial_month_year', '=', $period)->delete();
     $data5    = DB::table('transact_overtimes')->where('financial_month_year', '=', $period)->delete();
     $data6    = DB::table('transact_reliefs')->where('financial_month_year', '=', $period)->delete();
+<<<<<<< HEAD
     $data7    = DB::table('transact_nontaxables')->where('financial_month_year', '=', $period)->delete();
+=======
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
    
     if($data > 0){
       return 0;
@@ -160,6 +216,7 @@ class PayrollController extends \BaseController {
     exit();
     }
 
+<<<<<<< HEAD
 
     public function disp(){
       $display = "";
@@ -725,6 +782,8 @@ $display .="
 
 
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     public function display(){
       $display = "";
       $postedit = Input::all();
@@ -738,6 +797,7 @@ $display .="
                   ->get();
         
         $i=1;
+<<<<<<< HEAD
         $earningA = 0;
         $hourly = 0;
         $Daily = 0;
@@ -800,6 +860,18 @@ $display .="
            $totalnhif = $totalnhif + (double)Payroll::nhif($employee->id,$fperiod);
            $totaldeduction = $totaldeduction + (double)Payroll::total_deductions($employee->id,$fperiod);
            $totalnet = $totalnet + (double)Payroll::net($employee->id,$fperiod);
+=======
+        foreach($employees as $employee){
+        $salary = number_format($employee->basic_pay,2);
+        $benefits = number_format(Payroll::total_benefits($employee->id,$fperiod),2);
+        $gross = number_format(Payroll::gross($employee->id,$fperiod),2);
+        $paye = number_format(Payroll::tax($employee->id,$fperiod),2);
+        $nssf = number_format(Payroll::nssf($employee->id,$fperiod),2);
+        $nhif = number_format(Payroll::nhif($employee->id,$fperiod),2);
+        $deductions = number_format(Payroll::deductions($employee->id,$fperiod),2);
+        $total_deductions = number_format(Payroll::total_deductions($employee->id,$fperiod),2);
+        $net = number_format(Payroll::net($employee->id,$fperiod),2);
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
         $display .="
         <tr>
@@ -808,6 +880,7 @@ $display .="
           <td >$employee->personal_file_number</td>
           <td>$employee->first_name $employee->last_name </td>
           <td align='right'>$salary</td>
+<<<<<<< HEAD
           ";
           foreach($earnings as $earning){
            $earningA = number_format(Payroll::earnings($employee->id,$earning->id,$fperiod),2);
@@ -885,6 +958,22 @@ $display .="
         </tr>
         ";
          
+=======
+          <td align='right'>$benefits</td>
+          <td align='right'>$gross</td>
+          <td align='right'>$paye</td>
+          <td align='right'>$nssf</td>
+          <td align='right'>$nhif</td>
+          <td align='right'>$deductions</td>
+          <td align='right'>$total_deductions</td>
+          <td align='right'>$net</td>
+          
+        </tr>
+        ";
+         $i++;
+         
+        } 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         return $display;
         exit();
 
@@ -911,7 +1000,11 @@ $display .="
         $payroll->paye = Payroll::tax($employee->id,Input::get('period'));
         $payroll->nssf_amount = Payroll::nssf($employee->id,Input::get('period'));
         $payroll->nhif_amount = Payroll::nhif($employee->id,Input::get('period'));
+<<<<<<< HEAD
         $payroll->other_deductions = Payroll::deductionall($employee->id,Input::get('period'));
+=======
+        $payroll->other_deductions = Payroll::deductions($employee->id,Input::get('period'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         $payroll->total_deductions = Payroll::total_deductions($employee->id,Input::get('period'));
         $payroll->net = Payroll::net($employee->id,Input::get('period'));
         $payroll->financial_month_year = Input::get('period');
@@ -941,6 +1034,7 @@ $display .="
             ->select('employee.id as eid','employee_allowances.id as id','allowance_name','allowance_id','allowance_amount')
             ->get();
 
+<<<<<<< HEAD
         $count_a = DB::table('employee_allowances')
             ->join('allowances', 'employee_allowances.allowance_id', '=', 'allowances.id')
             ->join('employee', 'employee_allowances.employee_id', '=', 'employee.id')
@@ -958,6 +1052,8 @@ $display .="
             ->count();
 
         if($count_a>0){
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         foreach($allws as $allw){
         DB::table('transact_allowances')->insert(
         ['employee_id' => $allw->eid, 
@@ -1094,6 +1190,7 @@ $display .="
 
         $earns = DB::table('earnings')
             ->join('employee', 'earnings.employee_id', '=', 'employee.id')
+<<<<<<< HEAD
             ->join('earningsettings', 'earnings.earning_id', '=', 'earningsettings.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
@@ -1106,10 +1203,17 @@ $display .="
                               ->where('last_day_month','>=',$start);
                         })
             ->select('earnings.employee_id','earnings.id as id','earning_name','earnings_amount','formular','instalments')
+=======
+            ->where('instalments','>',0)
+            ->where('first_day_month','<=',$start)
+            ->where('last_day_month','>=',$start)
+            ->select('earnings.employee_id','earnings.id as id','earnings_name','earnings_amount','formular','instalments')
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
             ->get();
 
         $ct = DB::table('earnings')
             ->join('employee', 'earnings.employee_id', '=', 'employee.id')
+<<<<<<< HEAD
             ->join('earningsettings', 'earnings.earning_id', '=', 'earningsettings.id')
             ->where('instalments','>',0)
             ->where('in_employment','Y')
@@ -1122,6 +1226,12 @@ $display .="
                               ->where('last_day_month','>=',$start);
                         })
             ->select('earnings.employee_id','earnings.id as id','earning_name','earnings_amount','formular','instalments')
+=======
+            ->where('instalments','>',0)
+            ->where('first_day_month','<=',$start)
+            ->where('last_day_month','>=',$start)
+            ->select('earnings.employee_id','earnings.id as id','earnings_name','earnings_amount','formular','instalments')
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
             ->count();
 
         if($ct>0){
@@ -1129,7 +1239,11 @@ $display .="
         DB::table('transact_earnings')->insert(
         ['employee_id' => $earn->employee_id, 
         'earning_id' => $earn->id,
+<<<<<<< HEAD
         'earning_name' => $earn->earning_name,
+=======
+        'earning_name' => $earn->earnings_name,
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         'earning_amount' => $earn->earnings_amount,
         'financial_month_year'=>Input::get('period'),
         ]
@@ -1148,6 +1262,7 @@ $display .="
 
         $overtimes = DB::table('overtimes')
             ->join('employee', 'overtimes.employee_id', '=', 'employee.id')
+<<<<<<< HEAD
             ->where('instalments','>',0)
             ->where('in_employment','Y')
             ->where(function ($query) use ($start){
@@ -1183,6 +1298,15 @@ $display .="
         ['employee_id' => $overtime->employee_id, 
         'overtime_type' => $overtime->type, 
         'overtime_id' => $overtime->id, 
+=======
+            ->select('overtimes.employee_id','overtimes.type','overtimes.period','overtimes.amount')
+            ->get();
+
+        foreach($overtimes as $overtime){
+        DB::table('transact_overtimes')->insert(
+        ['employee_id' => $overtime->employee_id, 
+        'overtime_type' => $overtime->type,
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         'overtime_period' => $overtime->period,
         'overtime_amount' => $overtime->amount,
         'financial_month_year'=>Input::get('period'),

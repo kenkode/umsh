@@ -24,6 +24,11 @@
         </div>
         @endif
 
+
+         @if (Session::get('notice'))
+            <div class="alert alert-info">{{ Session::get('notice') }}</div>
+        @endif
+
 		 <form method="POST" action="{{URL::to('payrollReports/payslip')}}" accept-charset="UTF-8">
    
     <fieldset>
@@ -35,6 +40,17 @@
                         <input required class="form-control datepicker2" readonly="readonly" placeholder="" type="text" name="period" id="period" value="{{{ Input::old('period') }}}">
                     </div>
        </div>
+
+
+        <div class="form-group">
+                        <label for="username">Download as: <span style="color:red">*</span></label>
+                        <select required name="format" class="form-control">
+                            <option></option>
+                            <option value="excel"> Excel</option>
+                            <option value="pdf"> PDF</option>
+                        </select>
+                
+            </div>
         
         <input type="hidden" name="employeeid" value="{{$employee->id}}">
            

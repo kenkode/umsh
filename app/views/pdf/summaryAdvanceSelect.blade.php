@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 @extends('layouts.ports')
+=======
+@extends('layouts.payroll')
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 @section('content')
 <br/>
 

@@ -67,7 +67,11 @@ body {
        
         <td style="width:150px">
 
+<<<<<<< HEAD
             <img src="{{public_path().'/uploads/logo/'.$organization->logo}}" alt="logo" width="80%">
+=======
+            <img src="{{public_path().'/uploads/logos/'.$organization->logo}}" alt="logo" width="80%">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     
         </td>
@@ -122,6 +126,10 @@ body {
         <td><strong>Relationship</strong></td>
         <td><strong>Kin Id no.</strong></td>
         <td><strong>kin Contact</strong></td>
+<<<<<<< HEAD
+=======
+        <td><strong>Goodwill (%)</strong></td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
       </tr>
       <?php $i =1; ?>
       @foreach($kins as $kin)
@@ -131,6 +139,10 @@ body {
         <td> {{ $kin->relationship}}</td>
         <td> {{ $kin->id_number}}</td>
         <td> {{ $kin->contact}}</td>
+<<<<<<< HEAD
+=======
+        <td> {{ $kin->goodwill}}</td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
      </tr>
       <?php $i++; ?>
    

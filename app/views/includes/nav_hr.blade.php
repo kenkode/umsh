@@ -19,11 +19,11 @@
                     </li>
                     
                     <li>
-                        <a href="{{ URL::to('banks') }}"><i class="fa fa-users fa-fw"></i> Banks</a>
+                        <a href="{{ URL::to('banks') }}"><i class="glyphicon glyphicon-home"></i> Banks</a>
                     </li>
 
                      <li>
-                        <a href="{{ URL::to('bank_branch') }}"><i class="fa fa-users fa-fw"></i> Bank Branches</a>
+                        <a href="{{ URL::to('bank_branch') }}"><i class="glyphicon glyphicon-home"></i> Bank Branches</a>
                     </li>
                     
                     <li>
@@ -31,10 +31,13 @@
                     </li>
 
                     <li>
+<<<<<<< HEAD
                         <a href="{{ URL::to('citizenships') }}"><i class="fa fa-users fa-fw"></i> Citizenship</a>
                     </li>
 
                     <li>
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                         <a href="{{ URL::to('occurencesettings') }}"><i class="fa fa-list fa-fw"></i> Occurence Settings</a>
                     </li>
 

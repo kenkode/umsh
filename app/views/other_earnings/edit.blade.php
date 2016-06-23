@@ -31,6 +31,30 @@ function totalB() {
 
 }
 
+<<<<<<< HEAD
+=======
+function getdate() {
+    var tt = document.getElementById('ddate').value;
+    var instals = document.getElementById("instalments").value;
+
+    var date = new Date(tt);
+    var newdate = new Date(date);
+
+    newdate.setDate(newdate.getDate()  + parseInt(instals));
+    
+    var dd = newdate.getDate();
+    var mm = newdate.getMonth() + 1;
+    var y = newdate.getFullYear();
+
+    var someFormattedDate = dd + '/' + mm + '/' + y;
+
+    if(tt == '' || instals== ''){
+    document.getElementById('edate').value = '';
+    }else{
+    document.getElementById('edate').value = someFormattedDate;
+    }
+}
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 </script>
 
 <script type="text/javascript">
@@ -54,8 +78,46 @@ if($(this).val() == "Instalments"){
     $('#insts').hide();
     $('#bal').hide();
 }
+<<<<<<< HEAD
 });
 
+=======
+getdate();
+});
+
+$('#ddate').change(function(){
+getdate();
+});
+
+function getdate() {
+var tt = $('#ddate').val();
+
+    var instals = $('#instalments').val();
+
+    if(instals == 1){
+    var instals = 1;
+    }else{
+     var instals = $('#instalments').val();
+    }
+
+    var date = new Date(tt);
+    var newdate = new Date(date);
+
+    newdate.setDate(newdate.getDate() + parseInt(instals));
+
+    var dd = newdate.getDate();
+    var mm = newdate.getMonth() + 1;
+    var y = newdate.getFullYear();
+
+    var someFormattedDate = dd + '/' + mm + '/' + y;
+
+    if($('#ddate').val() == ''){
+    $('#edate').val();
+    }else{
+    $('#edate').val(someFormattedDate);
+    }
+}
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 });
 </script>
@@ -295,25 +357,41 @@ if($(this).val() == "Instalments"){
 
         <div class="form-group">
             <label for="username">Amount <span style="color:red">*</span></label>
+<<<<<<< HEAD
             <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
             <input class="form-control" placeholder=""  onkeypress="totalBalance()" onkeyup="totalBalance()" type="text" name="amount" id="amount" value="{{ asMoney($earning->earnings_amount)}}">
            </div>
+=======
+            <input class="form-control" placeholder=""  onkeypress="totalBalance()" onkeyup="totalBalance()" type="text" name="amount" id="amount" value="{{ asMoney($earning->earnings_amount)}}">
+           <script type="text/javascript">
+           $(document).ready(function() {
+           $('#amount').priceFormat();
+           });
+           </script> 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         </div>
 
         <div class="form-group bal_amt" id="bal">
             <label for="username">Total </label>
+<<<<<<< HEAD
             <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
             <input class="form-control" placeholder="" readonly="readonly" type="text" name="balance" id="balance" value="{{ asMoney((double)$earning->earnings_amount * (double)$earning->instalments)}}">
         </div>
         </div>
+=======
+            <input class="form-control" placeholder="" readonly="readonly" type="text" name="balance" id="balance" value="{{ asMoney((double)$earning->earnings_amount * (double)$earning->instalments)}}">
+        </div>
+        
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
        
 
         <div class="form-group">
                         <label for="username">Earning Date <span style="color:red">*</span></label>
                         <div class="right-inner-addon ">
                         <i class="glyphicon glyphicon-calendar"></i>
+<<<<<<< HEAD
                         <input class="form-control earningdate" readonly="readonly" placeholder="" type="text" name="ddate" id="ddate" value="{{ $earning->earning_date }}">
                         </div>
         </div>
@@ -330,6 +408,12 @@ $('.earningdate').datepicker({
 
 </script>
 
+=======
+                        <input class="form-control expiry" readonly="readonly" placeholder="" type="text" name="ddate" id="ddate" value="{{ $earning->earning_date }}">
+                        </div>
+        </div>
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         <div class="form-actions form-group">
         
           <button type="submit" class="btn btn-primary btn-sm">Update Employee Earning</button>

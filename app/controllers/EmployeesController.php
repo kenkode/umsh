@@ -314,6 +314,13 @@ class EmployeesController extends \BaseController {
 	    $employee->department_id = Input::get('department_id');
 	    $employee->job_group_id = Input::get('jgroup_id');
 		$employee->type_id = Input::get('type_id');
+
+        $employee->kin_name = Input::get('kin_name');
+        $employee->kin_email = Input::get('kin_email');
+        $employee->kin_phone = Input::get('kin_phone');
+	    $employee->kin_idno = Input::get('kin_idno');
+	    $employee->kin_relationship = Input::get('relationship');
+
 		if(Input::get('i_tax') != null ){
 		$employee->income_tax_applicable = '1';
 	    }else{
@@ -546,6 +553,13 @@ class EmployeesController extends \BaseController {
         $employee->yob = Input::get('dob');
         $employee->citizenship_id = Input::get('citizenship');
         $employee->mode_of_payment = Input::get('modep');
+
+        $employee->kin_name = Input::get('kin_name');
+        $employee->kin_email = Input::get('kin_email');
+        $employee->kin_phone = Input::get('kin_phone');
+	    $employee->kin_idno = Input::get('kin_idno');
+	    $employee->kin_relationship = Input::get('relationship');
+
         if(Input::get('bank_account_number') != null ){
         $employee->bank_account_number = Input::get('bank_account_number');
         }else{
@@ -722,8 +736,12 @@ class EmployeesController extends \BaseController {
 	{
 
 		$employee = Employee::findOrFail($id);
-		
-		DB::table('employee')->where('id',$id)->update(array('in_employment'=>'Y'));
+
+		$employee->date_joined=date("Y-m-d");
+
+		$employee->in_employment="Y";
+
+		$employee->update();
 
 		Audit::logaudit('Employee', 'activate', 'activated: '.$employee->personal_file_number.'-'.$employee->first_name.' '.$employee->last_name);
 
@@ -737,7 +755,7 @@ class EmployeesController extends \BaseController {
 
 		$appraisals = Appraisal::where('employee_id', $id)->get();
 
-        $kins = Nextofkin::where('employee_id', $id)->get();
+        $contacts = Emergencycontact::where('employee_id', $id)->get();
 
         $occurences = Occurence::where('employee_id', $id)->get();
 
@@ -751,7 +769,11 @@ class EmployeesController extends \BaseController {
 
 		$organization = Organization::find(1);
 
+<<<<<<< HEAD
 		return View::make('employees.view', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
+=======
+		return View::make('employees.view', compact('employee','appraisals','contacts','documents','occurences','properties','benefits','count'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 		
 	}
 
@@ -772,10 +794,17 @@ class EmployeesController extends \BaseController {
         $benefits = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->get();
 
         $count = Employeebenefit::where('jobgroup_id', $employee->job_group_id)->count();
+<<<<<<< HEAD
 
 		$organization = Organization::find(1);
 
 		return View::make('employees.viewdeactive', compact('employee','appraisals','kins','documents','occurences','properties','count','benefits'));
+=======
+     
+		$organization = Organization::find(1);
+
+		return View::make('employees.viewdeactive', compact('employee','appraisals','kins','documents','occurences','properties','benefits','count'));
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 		
 	}
 

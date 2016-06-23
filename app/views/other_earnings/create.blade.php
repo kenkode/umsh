@@ -22,6 +22,32 @@ function totalB() {
 
 }
 
+<<<<<<< HEAD
+=======
+function getdate() {
+    var tt = document.getElementById('ddate').value;
+    var instals = document.getElementById("instalments").value;
+
+    var date = new Date(tt);
+    var newdate = new Date(date);
+    
+    newdate.setMonth(newdate.getMonth() + parseInt(instals)+1);
+
+    var dd = newdate.getDate();
+    var mm = newdate.getMonth();
+    var y = newdate.getFullYear();
+
+    var someFormattedDate = dd + '/' + mm + '/' + y;
+
+    if(tt == '' || instals== ''){
+    document.getElementById('edate').value = '';
+    }else{
+    document.getElementById('edate').value = someFormattedDate;
+    }
+   
+}
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 </script>
 
 <script type="text/javascript">
@@ -36,8 +62,71 @@ if($(this).val() == "Instalments"){
     $('#insts').hide();
     $('#bal').hide();
 }
+<<<<<<< HEAD
 });
 
+=======
+getdate();
+});
+
+$('#ddate').change(function(){
+var tt = $('#ddate').val();
+var newdate = new Date(tt);
+var instals = $('#instalments').val();
+
+    if(instals == ''){
+    instals = 1;
+    }else{
+     instals = $('#instalments').val();
+    }
+if($('#ddate').val() == ''){
+    $('#edate').val();
+    }else{
+    $('#edate').val(formatDate(addMonths(newdate, parseInt(instals))));
+    }
+});
+
+function addMonths(date, months) {
+    var result = new Date(date);
+    result.setMonth(date.getMonth() + months);
+    return result;
+}
+
+function formatDate(date) {
+    return date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear();
+}
+
+function getdate() {
+var tt = $('#ddate').val();
+
+    var instals = $('#instalments').val();
+
+    if(instals == ''){
+    var instals = 1;
+    }else{
+     var instals = $('#instalments').val();
+    }
+
+    var newdate = new Date(tt);
+
+    var jan312009 = new Date(tt);
+    var oneMonthFromJan312009 = new Date(new Date(jan312009).setMonth(jan312009.getMonth()+parseInt(instals)));
+
+
+    var dd = oneMonthFromJan312009.getDate();
+    var mm = oneMonthFromJan312009.getMonth();
+    var y = oneMonthFromJan312009.getFullYear();
+
+    var someFormattedDate = dd + '/' + mm + '/' + y;
+
+    if($('#ddate').val() == ''){
+    $('#edate').val();
+    }else{
+    $('#edate').val(someFormattedDate);
+    }
+}
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 });
 </script>
 
@@ -282,18 +371,32 @@ if($(this).val() == "Instalments"){
 
         <div class="form-group">
             <label for="username">Amount <span style="color:red">*</span> </label>
+<<<<<<< HEAD
             <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
             <input class="form-control" placeholder="" type="text"  onkeypress="totalBalance()" onkeyup="totalBalance()" name="amount" id="amount" value="{{{ Input::old('amount') }}}">
             </div>
+=======
+            <input class="form-control" placeholder="" type="text"  onkeypress="totalBalance()" onkeyup="totalBalance()" name="amount" id="amount" value="{{{ Input::old('amount') }}}">
+            <script type="text/javascript">
+           $(document).ready(function() {
+           $('#amount').priceFormat();
+           });
+           </script> 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         </div>
         
          <div class="form-group bal_amt" id="bal">
             <label for="username">Total </label>
+<<<<<<< HEAD
             <div class="input-group">
             <span class="input-group-addon">{{$currency->shortname}}</span>
             <input class="form-control" placeholder="" readonly="readonly" type="text" name="balance" id="balance" value="{{{ Input::old('balance') }}}">
             </div>
+=======
+            <input class="form-control" placeholder="" readonly="readonly" type="text" name="balance" id="balance" value="{{{ Input::old('balance') }}}">
+            
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         </div>
 
         
@@ -301,6 +404,7 @@ if($(this).val() == "Instalments"){
                         <label for="username">Earning Date <span style="color:red">*</span></label>
                         <div class="right-inner-addon ">
                         <i class="glyphicon glyphicon-calendar"></i>
+<<<<<<< HEAD
                         <input class="form-control earningdate" readonly="readonly" placeholder="" type="text" name="ddate" id="ddate" value="{{{ Input::old('ddate') }}}">
                         </div>
         </div>
@@ -316,6 +420,11 @@ $('.earningdate').datepicker({
 });
 
 </script>
+=======
+                        <input class="form-control expiry" readonly="readonly" placeholder="" type="text" name="ddate" id="ddate" value="{{{ Input::old('ddate') }}}">
+                        </div>
+        </div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         
         <div class="form-actions form-group">
         

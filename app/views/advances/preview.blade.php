@@ -48,6 +48,34 @@ $start  = date('Y-m-01', strtotime($end_date));
        }else{
       window.location.href = "{{URL::to('advance')}}";
      }
+<<<<<<< HEAD
+=======
+
+     $(document).ready(function(){
+       
+       var p1 = <?php echo $part[0]?>;
+       var p2 = "-";
+       var p3 = <?php echo $part[1]?>;  
+
+       displaydata(); 
+
+      function displaydata(){
+       $.ajax({
+                      url     : "{{URL::to('showadvance')}}",
+                      type    : "POST",
+                      async   : false,
+                      data    : {
+                              'period1'  : p1,
+                              'period2'  : p2,
+                              'period3'  : p3
+                      },
+                      success : function(s){
+                      $('.displayrecord').html(s)
+                      }        
+       });
+       }
+      });
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     </script>
     <?php } ?>
 
@@ -79,11 +107,14 @@ function asMoney($value) {
       <input type="hidden" name="period" value="{{ $period }}"> 
        <input type="hidden" name="account" value="{{ $account }}"> 
 
+<<<<<<< HEAD
 <div align="right" class="form-actions form-group">
         
           <button class="btn btn-primary btn-sm process" >Process</button>
         </div>
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         <div class="panel panel-default">
       <div class="panel panel-success">
       <div class="panel-heading">
@@ -123,6 +154,13 @@ function asMoney($value) {
 
     </table>
      
+<<<<<<< HEAD
+=======
+     <div align="right" style="margin-top:50px;" class="form-actions form-group">
+        
+          <button class="btn btn-primary btn-sm process" >Process</button>
+        </div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
      
 
       </form>

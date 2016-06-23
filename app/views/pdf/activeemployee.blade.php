@@ -22,11 +22,18 @@ table {
 }
 th {
   text-align: left;
+<<<<<<< HEAD
   position: fixed;
 }
 .table {
   width: 100%;
   margin-bottom: 50px;
+=======
+}
+.table {
+  width: 100%;
+  margin-bottom: 2px;
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 }
 hr {
   margin-top: 1px;
@@ -46,10 +53,17 @@ body {
 
 
  @page { margin: 170px 30px; }
+<<<<<<< HEAD
  .header { position: top; left: 0px; top: -150px; right: 0px;  text-align: center; }
  .content {margin-top: -100px; margin-bottom: -150px}
  .footer { position: fixed; left: 0px; bottom: -180px; right: 0px; height: 50px;  }
  .footer .page:after { content: counter(page, upper-roman);}
+=======
+ .header { position: fixed; left: 0px; top: -150px; right: 0px; height: 150px;  text-align: center; }
+ .content {margin-top: -100px; margin-bottom: -150px}
+ .footer { position: fixed; left: 0px; bottom: -180px; right: 0px; height: 50px;  }
+ .footer .page:after { content: counter(page, upper-roman); }
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 
 
@@ -59,8 +73,13 @@ body {
 
 <body>
 
+<<<<<<< HEAD
   <div class="header" style="margin-top:-150px">
      <table class="tpage">
+=======
+  <div class="header">
+     <table >
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
       <tr>
 
@@ -68,17 +87,28 @@ body {
        
         <td style="width:150px">
 
+<<<<<<< HEAD
             <img src="{{public_path().'/uploads/logo/'.$organization->logo}}" alt="logo" width="80%">
+=======
+            <img src="{{public_path().'/uploads/logos/'.$organization->logo}}" alt="logo" width="80%">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     
         </td>
 
         <td>
         <strong>
+<<<<<<< HEAD
           {{ strtoupper($organization->name)}}
           </strong><br>
           {{ $organization->phone}}<br>
           {{ $organization->email}}<br>
+=======
+          {{ strtoupper($organization->name)}}<br>
+          </strong>
+          {{ $organization->phone}} |
+          {{ $organization->email}} |
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
           {{ $organization->website}}<br>
           {{ $organization->address}}
        
@@ -102,15 +132,25 @@ body {
 <br>
 
 <div class="footer">
+<<<<<<< HEAD
 
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
      <p class="page">Page <?php $PAGE_NUM ?></p>
    </div>
 
 
+<<<<<<< HEAD
 	<div class="content" style='margin-top:-70px;'>
 
 <div align="center"><strong>Employee List Report For Active Employees </strong></div><br>
     <table class="table tafter" border='1' cellspacing='0' cellpadding='0'>
+=======
+	<div class="content" style='margin-top:0px;'>
+
+<div align="center"><strong>Employee List Report For Active Employees </strong></div><br>
+    <table class="table table-bordered" border='1' cellspacing='0' cellpadding='0'>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
       <tr>
         
@@ -135,11 +175,15 @@ body {
 
        <td td width='20'>{{$i}}</td>
         <td>{{$employee->personal_file_number}}</td>
+<<<<<<< HEAD
         @if($employee->middle_name != null || $employee->middle_name != '')
         <td> {{$employee->first_name.' '.$employee->middle_name.' '.$employee->last_name}}</td>
         @else
         <td> {{$employee->first_name.' '.$employee->last_name}}</td>
         @endif
+=======
+        <td> {{$employee->last_name.' '.$employee->first_name.' '.$employee->middle_name}}</td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
          @if($employee->branch_id != 0)
         <td> {{ $employee->branch->name}}</td>
@@ -184,10 +228,29 @@ body {
     @endforeach
 
      
+<<<<<<< HEAD
     </table>
    
 </div>
 
+=======
+
+
+    </table>
+
+<br><br>
+
+    
+
+
+
+
+
+   
+</div>
+
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 </body>
 
 </html>

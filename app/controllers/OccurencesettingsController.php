@@ -116,16 +116,22 @@ class OccurencesettingsController extends \BaseController {
 	public function destroy($id)
 	{
 		$occurence = Occurencesetting::findOrFail($id);
+<<<<<<< HEAD
 		$occ = DB::table('occurences')->where('occurencesetting_id',$id)->count();
 		if($occ>0){
 			return Redirect::route('occurencesettings.index')->withDeleteMessage('Cannot delete this occurence type because its assigned to an employee occurence(s)!');
 		}else{
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 		Occurencesetting::destroy($id);
 
 		Audit::logaudit('Occurencesettings', 'delete', 'deleted: '.$occurence->occurence_type);
 
 		return Redirect::route('occurencesettings.index')->withDeleteMessage('Occurence type successfully deleted!');
 	}
+<<<<<<< HEAD
 }
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 }

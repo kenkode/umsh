@@ -79,6 +79,7 @@ function asMoney($value) {
             $("#amount_"+<?php echo $i;?>).attr('readonly',true);
             $("#amount_"+<?php echo $i;?>).val("{{asMoney(Benefitsetting::getAmount($benefit->id,$jobgroup->id))}}");
             }
+<<<<<<< HEAD
             $('#benefitid_'+<?php echo $i;?>).click(function(){
 
             if($('#benefitid_'+<?php echo $i;?>).is(":checked")){
@@ -120,11 +121,56 @@ function asMoney($value) {
             $(document).ready(function(){
             $("#amount_"+<?php echo $i;?>).attr('readonly',true);
             $("#amount_"+<?php echo $i;?>).val('0.00');
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
+            $('#benefitid_'+<?php echo $i;?>).click(function(){
+
+            if($('#benefitid_'+<?php echo $i;?>).is(":checked")){
+            $('#benefitid_'+<?php echo $i;?>+':checked').each(function(){
+            $("#amount_"+<?php echo $i;?>).attr('readonly',false);
+            $("#amount_"+<?php echo $i;?>).val("{{asMoney(Benefitsetting::getAmount($benefit->id,$jobgroup->id))}}");
+            });
+            }else{
+            $("#amount_"+<?php echo $i;?>).attr('readonly',true);
+            $("#amount_"+<?php echo $i;?>).val("0.00");
+            }
+            });
+            
+            });
+            </script>
+
+<<<<<<< HEAD
+=======
+            <?php $i++; ?>
+            @endforeach
+            @else
+            <?php $i = 1; ?>
+            @foreach($bens as $benefit)
+            <input type="hidden" name="chbox1[]" value="{{$benefit->id}}" />
+            <table>
+            <tr><td width="200">
+
+            <input type="checkbox" name="benefitid1[]" id="{{'benefitid_'.$i}}" value="{{$benefit->id}}">
+                             {{$benefit->benefit_name}}
+            </td>
+            <td>
+            
+            <input class="form-control" placeholder="" type="text" name="amount1[]" id="{{'amount_'.$i}}">
+            </td>
+            </tr>
+            
+            </table>
+
+            <script type="text/javascript">
+            $(document).ready(function(){
+            $("#amount_"+<?php echo $i;?>).attr('readonly',true);
+            $("#amount_"+<?php echo $i;?>).val('0.00');
             $('#benefitid_'+<?php echo $i;?>).click(function(){
 
             if($('#benefitid_'+<?php echo $i;?>).is(":checked")){
             $('#benefitid_'+<?php echo $i;?>+':checked').each(function(){
 
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
             $("#amount_"+<?php echo $i;?>).attr('readonly',false);
             $("#amount_"+<?php echo $i;?>).val('0.00');
             });

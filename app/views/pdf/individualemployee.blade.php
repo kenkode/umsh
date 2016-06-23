@@ -79,7 +79,16 @@ body {
        
         <td style="width:150px">
 
+<<<<<<< HEAD
             <img src="{{public_path().'/uploads/logo/'.$organization->logo}}" alt="logo" width="80%">
+=======
+<<<<<<< HEAD
+            <img src="{{public_path().'/uploads/logos/'.$organization->logo}}" alt="logo" width="80%">
+=======
+
+            <img src="{{asset('/public/uploads/logos/'.$organization->logo)}}" alt="logo" width="80%">
+>>>>>>> 7deaf969de76d8744898055a8c06fadd621b4cf0
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     
         </td>
@@ -138,7 +147,11 @@ body {
 
 
 
+<<<<<<< HEAD
 	<div class="emp">
+=======
+    <div class="emp">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 
     <table class="table table-bordered" border='1' cellspacing='0' cellpadding='0'>

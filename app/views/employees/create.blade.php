@@ -1592,6 +1592,22 @@ $(document).ready(function() {
                         <input class="gen"  type="radio" name="gender" id="gender" value="female"> Female
                     </div>
 
+<<<<<<< HEAD
+=======
+                    <div class="form-group">
+                        <label for="username">Photo</label><br>
+                        <div id="imagePreview"></div>
+
+                        <input class=" img" placeholder="" type="file" name="image" id="uploadFile" value="{{{ Input::old('image') }}}">
+
+                        
+                    </div>
+            
+                     <div class="form-group">
+                        <label for="username">Signature</label><br>
+                        <div id="signPreview"></div>
+                        <input class="img" placeholder="" type="file" name="signature" id="signFile" value="{{{ Input::old('signature') }}}">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                     </div>
 
           </div>
@@ -1614,9 +1630,14 @@ $(document).ready(function() {
                         <label for="username">Nhif Number</label>
                         <input class="form-control" placeholder="" type="text" name="hospital_insurance_number" id="hospital_insurance_number" value="{{{ Input::old('hospital_insurance_number') }}}">
                     </div>
+<<<<<<< HEAD
                      </div>
 
                      <div class="col-lg-4">
+=======
+                     </fieldset>
+                     <fieldset>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                       
                       <div class="form-group"><h3 style='color:Green;strong;'>Deductions Applicable</h3></div>
 
@@ -1647,8 +1668,15 @@ $(document).ready(function() {
                                 Apply Nhif
                         </label>
                     </div>
+<<<<<<< HEAD
                    </div>
                  </div>
+=======
+                     </fieldset>
+
+                     <fieldset>
+                    <div class="form-group"><h3 style='color:Green;strong'>Payment Information</h3></div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
                      <div role="tabpanel" class="tab-pane" id="payment">
                       <br><br>
@@ -1710,9 +1738,48 @@ $(document).ready(function() {
                         <label for="username">Swift Code</label>
                         <input class="form-control" placeholder="" type="text" name="swift_code" id="swift_code" value="{{{ Input::old('swift_code') }}}">
                     </div>
+
+                   
+
+              </fieldset>
+
+              
+              <fieldset>
+                    <div class="form-group"><h3 style='color:Green;strong'>Next of Kin</h3></div>
+
+                    <div class="form-group">
+                        <label for="username">Kin name</label>
+                        <input class="form-control" placeholder="" type="text" name="kin_name" id="kin_name" value="{{{ Input::old('kin_name') }}}">
+                
+                    </div>                    
+
+                    <div class="form-group">
+                        <label for="username">ID Number</label>
+                       <input class="form-control" placeholder="" type="text" name="kin_idno" id="kin_idno" value="{{{ Input::old('kin_idno') }}}">
+                
+                    </div>
+
+                      
+                     <div class="form-group">
+                        <label for="username">Email Address</label>
+                        <input class="form-control" placeholder="" type="text" name="kin_email" id="kin_email" value="{{{ Input::old('kin_email') }}}">
+                
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Telephone Number</label>
+                        <input class="form-control" placeholder="" type="text" name="kin_phone" id="kin_phone" value="{{{ Input::old('kin_phone') }}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Relationship</label>
+                        <input class="form-control" placeholder="" type="text" name="relationship" id="relationship" value="{{{ Input::old('relationship') }}}">
+                    </div>
                      
 
               </div>
+
+
 
             </div>
 
@@ -1747,8 +1814,13 @@ $(document).ready(function() {
                     </div>
 
                      <div class="form-group">
+<<<<<<< HEAD
                         <label for="username">Job Group  <span style="color:red">*</span></label>
                         <select name="jgroup_id" id="jgroup_id" class="form-control">
+=======
+                        <label for="username">Job Group <span style="color:red">*</span></label>
+                        <select name="jgroup_id" class="form-control">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             <option></option>
                             <option value="cnew">Create New</option>
                             @foreach($jgroups as $jgroup)
@@ -1815,7 +1887,11 @@ $(document).ready(function() {
                     </div>
 
                     <div class="form-group">
+<<<<<<< HEAD
                         <label for="username">Date joined  <span style="color:red">*</span></label>
+=======
+                        <label for="username">Date joined <span style="color:red">*</span></label>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                         <div class="right-inner-addon ">
                         <i class="glyphicon glyphicon-calendar"></i>
                         <input class="form-control datepicker"  readonly="readonly" placeholder=""  type="text" name="djoined" id="djoined" value="{{{ Input::old('djoined') }}}">
@@ -1862,6 +1938,7 @@ $(document).ready(function() {
                         <textarea class="form-control"  name="address" id="address">{{{ Input::old('address') }}}</textarea>
                     </div>
 
+<<<<<<< HEAD
                   </div>
 
                  </div>
@@ -1897,6 +1974,35 @@ $(document).ready(function() {
 
 <button type="button" class='ndelete'>- Delete</button>
 <button type="button" class='naddmore'>+ Add More</button>
+=======
+                  
+                   </fieldset>
+                  
+                   <fieldset>
+                    
+                     <div class="checkbox">
+                        <label>
+                            <input type="checkbox" checked name="active">
+                                In Employment
+                        </label>
+                    </div>
+                      
+                    </fieldset>
+
+                    <div style='margin-top:170px'></div>
+
+                    </fieldset>
+                    
+                        <div  align='right' class="form-actions form-group">
+        
+                            <button type="submit" class="btn btn-primary btn-sm">Create Employee</button>
+                        </div>
+
+                    
+                </fieldset>
+
+            </div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 </div>
 <script>
 $(".ndelete").on('click', function() {
@@ -2065,5 +2171,9 @@ $("#irel").prop('checked', false);
 });
 });
 </script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 @stop

@@ -67,7 +67,11 @@ body {
        
         <td style="width:150px">
 
+<<<<<<< HEAD
             <img src="{{public_path().'/uploads/logo/'.$organization->logo}}" alt="logo" width="80%">
+=======
+            <img src="{{public_path().'/uploads/logos/'.$organization->logo}}" alt="logo" width="80%">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
     
         </td>
@@ -105,11 +109,19 @@ body {
    </div>
 
 
+<<<<<<< HEAD
 	<div class="content" style='margin-top:-70px;'>
     @if($type == 'All')
    <div style="margin-bottom:20px">{{'<strong>Period</strong> : '.$period}}<div align="center"><strong>Deduction Report</strong></div></div>
     @else
     <div style="margin-bottom:20px">{{'<strong>Period</strong> : '.$period}}<div align="center"><strong>Deduction Report for {{$type}}</strong></div></div>
+=======
+	<div class="content" style='margin-top:0px;'>
+    @if($type == 'All')
+   <div style="margin-bottom:20px">{{'<strong>Period</strong> : '.$period}}<div align="center"><strong>Deduction Report</strong></div></div>
+    @else
+    <div style="margin-bottom:20px">{{'<strong>Period</strong> : '.$period}}<div align="center"><strong>Deduction Report for {{$name->deduction_name}}</strong></div></div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
     @endif
     <table class="table table-bordered" border='1' cellspacing='0' cellpadding='0'>
 
@@ -135,11 +147,15 @@ body {
 
        <td td width='20'>{{$i}}</td>
         <td> {{ $ded->personal_file_number }}</td>
+<<<<<<< HEAD
          @if($ded->middle_name != null || $ded->middle_name != '')
         <td> {{$ded->first_name.' '.$ded->middle_name.' '.$ded->last_name}}</td>
         @else
         <td> {{$ded->first_name.' '.$ded->last_name}}</td>
         @endif
+=======
+        <td> {{ $ded->last_name.' '.$ded->first_name }}</td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
          @if($type == 'All')
         <td> {{ $ded->deduction_name }}</td>
         @else

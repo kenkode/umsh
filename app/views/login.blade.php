@@ -8,7 +8,11 @@
                       
                     <div class="panel-body">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<<<<<<< HEAD
                         <img src="{{asset('public/uploads/logo/'.$organization->logo)}}" alt="logo" width="60%">
+=======
+                        <img src="{{ asset('public/uploads/logos/'.$organization->logo) }}" alt="LOGO" width="50%"/>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
                         <br>
                

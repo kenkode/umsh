@@ -50,6 +50,10 @@ function asMoney($value) {
 
         <th>#</th>
         <th>Employee</th>
+<<<<<<< HEAD
+=======
+        <th>Type</th>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
         <th>Period Worked</th>
         <th>Amount</th>
         <th>Total Amount</th>
@@ -77,9 +81,13 @@ function asMoney($value) {
           <td> {{ $i }}</td>
           @if($overtime->middle_name == null || $overtime->middle_name == '')
           <td>{{ $overtime->first_name.' '.$overtime->last_name }}</td>
+<<<<<<< HEAD
           @else
           <td>{{ $overtime->first_name.' '.$overtime->middle_name.' '.$overtime->last_name }}</td>
           @endif
+=======
+          <td>{{ $overtime->type }}</td>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
           <td>{{ $overtime->period }}</td>
           <td align="right">{{ asMoney((double)$overtime->amount) }}</td>
           <td align="right">{{ asMoney((double)$overtime->amount*(double)$overtime->period) }}</td>

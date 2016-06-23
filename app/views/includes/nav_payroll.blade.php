@@ -55,6 +55,7 @@
                     <a href="{{ URL::to('employee_deductions') }}"><i class="glyphicon glyphicon-barcode fa-fw"></i> Deductions</a>
                   </li>
 
+<<<<<<< HEAD
                   <li class="dropdown-submenu" >
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-file fa-fw"></i> Process <i class="fa fa-caret-right"></i>
@@ -63,6 +64,10 @@
 
                  <li>
                     <a href="{{ URL::to('advance') }}"><i class="glyphicon glyphicon-circle-arrow-right fa-fw"></i>  Advance Salaries</a>
+=======
+                  <li>
+                    <a href="{{ URL::to('advance') }}"><i class="glyphicon glyphicon-circle-arrow-right fa-fw"></i>  Process Advance Salaries</a>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                   </li>
                         
                   <li>
@@ -80,6 +85,13 @@
                  <li>
                     <a href="{{ URL::to('advanceReports') }}"><i class="fa fa-file fa-fw"></i>  Advance Reports</a>
                   </li>
+<<<<<<< HEAD
+=======
+                
+                  <li>
+                    <a href="{{ URL::to('advanceReports') }}"><i class="fa fa-file fa-fw"></i>  Advance Reports</a>
+                  </li>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                   
                   <li>
                     <a href="{{ URL::to('payrollReports') }}"><i class="fa fa-file fa-fw"></i>  Payroll Reports</a>

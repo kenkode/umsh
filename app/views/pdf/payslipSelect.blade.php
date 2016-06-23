@@ -89,6 +89,7 @@ $(document).ready(function() {
         </div>
 
         <div class="form-group">
+<<<<<<< HEAD
                         <label for="username">Select Department: <span style="color:red">*</span></label>
                         <select required name="departmentid" id="departmentid" class="form-control">
                             <option></option>
@@ -113,6 +114,8 @@ $(document).ready(function() {
 
 
         <div class="form-group">
+=======
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                         <label for="username">Download as: <span style="color:red">*</span></label>
                         <select required name="format" class="form-control">
                             <option></option>

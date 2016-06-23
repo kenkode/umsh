@@ -48,8 +48,12 @@
                         <label for="username">Download as: <span style="color:red">*</span></label>
                         <select required name="format" class="form-control">
                             <option></option>
+<<<<<<< HEAD
                             <option value="excel"> Excel</option>
                             <option value="csv"> CSV</option>
+=======
+                            <option value="excel"> CSV</option>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             <option value="pdf"> PDF</option>
                         </select>
                 

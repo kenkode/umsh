@@ -98,6 +98,7 @@
 
     $(document).ready(function() {
 
+<<<<<<< HEAD
     $('#datadash').DataTable({
         "bPaginate": false,
         "bInfo": false,
@@ -293,6 +294,24 @@
         });
     });
     });
+=======
+
+    $('#users').DataTable();
+    $('#doc').DataTable();
+    $('#app').DataTable();
+    $('#occ').DataTable();
+    $('#prop').DataTable();
+    $('#mobile').DataTable();
+    $('#rejected').DataTable();
+    $('#app').DataTable();
+    $('#disbursed').DataTable();
+    $('#amended').DataTable();
+
+
+    
+
+    } );
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 </script>
 
@@ -390,6 +409,7 @@ $('.datepicker40').datepicker({
 
 </script>
 
+<<<<<<< HEAD
 <script type="text/javascript">
 $(function(){ 
 
@@ -401,5 +421,8 @@ $('.expiry').datepicker({
 });
 
 </script>
+=======
+
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
 </head>

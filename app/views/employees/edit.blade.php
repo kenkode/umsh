@@ -1424,7 +1424,17 @@ $(document).ready(function() {
                 
                     </div>
 
+<<<<<<< HEAD
                    
+=======
+                    <div class="form-group">
+                        <label for="username">Date joined <span style="color:red">*</span></label>
+                        <div class="right-inner-addon ">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        <input class="form-control datepicker"  readonly="readonly" placeholder="" type="text" name="djoined" id="djoined" value="{{{ $employee->date_joined }}}">
+                        </div>
+                        </div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
                     <div class="form-group">
                         <label for="username">Gender <span style="color:red">*</span></label><br>
@@ -1458,21 +1468,34 @@ $(document).ready(function() {
                         <label for="username">Nhif Number</label>
                         <input class="form-control" placeholder="" type="text" name="hospital_insurance_number" id="hospital_insurance_number" value="{{{ $employee->hospital_insurance_number }}}">
                     </div>
+<<<<<<< HEAD
                   </div>
                      <div class="col-lg-4">
+=======
+                     </fieldset>
+                     <fieldset>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                       
                       <div class="form-group"><h3 style='color:Green;strong;margin-top:15px'>Deductions Applicable</h3></div>
 
                         <div class="checkbox">
                         <label>
+<<<<<<< HEAD
                             <input type="checkbox" value="{{{ $employee->income_tax_applicable }}}" id="itax" name="i_tax"<?= ($employee->income_tax_applicable=='1')?'checked="checked"':''; ?>>
+=======
+                            <input type="checkbox" name="itax" value="{{{ $employee->income_tax_applicable }}}" name="i_tax"<?= ($employee->income_tax_applicable=='1')?'checked="checked"':''; ?>>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                               Apply Income Tax
                         </label>
                     </div>
 
                     <div class="checkbox">
                         <label>
+<<<<<<< HEAD
                             <input type="checkbox" value="{{{ $employee->income_tax_relief_applicable }}}" id="irel" name="i_tax_relief"<?= ($employee->income_tax_relief_applicable=='1')?'checked="checked"':''; ?>>
+=======
+                            <input type="checkbox" name="irel" value="{{{ $employee->income_tax_relief_applicable }}}" name="i_tax_relief"<?= ($employee->income_tax_relief_applicable=='1')?'checked="checked"':''; ?>>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                                Apply Income Tax Relief
                         </label>
                     </div>
@@ -1489,9 +1512,14 @@ $(document).ready(function() {
                             <input type="checkbox" value="{{{ $employee->hospital_insurance_applicable }}}" name="a_nhif"<?= ($employee->hospital_insurance_applicable=='1')?'checked="checked"':''; ?>>
                                 Apply Nhif
                         </label>
+<<<<<<< HEAD
                       </div>
                      </div>
                    </div>
+=======
+                    </div>
+                     </fieldset>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 
                    <div role="tabpanel" class="tab-pane" id="payment">
                       <br><br>
@@ -1563,14 +1591,55 @@ $(document).ready(function() {
 
               </div>
 
+              <fieldset>
+                    <div class="form-group"><h3 style='color:Green;strong'>Next of Kin</h3></div>
+
+                    <div class="form-group">
+                        <label for="username">Kin name</label>
+                        <input class="form-control" placeholder="" type="text" name="kin_name" id="kin_name" value="{{ $employee->kin_name }}">
+                
+                    </div>                    
+
+                    <div class="form-group">
+                        <label for="username">ID Number</label>
+                       <input class="form-control" placeholder="" type="text" name="kin_idno" id="kin_idno" value="{{$employee->kin_idno }}">
+                
+                    </div>
+
+                      
+                     <div class="form-group">
+                        <label for="username">Email Address</label>
+                        <input class="form-control" placeholder="" type="text" name="kin_email" id="kin_email" value="{{$employee->kin_email}}">
+                
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Telephone Number</label>
+                        <input class="form-control" placeholder="" type="text" name="kin_phone" id="kin_phone" value="{{$employee->kin_phone}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Relationship</label>
+                        <input class="form-control" placeholder="" type="text" name="relationship" id="relationship" value="{{$employee->kin_relationship}}">
+                    </div>
+                     
+
+              </fieldset>
+
+
             </div>
 
              <div role="tabpanel" class="tab-pane" id="companyinfo">
             <br><br>
             <div class="col-lg-4">
                     <div class="form-group">
+<<<<<<< HEAD
                         <label for="username">Employee Branch</label>
                         <select name="branch_id" id="branch_id" class="form-control">
+=======
+                        <label for="username">Employee Branch <span style="color:red">*</span></label>
+                        <select name="branch_id" class="form-control">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             <option></option>
                             <option value="cnew">Create New</option>
                             @foreach($branches as $branch)
@@ -1583,8 +1652,13 @@ $(document).ready(function() {
 
 
                      <div class="form-group">
+<<<<<<< HEAD
                         <label for="username">Employee Department</label>
                         <select name="department_id" id="department_id" class="form-control">
+=======
+                        <label for="username">Employee Department <span style="color:red">*</span></label>
+                        <select name="department_id" class="form-control">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             <option></option>
                             <option value="cnew">Create New</option>
                             @foreach($departments as $department)
@@ -1597,7 +1671,11 @@ $(document).ready(function() {
 
                      <div class="form-group">
                         <label for="username">Job Group <span style="color:red">*</span></label>
+<<<<<<< HEAD
                         <select name="jgroup_id" id="jgroup_id" class="form-control">
+=======
+                        <select name="jgroup_id" class="form-control">
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
                             <option></option>
                             <option value="cnew">Create New</option>
                             @foreach($jgroups as $jgroup)
@@ -1608,7 +1686,7 @@ $(document).ready(function() {
                 
                     </div>
 
-
+                     
                      <div class="form-group">
                         <label for="username">Employee Type <span style="color:red">*</span></label>
                         <select name="type_id" id="type_id" class="form-control">
@@ -1692,7 +1770,7 @@ $(document).ready(function() {
                     </div>
 
                     <div class="form-group">
-                        <label for="username">Office Email<span style="color:red">*</span></label>
+                        <label for="username">Office Email <span style="color:red">*</span></label>
                         <input class="form-control" placeholder="" type="text" name="email_office" id="email_office" value="{{{ $employee->email_office }}}">
                     </div>
 
@@ -1713,6 +1791,7 @@ $(document).ready(function() {
         
                    </div>
                   
+<<<<<<< HEAD
                    </div>
 
                    <div role="tabpanel" class="tab-pane" id="kins">
@@ -1765,6 +1844,31 @@ $(document).ready(function() {
 
 <button type="button" class='ndelete'>- Delete</button>
 <button type="button" class='naddmore'>+ Add More</button>
+=======
+                   <fieldset>
+                    
+                     <div class="checkbox">
+                        <label>
+                            <input type="checkbox" value="{{{ $employee->in_employment }}}"<?= ($employee->in_employment=='Y')?'checked="checked"':''; ?> name="active">
+                                In Employment
+                        </label>
+                    </div>
+                      
+                    </fieldset>
+
+                    <div style='margin-top:260px'></div>
+
+                    </fieldset>
+                        <div align='right' class="form-actions form-group">
+        
+                            <button type="submit" class="btn btn-primary btn-sm">Update Employee</button>
+                        </div>
+
+                    
+                </fieldset>
+
+            </div>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
 </div>
 <script>
 $(".ndelete").on('click', function() {
@@ -1958,6 +2062,18 @@ function dcheck(){
         </div>
 </form>
     
+
+<script type="text/javascript">
+$(document).ready(function() {
+$("#itax").click(function(){
+if($(this).is(':checked')){
+ $("#irel").prop('checked', true);
+}else{
+$("#irel").prop('checked', false);
+}
+});
+});
+</script>
 
 <script type="text/javascript">
 $(document).ready(function() {

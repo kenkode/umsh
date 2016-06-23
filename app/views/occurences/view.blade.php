@@ -56,10 +56,17 @@ function asMoney($value) {
       @endif
       </tr>
       <tr><td><strong>Occurence Brief: </strong></td><td>{{$occurence->occurence_brief}}</td></tr>
+<<<<<<< HEAD
       <tr><td><strong>Occurence Type: </strong></td><td>{{Occurencesetting::getOccurenceType($occurence->occurencesetting_id)}}</td></tr>
       <tr><td><strong>Narrative: </strong></td><td>{{$occurence->narrative}}</td></tr>
       @if($occurence->doc_path!=null || $occurence->doc_path!='')
       <tr><td><strong>Attached Document: </strong></td><td>{{$occurence->doc_path.' - '}}<a target="blank" href="{{asset('/public/uploads/employees/documents/'.$occurence->doc_path) }}">Download <i class="glyphicon glyphicon-download"></i></a></td></tr>
+=======
+      <tr><td><strong>Occurence Type: </strong></td><td>{{Occurencesetting::getOccurenceType($occurence->occurence_type_id)}}</td></tr>
+      <tr><td><strong>Narrative: </strong></td><td>{{$occurence->narrative}}</td></tr>
+      @if($occurence->doc_path!=null || $occurence->doc_path!='')
+      <tr><td><strong>Attached Document: </strong></td><td>{{$occurence->doc_path.' - '}}<a href="{{URL::to('occurences/download/'.$occurence->id)}}">Download <i class="glyphicon glyphicon-download"></i></a></td></tr>
+>>>>>>> aaf24fd0b2c17e5b468f8834f2db2d1e9264f0c8
       @else
       <tr><td><strong>Attached Document: </strong></td><td>None</td></tr>
       @endif
